@@ -1,4 +1,4 @@
-package com.longterm.artschools.ui.theme
+package com.longterm.artschools.ui.core.theme
 
 import androidx.compose.ui.graphics.Color
 
