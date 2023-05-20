@@ -10,12 +10,12 @@ import androidx.navigation.compose.composable
 @Composable
 fun CustomNavHost(
     navController: NavHostController,
-    startDestionation: Destination = Destination.Main
+    startDestination: Destination = Destination.Main
 ) {
     fun NavGraphBuilder.createDestination(destination: Destination) =
         composable(destination.name) { destination.GetComposable() }
 
-    NavHost(navController = navController, startDestination = startDestionation.name) {
+    NavHost(navController = navController, startDestination = startDestination.name) {
         createDestination(Destination.Main)
     }
 }
