@@ -22,9 +22,9 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Colors.Purple40,
+    primary = Colors.MainGreen,
     secondary = Colors.PurpleGrey40,
-    tertiary = Colors.Pink40
+    tertiary =Colors.Pink40
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -41,7 +41,7 @@ private val LightColorScheme = lightColorScheme(
 fun ArtSchoolsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

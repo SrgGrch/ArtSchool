@@ -9,4 +9,9 @@
     <string name="done">Готово</string>
     <string name="enterPassword">Введите пароль</string>
     <string name="doNotRememberPassword">Я не помню пароль</string>
+
+    <string name="onboarding_intro_title">Привествуем вас, любитель искусств! </string>
+    <string name="onboarding_intro_description">Мы поможем вам узнать много нового, интересно провести время и найти ближайшую школу в Москве</string>
+    <string name="onboarding_intro_start_button">Давайте познакомимся</string>
+    <string name="onboarding_intro_start_login">Войти в существующий аккаунт</string>
 </resources>

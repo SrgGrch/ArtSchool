@@ -19,6 +19,7 @@ fun CustomNavHost(
 
     NavHost(navController = navController, startDestination = startDestination.name) {
         createDestination(Destination.Main)
+        createDestination(Destination.Onboarding)
         createDestination(Destination.Auth)
     }
 }

@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.longterm.artschools.ui.core.theme.ArtSchoolsTheme
 import com.longterm.artschools.ui.navigation.CustomNavHost
+import com.longterm.artschools.ui.navigation.Destination
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Main() {
     val navController = rememberNavController()
-    CustomNavHost(navController)
+    CustomNavHost(navController, Destination.Onboarding) // todo
 }
 
 @Preview(showBackground = true)

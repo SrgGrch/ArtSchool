@@ -32,3 +32,27 @@ val Typography = Typography(
     )
     */
 )
+
+object ArtTextStyle {
+    val H1 = TextStyle(
+        fontWeight = FontWeight.Bold,
+        fontSize = 28.sp,
+        lineHeight = 30.sp
+    )
+
+    val Body = TextStyle(
+        fontSize = 16.sp,
+        lineHeight = 22.sp
+    )
+
+    val Button = TextStyle(
+        fontSize = 18.sp,
+        lineHeight = 22.sp,
+        fontWeight = FontWeight.Bold
+    )
+
+    val Chips = TextStyle(
+        fontSize = 13.sp,
+        lineHeight = 22.sp
+    )
+}
