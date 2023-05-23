@@ -15,6 +15,8 @@ object Colors {
     val Green = Color(0xFFADCB47)
     val GreenDisabled = Color(0x80ADCB47)
 
+    val VioletLite = Color(0xFF8E75A8)
+
     val LightGrey = Color(0xFFA1A1A1)
 
     val VkBlue = Color(0xFF0077FF)

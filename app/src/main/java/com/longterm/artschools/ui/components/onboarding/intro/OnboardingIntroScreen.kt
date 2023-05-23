@@ -3,19 +3,13 @@ package com.longterm.artschools.ui.components.onboarding.intro
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,8 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.longterm.artschools.R
+import com.longterm.artschools.ui.components.common.ButtonGroup
 import com.longterm.artschools.ui.core.theme.ArtTextStyle
 import com.longterm.artschools.ui.core.utils.PreviewContext
 
@@ -60,41 +54,11 @@ fun OnboardingIntroScreen(nextPage: () -> Unit) {
 
         Spacer(modifier = Modifier.weight(1.0f))
 
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(bottom = 10.dp)
-        ) {
-            Button(
-                onClick = nextPage,
-                Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(),
-                contentPadding = PaddingValues(vertical = 20.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.onboarding_intro_start_button),
-                    style = ArtTextStyle.Button
-                )
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            TextButton(
-                onClick = { /*TODO*/ },
-                Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(),
-                contentPadding = PaddingValues(vertical = 20.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.onboarding_intro_start_login),
-                    fontSize = 18.sp,
-                    style = ArtTextStyle.Button
-                )
-            }
-        }
+        ButtonGroup(
+            stringResource(id = R.string.onboarding_intro_start_button),
+            stringResource(id = R.string.onboarding_intro_login),
+            nextPage
+        )
     }
 }
 
