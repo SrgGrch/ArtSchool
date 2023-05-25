@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.longterm.artschools.ui.components.onboarding.register.RegisterScreen
 import com.longterm.artschools.ui.core.theme.ArtSchoolsTheme
 import com.longterm.artschools.ui.navigation.CustomNavHost
 
@@ -23,7 +24,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Main()
+//                    Main()
+                    RegisterScreen()
                 }
             }
         }
@@ -38,7 +40,7 @@ fun Main() {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+private fun Preview() {
     ArtSchoolsTheme {
         Main()
     }

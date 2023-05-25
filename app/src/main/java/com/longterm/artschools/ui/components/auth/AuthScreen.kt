@@ -4,8 +4,6 @@ package com.longterm.artschools.ui.components.auth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.tooling.preview.Preview
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
@@ -15,9 +13,9 @@ fun AuthScreen() {
     val viewModel: AuthViewModel = getViewModel()
     val state by viewModel.state.collectAsState()
 
-    when (state) {
-        AuthViewModel.State.Initial -> AuthInitialStateView(viewModel, state)
-        is AuthViewModel.State.InternalAuth -> AuthInternalStateView(viewModel, state)
+    when (val st = state) {
+        is AuthViewModel.State.Initial -> AuthInitialStateView(viewModel, st)
+        is AuthViewModel.State.InternalAuth -> AuthInternalStateView(viewModel, st)
         AuthViewModel.State.Vk -> {}
         AuthViewModel.State.Close -> {}
     }

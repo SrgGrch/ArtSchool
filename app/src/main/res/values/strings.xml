@@ -4,6 +4,7 @@
     <string name="enterEmailOrLoginViaVk">Введите вашу почту или войдите через VK</string>
     <string name="yourEmail">Ваша почта</string>
     <string name="password">Пароль</string>
+    <string name="repeat_password">Повторите пароль</string>
     <string name="or">или</string>
     <string name="loginViaVk">Войти через VK ID</string>
     <string name="done">Готово</string>
