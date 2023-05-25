@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ArtSchools</string>
+    <string name="login">Вход</string>
+    <string name="enterEmailOrLoginViaVk">Введите вашу почту или войдите через VK</string>
+    <string name="yourEmail">Ваша почта</string>
+    <string name="password">Пароль</string>
+    <string name="or">или</string>
+    <string name="loginViaVk">Войти через VK ID</string>
+    <string name="done">Готово</string>
+    <string name="enterPassword">Введите пароль</string>
+    <string name="doNotRememberPassword">Я не помню пароль</string>
 </resources>
