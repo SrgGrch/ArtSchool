@@ -1,11 +1,14 @@
 package com.longterm.artschools.ui.components.onboarding.userInfo
 
 import androidx.lifecycle.ViewModel
+import com.longterm.artschools.domain.usecase.RegisterUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class OnboardingUserInfoViewModel : ViewModel() {
+class OnboardingUserInfoViewModel(
+    private val registerUseCase: RegisterUseCase
+) : ViewModel() {
     val state: StateFlow<State> get() = _state
     private val _state = MutableStateFlow(State())
 
@@ -27,6 +30,11 @@ class OnboardingUserInfoViewModel : ViewModel() {
     }
 
     fun navigateNext() {
+        registerUseCase.supplyUserInfo(
+            state.value.name,
+            state.value.age,
+            null//photo url todo
+        )
         _state.update {
             it.copy(navigateNext = true)
         }

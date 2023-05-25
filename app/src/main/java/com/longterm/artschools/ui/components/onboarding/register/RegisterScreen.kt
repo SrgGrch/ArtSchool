@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.longterm.artschools.R
+import com.longterm.artschools.domain.usecase.RegisterUseCase
 import com.longterm.artschools.ui.components.onboarding.register.components.RegisterDoneButton
 import com.longterm.artschools.ui.components.onboarding.register.components.RegisterEmailTextField
 import com.longterm.artschools.ui.components.onboarding.register.components.RegisterInitialStateView
@@ -25,10 +26,13 @@ import com.longterm.artschools.ui.components.onboarding.register.components.Regi
 import com.longterm.artschools.ui.core.theme.Dimens.horizontalPadding
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
+import org.koin.compose.koinInject
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun RegisterScreen() {
-    val viewModel: RegisterViewModel = getViewModel()
+    val registerUseCase: RegisterUseCase = koinInject()
+    val viewModel: RegisterViewModel = getViewModel { parametersOf(registerUseCase) }
     val state by viewModel.state.collectAsState()
 
     val errors = (state as? RegisterViewModel.State.InternalRegister)?.errors

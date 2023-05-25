@@ -24,4 +24,9 @@ class UserStorage(private val sharedPreferences: SharedPreferences) {
         set(value) = sharedPreferences.edit {
             putString(::token.name, value)
         }
+
+    fun setUser(user: User, token: String) {
+        this.user = user
+        this.token = token
+    }
 }

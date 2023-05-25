@@ -3,7 +3,9 @@ package com.longterm.artschools.di
 import android.content.Context
 import com.longterm.artschools.data.UserStorage
 import com.longterm.artschools.data.network.HttpClientFactory
+import com.longterm.artschools.data.repository.UserRepository
 import com.longterm.artschools.data.service.UserApi
+import com.longterm.artschools.domain.usecase.RegisterUseCase
 import com.longterm.artschools.ui.components.auth.AuthViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
 import com.longterm.artschools.ui.components.onboarding.OnboardingViewModel
@@ -21,9 +23,9 @@ val presentationModule = module {
     viewModel { OnboardingViewModel() }
     viewModel { OnboardingArtViewModel() }
     viewModel { OnboardingTargetViewModel() }
-    viewModel { OnboardingUserInfoViewModel() }
+    viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
     viewModel { AuthViewModel() }
-    viewModel { RegisterViewModel() }
+    viewModel { params -> RegisterViewModel(params.get()) }
 }
 
 val dataModule = module {
@@ -39,10 +41,14 @@ val dataModule = module {
     factory { UserStorage(get(SharedPreferencesQualifier.UserStorage)) }
 
     factory { UserApi(get()) }
+
+    factory { UserRepository(get(), get()) }
 }
 
 val domainModule = module {
-
+    scope<OnboardingScope> {
+        scoped { RegisterUseCase(get()) }
+    }
 }
 
 val commonModule = module {

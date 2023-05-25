@@ -13,6 +13,6 @@ data class RegisterRequest(
     @SerialName("first_name")
     val firstName: String? = null,
     val photoUrl: String? = null,
-//    val interests: List<Any>? = null, // todo пока нет в API
-//    val goals: List<Any>? = null, // todo пока нет в API
+//    val preferences: List<Any>? = null, // todo пока нет в API
+//    val targets: List<Any>? = null, // todo пока нет в API
 )

@@ -2,8 +2,9 @@ package com.longterm.artschools.data.service
 
 import com.longterm.artschools.data.models.AuthRequest
 import com.longterm.artschools.data.models.AuthResponse
+import com.longterm.artschools.data.models.BaseResponse
 import com.longterm.artschools.data.models.RegisterRequest
-import com.longterm.artschools.domain.models.BaseResponse
+import com.longterm.artschools.domain.models.User
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -17,17 +18,17 @@ class UserApi(
 ) {
     suspend fun register(
         request: RegisterRequest
-    ): BaseResponse<AuthResponse> = httpClient.post("register/") {
+    ): Result<AuthResponse> = httpClient.post("register/") {
         contentType(ContentType.Application.Json)
         setBody(request)
-    }.body()
+    }.body<BaseResponse<AuthResponse>>().unwrap()
 
     suspend fun authorize(request: AuthRequest): BaseResponse<AuthResponse> = httpClient.post("signin/") {
         contentType(ContentType.Application.Json)
         setBody(request)
     }.body()
 
-    suspend fun me() = httpClient.get("me/") {
+    suspend fun me(): Result<User> = httpClient.get("me/") {
         withAuth()
-    }
+    }.body<BaseResponse<User>>().unwrap()
 }
