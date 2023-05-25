@@ -1,11 +1,9 @@
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package com.longterm.artschools.ui.components.onboarding
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -57,17 +55,27 @@ fun OnboardingRootScreen() {
         }
     }
 
-    systemUiController.setStatusBarColor(getTopBarColor(pagerState.currentPage))
+    systemUiController.setStatusBarColor(getBackground(pagerState.currentPage))
 
     BackHandler(enabled = pagerState.currentPage != 0) {
         vm.prevPage()
     }
 
-    Column() {
+    Box {
+        HorizontalPager(pageCount = PAGE_COUNT, state = pagerState, userScrollEnabled = false) {
+            GetPage(
+                page = it,
+                nextPage = {
+                    vm.nextPage()
+                },
+                skip = {
+                    vm.skip()
+                })
+        }
+
         Row(
             Modifier
-                .fillMaxWidth()
-                .background(getTopBarColor(state.currentPage)),
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -93,27 +101,30 @@ fun OnboardingRootScreen() {
                 )
             }
         }
-
-        HorizontalPager(pageCount = PAGE_COUNT, state = pagerState, userScrollEnabled = false) {
-            GetPage(page = it) {
-                vm.nextPage()
-            }
-        }
     }
 }
 
-private fun getTopBarColor(currentPage: Int): Color {
+private fun getBackground(currentPage: Int): Color {
     return if (currentPage == 3) VioletLite else Color.White
 }
 
 @Composable
-private fun GetPage(page: Int, nextPage: () -> Unit) = when (page) {
-    0 -> OnboardingIntroScreen(nextPage)
-    1 -> OnboardingArtScreen(nextPage)
-    2 -> OnboardingTargetScreen(nextPage)
-    3 -> OnboardingUserInfoScreen(nextPage)
-    in 3..6 -> OnboardingIntroScreen(nextPage)
-    else -> error("No such page $page")
+private fun GetPage(page: Int, nextPage: () -> Unit, skip: () -> Unit) {
+    Column(
+        Modifier
+            .background(getBackground(page))
+    ) {
+        Spacer(modifier = Modifier.size(50.dp))
+
+        when (page) {
+            0 -> OnboardingIntroScreen(nextPage, skip)
+            1 -> OnboardingArtScreen(nextPage, skip)
+            2 -> OnboardingTargetScreen(nextPage, skip)
+            3 -> OnboardingUserInfoScreen(nextPage, skip)
+            in 3..6 -> OnboardingIntroScreen(nextPage, skip)
+            else -> error("No such page $page")
+        }
+    }
 }
 
 

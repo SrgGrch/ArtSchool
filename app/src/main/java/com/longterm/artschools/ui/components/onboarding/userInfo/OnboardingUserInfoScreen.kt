@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,13 +34,12 @@ import com.longterm.artschools.ui.components.common.ButtonGroup
 import com.longterm.artschools.ui.core.theme.ArtTextStyle
 import com.longterm.artschools.ui.core.theme.LightGrey
 import com.longterm.artschools.ui.core.theme.MainGreen
-import com.longterm.artschools.ui.core.theme.VioletLite
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}) {
+fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}, skip: () -> Unit = {}) {
     val vm: OnboardingUserInfoViewModel = getViewModel()
     val state by vm.state.collectAsState()
 
@@ -49,10 +49,11 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}) {
     }
 
     if (state.skip) {
+        skip()
         vm.onSkip()
     }
 
-    Column(Modifier.background(VioletLite)) {
+    Column {
         Row(
             Modifier
                 .fillMaxWidth()
@@ -99,8 +100,18 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}) {
                 Modifier.fillMaxWidth(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Text,
+                    keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Next
+                ),
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color.Black,
+                    containerColor = Color.White,
+                    focusedIndicatorColor = MainGreen,
+                    unfocusedIndicatorColor = MainGreen,
+                    disabledIndicatorColor = MainGreen,
+                    unfocusedLabelColor = LightGrey,
+                    disabledLabelColor = LightGrey,
+                    focusedLabelColor = LightGrey
                 ),
                 label = {
                     Text("Ваше имя", style = ArtTextStyle.Body, color = LightGrey)
@@ -112,8 +123,18 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}) {
                 onValueChange = vm::onAgeChanged,
                 Modifier.fillMaxWidth(),
                 label = {
-                    Text("Ваше имя", style = ArtTextStyle.Body, color = LightGrey)
+                    Text("Сколько вам лет", style = ArtTextStyle.Body, color = LightGrey)
                 },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color.Black,
+                    containerColor = Color.White,
+                    focusedIndicatorColor = MainGreen,
+                    unfocusedIndicatorColor = MainGreen,
+                    disabledIndicatorColor = MainGreen,
+                    unfocusedLabelColor = LightGrey,
+                    disabledLabelColor = LightGrey,
+                    focusedLabelColor = LightGrey
+                ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number,
@@ -125,8 +146,7 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}) {
 
                     if (error != null)
                         Text(text = error)
-                }
-
+                },
             )
             Spacer(modifier = Modifier.weight(1f))
             ButtonGroup(

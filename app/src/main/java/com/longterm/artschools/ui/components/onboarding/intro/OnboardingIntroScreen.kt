@@ -24,7 +24,10 @@ import com.longterm.artschools.ui.core.theme.ArtTextStyle
 import com.longterm.artschools.ui.core.utils.PreviewContext
 
 @Composable
-fun OnboardingIntroScreen(nextPage: () -> Unit) {
+fun OnboardingIntroScreen(
+    nextPage: () -> Unit = {},
+    skip: () -> Unit = {}
+) {
     Column(
         Modifier
             .padding(horizontal = 16.dp, vertical = 12.dp),
@@ -55,9 +58,10 @@ fun OnboardingIntroScreen(nextPage: () -> Unit) {
         Spacer(modifier = Modifier.weight(1.0f))
 
         ButtonGroup(
-            stringResource(id = R.string.onboarding_intro_start_button),
-            stringResource(id = R.string.onboarding_intro_login),
-            nextPage
+            primaryText = stringResource(id = R.string.onboarding_intro_start_button),
+            secondaryText = stringResource(id = R.string.onboarding_intro_login),
+            primaryButtonClicked = nextPage,
+            secondaryButtonClicked = skip
         )
     }
 }

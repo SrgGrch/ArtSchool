@@ -21,6 +21,10 @@ class OnboardingViewModel : ViewModel() {
         }
     }
 
+    fun skip() = _state.update { state ->
+        state.nextPage().copy(currentPage = 4)
+    }
+
     data class State(
         val currentPage: Int = 0,
         val isPrevButtonVisible: Boolean = false

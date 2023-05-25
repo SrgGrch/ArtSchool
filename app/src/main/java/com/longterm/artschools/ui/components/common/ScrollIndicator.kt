@@ -1,8 +1,5 @@
-@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class)
-
 package com.longterm.artschools.ui.components.common
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

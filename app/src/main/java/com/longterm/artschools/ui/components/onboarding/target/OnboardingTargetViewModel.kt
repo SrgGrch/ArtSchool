@@ -51,6 +51,12 @@ class OnboardingTargetViewModel : ViewModel() {
         }
     }
 
+    fun onSkip() {
+        _state.update {
+            State.Data(it.chips)
+        }
+    }
+
     sealed class State {
         abstract val chips: List<Chip>
 

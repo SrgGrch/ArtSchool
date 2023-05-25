@@ -46,7 +46,13 @@ class OnboardingArtViewModel : ViewModel() {
         State.Chip("\uD83C\uDFDB️ Архитектура"),
     )
 
-    fun nextPageInvoked() {
+    fun onNextPageInvoked() {
+        _state.update {
+            State.Data(it.chips)
+        }
+    }
+
+    fun onSkip() {
         _state.update {
             State.Data(it.chips)
         }

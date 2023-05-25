@@ -1,17 +1,13 @@
-@file:OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
-
 package com.longterm.artschools.ui.components.onboarding.art
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
@@ -31,22 +27,31 @@ import com.longterm.artschools.ui.core.theme.MainGreen
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun OnboardingArtScreen(
-    nextPage: () -> Unit = {}
+    nextPage: () -> Unit = {},
+    skip: () -> Unit = {}
 ) {
     val vm: OnboardingArtViewModel = getViewModel()
     val state by vm.state.collectAsState()
 
     when (state) {
-        is OnboardingArtViewModel.State.NextPage,
+        is OnboardingArtViewModel.State.NextPage -> {
+            LaunchedEffect(
+                key1 = state,
+                block = { nextPage() }
+            )
+
+            vm.onNextPageInvoked()
+        }
+
         is OnboardingArtViewModel.State.NotNow -> {
             LaunchedEffect(
                 key1 = state,
-                block = { nextPage() })
+                block = { skip() }
+            )
 
-            vm.nextPageInvoked()
+            vm.onSkip()
         }
 
         else -> Unit
