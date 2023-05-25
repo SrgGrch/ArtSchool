@@ -3,10 +3,12 @@ package com.longterm.artschools.di
 import android.content.Context
 import com.longterm.artschools.data.UserStorage
 import com.longterm.artschools.data.network.HttpClientFactory
+import com.longterm.artschools.data.service.UserApi
 import com.longterm.artschools.ui.components.auth.AuthViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
 import com.longterm.artschools.ui.components.onboarding.OnboardingViewModel
 import com.longterm.artschools.ui.components.onboarding.art.OnboardingArtViewModel
+import com.longterm.artschools.ui.components.onboarding.register.RegisterViewModel
 import com.longterm.artschools.ui.components.onboarding.target.OnboardingTargetViewModel
 import com.longterm.artschools.ui.components.onboarding.userInfo.OnboardingUserInfoViewModel
 import kotlinx.serialization.json.Json
@@ -21,6 +23,7 @@ val presentationModule = module {
     viewModel { OnboardingTargetViewModel() }
     viewModel { OnboardingUserInfoViewModel() }
     viewModel { AuthViewModel() }
+    viewModel { RegisterViewModel() }
 }
 
 val dataModule = module {
@@ -33,6 +36,8 @@ val dataModule = module {
     }
 
     factory { UserStorage(get(SharedPreferencesQualifier.UserStorage)) }
+
+    factory { UserApi(get(), get()) }
 }
 
 val domainModule = module {

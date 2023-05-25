@@ -14,7 +14,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -31,6 +30,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.longterm.artschools.ui.components.common.ScrollIndicator
 import com.longterm.artschools.ui.components.onboarding.art.OnboardingArtScreen
 import com.longterm.artschools.ui.components.onboarding.intro.OnboardingIntroScreen
+import com.longterm.artschools.ui.components.onboarding.register.RegisterScreen
 import com.longterm.artschools.ui.components.onboarding.target.OnboardingTargetScreen
 import com.longterm.artschools.ui.components.onboarding.userInfo.OnboardingUserInfoScreen
 import com.longterm.artschools.ui.core.theme.Colors
@@ -38,12 +38,12 @@ import com.longterm.artschools.ui.core.utils.PreviewContext
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
-const val PAGE_COUNT = 7
+const val PAGE_COUNT = 5
 
 @Composable
 fun OnboardingRootScreen() {
-    val coroutineScope = rememberCoroutineScope()
     val vm: OnboardingViewModel = getViewModel()
+    val coroutineScope = rememberCoroutineScope()
     val state by vm.state.collectAsState()
     val pagerState = rememberPagerState()
     val systemUiController = rememberSystemUiController()
@@ -62,7 +62,7 @@ fun OnboardingRootScreen() {
 
     Box {
         HorizontalPager(pageCount = PAGE_COUNT, state = pagerState, userScrollEnabled = false) {
-            GetPage(
+            PagerPage(
                 page = it,
                 nextPage = {
                     vm.nextPage()
@@ -92,13 +92,7 @@ fun OnboardingRootScreen() {
 
             ScrollIndicator(PAGE_COUNT, pagerState, Modifier.wrapContentWidth())
 
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = "назад",
-                    tint = Colors.MainGreen
-                )
-            }
+            Spacer(modifier = Modifier.size(48.dp))
         }
     }
 }
@@ -108,7 +102,7 @@ private fun getBackground(currentPage: Int): Color {
 }
 
 @Composable
-private fun GetPage(page: Int, nextPage: () -> Unit, skip: () -> Unit) {
+private fun PagerPage(page: Int, nextPage: () -> Unit, skip: () -> Unit) {
     Column(
         Modifier
             .background(getBackground(page))
@@ -120,7 +114,7 @@ private fun GetPage(page: Int, nextPage: () -> Unit, skip: () -> Unit) {
             1 -> OnboardingArtScreen(nextPage, skip)
             2 -> OnboardingTargetScreen(nextPage, skip)
             3 -> OnboardingUserInfoScreen(nextPage, skip)
-            in 3..6 -> OnboardingIntroScreen(nextPage, skip)
+            4 -> RegisterScreen()
             else -> error("No such page $page")
         }
     }

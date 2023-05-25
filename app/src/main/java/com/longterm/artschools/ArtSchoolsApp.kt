@@ -5,7 +5,7 @@ import com.longterm.artschools.di.moduleList
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-class ArtSchoolsApp: Application() {
+class ArtSchoolsApp : Application() {
     override fun onCreate() {
         super.onCreate()
 

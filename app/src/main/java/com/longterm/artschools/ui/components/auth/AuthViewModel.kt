@@ -2,19 +2,14 @@ package com.longterm.artschools.ui.components.auth
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import java.util.regex.Pattern
-import kotlin.time.Duration.Companion.seconds
 
 class AuthViewModel : ViewModel() {
     val state: StateFlow<State>
         get() = _state
-    private val _state : MutableStateFlow<State> = MutableStateFlow(State.Initial)
+    private val _state: MutableStateFlow<State> = MutableStateFlow(State.Initial)
 
     fun close() {
         _state.value = State.Close
@@ -34,11 +29,11 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun passwordChanged(value: TextFieldValue) {
+    fun passwordChanged(value: String) {
         _state.update {
             (it as State.InternalAuth).copy(
-                password = value.text,
-                isDoneButtonEnabled = isEmailValid(it.email) && value.text.isNotBlank()
+                password = value,
+                isDoneButtonEnabled = isEmailValid(it.email) && value.isNotBlank()
             )
         }
     }
