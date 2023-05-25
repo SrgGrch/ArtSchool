@@ -33,8 +33,7 @@ import com.longterm.artschools.ui.components.onboarding.art.OnboardingArtScreen
 import com.longterm.artschools.ui.components.onboarding.intro.OnboardingIntroScreen
 import com.longterm.artschools.ui.components.onboarding.target.OnboardingTargetScreen
 import com.longterm.artschools.ui.components.onboarding.userInfo.OnboardingUserInfoScreen
-import com.longterm.artschools.ui.core.theme.MainGreen
-import com.longterm.artschools.ui.core.theme.VioletLite
+import com.longterm.artschools.ui.core.theme.Colors
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
@@ -86,7 +85,7 @@ fun OnboardingRootScreen() {
                     Icon(
                         imageVector = Icons.Rounded.ArrowBack,
                         contentDescription = "назад",
-                        tint = MainGreen
+                        tint = Colors.MainGreen
                     )
                 }
             else Spacer(modifier = Modifier.size(48.dp))
@@ -97,7 +96,7 @@ fun OnboardingRootScreen() {
                 Icon(
                     imageVector = Icons.Rounded.Close,
                     contentDescription = "назад",
-                    tint = MainGreen
+                    tint = Colors.MainGreen
                 )
             }
         }
@@ -105,7 +104,7 @@ fun OnboardingRootScreen() {
 }
 
 private fun getBackground(currentPage: Int): Color {
-    return if (currentPage == 3) VioletLite else Color.White
+    return if (currentPage == 3) Colors.VioletLite else Color.White
 }
 
 @Composable

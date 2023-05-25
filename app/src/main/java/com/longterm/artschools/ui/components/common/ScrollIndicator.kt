@@ -15,8 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.longterm.artschools.ui.core.theme.LightGrey
-import com.longterm.artschools.ui.core.theme.MainGreen
+import com.longterm.artschools.ui.core.theme.Colors
 
 @Composable
 fun ScrollIndicator(
@@ -37,7 +36,7 @@ fun ScrollIndicator(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
                         .clip(CircleShape)
-                        .background(MainGreen)
+                        .background(Colors.MainGreen)
                         .size(42.dp, 4.dp)
                 )
 
@@ -46,7 +45,7 @@ fun ScrollIndicator(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
                         .clip(CircleShape)
-                        .background(LightGrey)
+                        .background(Colors.LightGrey)
                         .size(4.dp)
 
                 )

@@ -32,8 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.longterm.artschools.R
 import com.longterm.artschools.ui.components.common.ButtonGroup
 import com.longterm.artschools.ui.core.theme.ArtTextStyle
-import com.longterm.artschools.ui.core.theme.LightGrey
-import com.longterm.artschools.ui.core.theme.MainGreen
+import com.longterm.artschools.ui.core.theme.Colors
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 
@@ -64,13 +63,13 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}, skip: () -> Unit = {}) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_select_photo),
                 contentDescription = null,
-                tint = MainGreen
+                tint = Colors.MainGreen
             )
             Spacer(modifier = Modifier.size(12.dp))
             Text(
                 text = stringResource(id = R.string.onboarding_user_info_select_photo),
                 style = ArtTextStyle.Button,
-                color = MainGreen
+                color = Colors.MainGreen
             )
         }
 
@@ -106,15 +105,15 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}, skip: () -> Unit = {}) {
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color.Black,
                     containerColor = Color.White,
-                    focusedIndicatorColor = MainGreen,
-                    unfocusedIndicatorColor = MainGreen,
-                    disabledIndicatorColor = MainGreen,
-                    unfocusedLabelColor = LightGrey,
-                    disabledLabelColor = LightGrey,
-                    focusedLabelColor = LightGrey
+                    focusedIndicatorColor = Colors.MainGreen,
+                    unfocusedIndicatorColor = Colors.MainGreen,
+                    disabledIndicatorColor = Colors.MainGreen,
+                    unfocusedLabelColor = Colors.LightGrey,
+                    disabledLabelColor = Colors.LightGrey,
+                    focusedLabelColor = Colors.LightGrey
                 ),
                 label = {
-                    Text("Ваше имя", style = ArtTextStyle.Body, color = LightGrey)
+                    Text("Ваше имя", style = ArtTextStyle.Body, color = Colors.LightGrey)
                 }
             )
             Spacer(modifier = Modifier.size(12.dp))
@@ -123,17 +122,17 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}, skip: () -> Unit = {}) {
                 onValueChange = vm::onAgeChanged,
                 Modifier.fillMaxWidth(),
                 label = {
-                    Text("Сколько вам лет", style = ArtTextStyle.Body, color = LightGrey)
+                    Text("Сколько вам лет", style = ArtTextStyle.Body, color = Colors.LightGrey)
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color.Black,
                     containerColor = Color.White,
-                    focusedIndicatorColor = MainGreen,
-                    unfocusedIndicatorColor = MainGreen,
-                    disabledIndicatorColor = MainGreen,
-                    unfocusedLabelColor = LightGrey,
-                    disabledLabelColor = LightGrey,
-                    focusedLabelColor = LightGrey
+                    focusedIndicatorColor = Colors.MainGreen,
+                    unfocusedIndicatorColor = Colors.MainGreen,
+                    disabledIndicatorColor = Colors.MainGreen,
+                    unfocusedLabelColor = Colors.LightGrey,
+                    disabledLabelColor = Colors.LightGrey,
+                    focusedLabelColor = Colors.LightGrey
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(

@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.longterm.artschools.R
 import com.longterm.artschools.ui.components.common.ButtonGroup
 import com.longterm.artschools.ui.core.theme.ArtTextStyle
-import com.longterm.artschools.ui.core.theme.MainGreen
+import com.longterm.artschools.ui.core.theme.Colors
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 
@@ -81,9 +81,9 @@ fun OnboardingTargetScreen(
                     },
                     shape = CircleShape,
                     modifier = Modifier.padding(horizontal = 4.dp),
-                    colors = FilterChipDefaults.filterChipColors(selectedContainerColor = MainGreen),
+                    colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Colors.MainGreen),
                     border = FilterChipDefaults.filterChipBorder(
-                        borderColor = MainGreen,
+                        borderColor = Colors.MainGreen,
                         borderWidth = 2.dp
                     )
                 )
