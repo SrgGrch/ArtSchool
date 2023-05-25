@@ -1,6 +1,7 @@
 package com.longterm.artschools.di
 
 import com.longterm.artschools.data.network.HttpClientFactory
+import com.longterm.artschools.ui.components.auth.AuthViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
 import kotlinx.serialization.json.Json
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -8,6 +9,7 @@ import org.koin.dsl.module
 
 val presentationModule = module {
     viewModel { MainViewModel() }
+    viewModel { AuthViewModel() }
 }
 
 val dataModule = module {
