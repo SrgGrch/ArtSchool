@@ -27,7 +27,8 @@ val presentationModule = module {
 }
 
 val dataModule = module {
-    factory { HttpClientFactory(get(), "http://dolgostroiki-20.game-kit.ru") }
+    factory { HttpClientFactory(get(), get()).create("http://dolgostroiki-20.game-kit.ru/api/") }
+
     factory(qualifier = SharedPreferencesQualifier.UserStorage) {
         androidApplication().getSharedPreferences(
             "UserStorage",
@@ -37,7 +38,7 @@ val dataModule = module {
 
     factory { UserStorage(get(SharedPreferencesQualifier.UserStorage)) }
 
-    factory { UserApi(get(), get()) }
+    factory { UserApi(get()) }
 }
 
 val domainModule = module {
