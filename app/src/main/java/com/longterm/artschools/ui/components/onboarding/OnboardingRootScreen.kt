@@ -1,3 +1,5 @@
+@file:OptIn(KoinExperimentalAPI::class)
+
 package com.longterm.artschools.ui.components.onboarding
 
 import androidx.activity.compose.BackHandler
@@ -27,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.longterm.artschools.di.OnboardingScope
 import com.longterm.artschools.ui.components.common.ScrollIndicator
 import com.longterm.artschools.ui.components.onboarding.art.OnboardingArtScreen
 import com.longterm.artschools.ui.components.onboarding.intro.OnboardingIntroScreen
@@ -37,62 +40,66 @@ import com.longterm.artschools.ui.core.theme.Colors
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
+import org.koin.compose.scope.KoinScope
+import org.koin.core.annotation.KoinExperimentalAPI
 
 const val PAGE_COUNT = 5
 
 @Composable
 fun OnboardingRootScreen() {
-    val vm: OnboardingViewModel = getViewModel()
-    val coroutineScope = rememberCoroutineScope()
-    val state by vm.state.collectAsState()
-    val pagerState = rememberPagerState()
-    val systemUiController = rememberSystemUiController()
+    KoinScope(scopeDefinition = { createScope<OnboardingScope>() }) {
+        val vm: OnboardingViewModel = getViewModel()
+        val coroutineScope = rememberCoroutineScope()
+        val state by vm.state.collectAsState()
+        val pagerState = rememberPagerState()
+        val systemUiController = rememberSystemUiController()
 
-    SideEffect {
-        coroutineScope.launch {
-            pagerState.animateScrollToPage(state.currentPage)
-        }
-    }
-
-    systemUiController.setStatusBarColor(getBackground(pagerState.currentPage))
-
-    BackHandler(enabled = pagerState.currentPage != 0) {
-        vm.prevPage()
-    }
-
-    Box {
-        HorizontalPager(pageCount = PAGE_COUNT, state = pagerState, userScrollEnabled = false) {
-            PagerPage(
-                page = it,
-                nextPage = {
-                    vm.nextPage()
-                },
-                skip = {
-                    vm.skip()
-                })
+        SideEffect {
+            coroutineScope.launch {
+                pagerState.animateScrollToPage(state.currentPage)
+            }
         }
 
-        Row(
-            Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            if (state.isPrevButtonVisible)
-                IconButton(onClick = {
-                    vm.prevPage()
-                }) {
-                    Icon(
-                        imageVector = Icons.Rounded.ArrowBack,
-                        contentDescription = "назад",
-                        tint = Colors.MainGreen
-                    )
-                }
-            else Spacer(modifier = Modifier.size(48.dp))
+        systemUiController.setStatusBarColor(getBackground(pagerState.currentPage))
 
-            ScrollIndicator(PAGE_COUNT, pagerState, Modifier.wrapContentWidth())
+        BackHandler(enabled = pagerState.currentPage != 0) {
+            vm.prevPage()
+        }
 
-            Spacer(modifier = Modifier.size(48.dp))
+        Box {
+            HorizontalPager(pageCount = PAGE_COUNT, state = pagerState, userScrollEnabled = false) {
+                PagerPage(
+                    page = it,
+                    nextPage = {
+                        vm.nextPage()
+                    },
+                    skip = {
+                        vm.skip()
+                    })
+            }
+
+            Row(
+                Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                if (state.isPrevButtonVisible)
+                    IconButton(onClick = {
+                        vm.prevPage()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowBack,
+                            contentDescription = "назад",
+                            tint = Colors.MainGreen
+                        )
+                    }
+                else Spacer(modifier = Modifier.size(48.dp))
+
+                ScrollIndicator(PAGE_COUNT, pagerState, Modifier.wrapContentWidth())
+
+                Spacer(modifier = Modifier.size(48.dp))
+            }
         }
     }
 }

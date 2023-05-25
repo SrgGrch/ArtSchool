@@ -2,11 +2,16 @@ package com.longterm.artschools.ui.components.onboarding.register
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.longterm.artschools.domain.usecase.RegisterUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class RegisterViewModel : ViewModel() {
+class RegisterViewModel(
+    private val registerUseCase: RegisterUseCase
+) : ViewModel() {
     val state: StateFlow<State>
         get() = _state
     private val _state: MutableStateFlow<State> = MutableStateFlow(State.Initial())
@@ -70,8 +75,30 @@ class RegisterViewModel : ViewModel() {
     }
 
     fun onDoneClicked() {
+        val st = state.value as? State.InternalRegister ?: error("Wrong state")
+        registerUseCase.supplyCredentials(
+            st.email,
+            st.password,
+            st.repeatPassword
+        )
+        viewModelScope.launch {
+            registerUseCase.register()
+                .onSuccess {
+                    _state.update {
+                        State.Done(it.email, it.isDoneButtonEnabled)
+                    }
+                }
+                .onFailure {
+                    _state.update { state ->
+                        state.copyState(showError = true)
+                    }
+                }.getOrThrow()
+        }
+    }
+
+    fun onErrorShowed() {
         _state.update {
-            State.Done(it.email, it.isDoneButtonEnabled)
+            it.copyState(showError = false)
         }
     }
 
@@ -96,8 +123,26 @@ class RegisterViewModel : ViewModel() {
     sealed interface State {
         val email: String
         val isDoneButtonEnabled: Boolean
+        val showError: Boolean
 
-        data class Initial(override val email: String = "", override val isDoneButtonEnabled: Boolean = false) : State
+        fun copyState(
+            email: String = this.email,
+            isDoneButtonEnabled: Boolean = this.isDoneButtonEnabled,
+            showError: Boolean = this.showError,
+        ): State {
+            return when (this) {
+                is Done -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
+                is Initial -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
+                is InternalRegister -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
+                is Vk -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
+            }
+        }
+
+        data class Initial(
+            override val email: String = "",
+            override val isDoneButtonEnabled: Boolean = false,
+            override val showError: Boolean = false
+        ) : State
 
         data class InternalRegister(
             override val email: String,
@@ -105,6 +150,7 @@ class RegisterViewModel : ViewModel() {
             val repeatPassword: String = "",
             val errors: Errors? = null,
             override val isDoneButtonEnabled: Boolean = false,
+            override val showError: Boolean = false
         ) : State {
             data class Errors(
                 val email: String? = null,
@@ -115,12 +161,14 @@ class RegisterViewModel : ViewModel() {
 
         data class Vk(
             override val email: String = "",
-            override val isDoneButtonEnabled: Boolean = false
+            override val isDoneButtonEnabled: Boolean = false,
+            override val showError: Boolean = false
         ) : State
 
         data class Done(
             override val email: String = "",
-            override val isDoneButtonEnabled: Boolean = false
+            override val isDoneButtonEnabled: Boolean = false,
+            override val showError: Boolean = false
         ) : State
     }
 }
