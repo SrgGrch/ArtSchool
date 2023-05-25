@@ -1,5 +1,7 @@
 package com.longterm.artschools.di
 
+import android.content.Context
+import com.longterm.artschools.data.UserStorage
 import com.longterm.artschools.data.network.HttpClientFactory
 import com.longterm.artschools.ui.components.auth.AuthViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
@@ -8,6 +10,7 @@ import com.longterm.artschools.ui.components.onboarding.art.OnboardingArtViewMod
 import com.longterm.artschools.ui.components.onboarding.target.OnboardingTargetViewModel
 import com.longterm.artschools.ui.components.onboarding.userInfo.OnboardingUserInfoViewModel
 import kotlinx.serialization.json.Json
+import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -22,6 +25,14 @@ val presentationModule = module {
 
 val dataModule = module {
     factory { HttpClientFactory(get() /*todo pass URL*/) }
+    factory(qualifier = SharedPreferencesQualifier.UserStorage) {
+        androidApplication().getSharedPreferences(
+            "UserStorage",
+            Context.MODE_PRIVATE
+        )
+    }
+
+    factory { UserStorage(get(SharedPreferencesQualifier.UserStorage)) }
 }
 
 val domainModule = module {
