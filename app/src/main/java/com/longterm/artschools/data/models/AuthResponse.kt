@@ -1,3 +1,10 @@
 package com.longterm.artschools.data.models
 
-data class AuthResponse(val access: String)
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class AuthResponse(
+    @SerialName("access")
+    val token: String
+)

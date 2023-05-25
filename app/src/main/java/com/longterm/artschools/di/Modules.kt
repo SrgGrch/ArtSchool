@@ -3,6 +3,7 @@ package com.longterm.artschools.di
 import android.content.Context
 import com.longterm.artschools.data.UserStorage
 import com.longterm.artschools.data.network.HttpClientFactory
+import com.longterm.artschools.data.service.UserApi
 import com.longterm.artschools.ui.components.auth.AuthViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
 import com.longterm.artschools.ui.components.onboarding.OnboardingViewModel
@@ -35,6 +36,8 @@ val dataModule = module {
     }
 
     factory { UserStorage(get(SharedPreferencesQualifier.UserStorage)) }
+
+    factory { UserApi(get(), get()) }
 }
 
 val domainModule = module {
