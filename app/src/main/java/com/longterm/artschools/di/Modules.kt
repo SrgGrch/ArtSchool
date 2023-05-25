@@ -24,7 +24,7 @@ val presentationModule = module {
 }
 
 val dataModule = module {
-    factory { HttpClientFactory(get() /*todo pass URL*/) }
+    factory { HttpClientFactory(get(), "http://dolgostroiki-20.game-kit.ru") }
     factory(qualifier = SharedPreferencesQualifier.UserStorage) {
         androidApplication().getSharedPreferences(
             "UserStorage",
