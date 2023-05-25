@@ -9,4 +9,25 @@
     <string name="done">Готово</string>
     <string name="enterPassword">Введите пароль</string>
     <string name="doNotRememberPassword">Я не помню пароль</string>
+
+    <string name="onboarding_intro_title">Привествуем вас, любитель искусств! </string>
+    <string name="onboarding_intro_description">Мы поможем вам узнать много нового, интересно провести время и найти ближайшую школу в Москве</string>
+    <string name="onboarding_intro_start_button">Давайте познакомимся</string>
+    <string name="onboarding_intro_login">Войти в существующий аккаунт</string>
+
+    <string name="onboarding_art_title">Какое искусство вас интересует?</string>
+    <string name="onboarding_art_description">Мы сможем подобрать интересные для вас темы и курсы</string>
+    <string name="onboarding_art_accept_button">Вот это</string>
+    <string name="onboarding_art_cancel_button">Не сейчас</string>
+
+    <string name="onboarding_target_title">Ваша цель?</string>
+    <string name="onboarding_target_description">В приложении кроме курсов, вы сможете подобрать для себя ближайшую Московоской школу исскуств (МШИ)</string>
+    <string name="onboarding_target_accept_button">Вот так</string>
+    <string name="onboarding_target_cancel_button">Не сейчас</string>
+
+    <string name="onboarding_user_info_select_photo">Добавить фото</string>
+    <string name="onboarding_user_info_title">Расскажите немного о себе</string>
+    <string name="onboarding_user_info_subtitle">Так мы сможем точнее настроить приложение</string>
+    <string name="onboarding_user_info_next_button">Дальше</string>
+    <string name="onboarding_user_info_cancel_button">Не сейчас</string>
 </resources>
