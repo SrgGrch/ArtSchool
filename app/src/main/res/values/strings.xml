@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">ArtSchools</string>
+
+
+    <string name="com_vk_sdk_Secret">bRUQMWv798QurrntWakO</string>
+
+
     <string name="login">Вход</string>
     <string name="enterEmailOrLoginViaVk">Введите вашу почту или войдите через VK</string>
     <string name="yourEmail">Ваша почта</string>

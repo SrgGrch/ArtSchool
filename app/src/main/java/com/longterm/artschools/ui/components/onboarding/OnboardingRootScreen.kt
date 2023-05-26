@@ -36,6 +36,7 @@ import com.longterm.artschools.ui.components.onboarding.intro.OnboardingIntroScr
 import com.longterm.artschools.ui.components.onboarding.register.RegisterScreen
 import com.longterm.artschools.ui.components.onboarding.target.OnboardingTargetScreen
 import com.longterm.artschools.ui.components.onboarding.userInfo.OnboardingUserInfoScreen
+import com.longterm.artschools.ui.components.vkauth.components.OnVkAuthResult
 import com.longterm.artschools.ui.core.theme.Colors
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import kotlinx.coroutines.launch
@@ -46,7 +47,10 @@ import org.koin.core.annotation.KoinExperimentalAPI
 const val PAGE_COUNT = 5
 
 @Composable
-fun OnboardingRootScreen() {
+fun OnboardingRootScreen(
+    navigateToVkAuth: (OnVkAuthResult) -> Unit,
+    navigateToMainScreen: () -> Unit
+) {
     KoinScope(scopeDefinition = { createScope<OnboardingScope>() }) {
         val vm: OnboardingViewModel = getViewModel()
         val coroutineScope = rememberCoroutineScope()
@@ -75,7 +79,10 @@ fun OnboardingRootScreen() {
                     },
                     skip = {
                         vm.skip()
-                    })
+                    },
+                    navigateToVkAuth = navigateToVkAuth,
+                    navigateToMainScreen = navigateToMainScreen
+                )
             }
 
             Row(
@@ -109,7 +116,13 @@ private fun getBackground(currentPage: Int): Color {
 }
 
 @Composable
-private fun PagerPage(page: Int, nextPage: () -> Unit, skip: () -> Unit) {
+private fun PagerPage(
+    page: Int,
+    nextPage: () -> Unit,
+    skip: () -> Unit,
+    navigateToVkAuth: (OnVkAuthResult) -> Unit,
+    navigateToMainScreen: () -> Unit
+) {
     Column(
         Modifier
             .background(getBackground(page))
@@ -121,7 +134,7 @@ private fun PagerPage(page: Int, nextPage: () -> Unit, skip: () -> Unit) {
             1 -> OnboardingArtScreen(nextPage, skip)
             2 -> OnboardingTargetScreen(nextPage, skip)
             3 -> OnboardingUserInfoScreen(nextPage, skip)
-            4 -> RegisterScreen()
+            4 -> RegisterScreen(navigateToVkAuth, navigateToMainScreen)
             else -> error("No such page $page")
         }
     }
@@ -132,6 +145,6 @@ private fun PagerPage(page: Int, nextPage: () -> Unit, skip: () -> Unit) {
 @Composable
 private fun Preview() {
     PreviewContext {
-        OnboardingRootScreen()
+        OnboardingRootScreen({}, {})
     }
 }

@@ -1,7 +1,5 @@
 package com.longterm.artschools.ui.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -15,16 +13,17 @@ fun CustomNavHost(
     startDestination: Destination = Destination.Main
 ) {
     fun NavGraphBuilder.createDestination(destination: Destination) =
-        composable(destination.name) { destination.GetComposable() }
+        composable(destination.name) { destination.GetComposable(navController) }
 
     NavHost(navController = navController, startDestination = startDestination.name) {
         createDestination(Destination.Main)
         createDestination(Destination.Onboarding)
         createDestination(Destination.Auth)
+        createDestination(Destination.VkAuth)
+//        createDestination(Destination.Register)
     }
 }
 
 fun NavController.navigate(destination: Destination) {
     navigate(destination.name)
-    Icons.Default.Add
 }

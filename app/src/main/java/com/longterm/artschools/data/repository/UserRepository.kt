@@ -1,8 +1,10 @@
 package com.longterm.artschools.data.repository
 
 import com.longterm.artschools.data.UserStorage
+import com.longterm.artschools.data.api.UserApi
 import com.longterm.artschools.data.models.RegisterRequest
-import com.longterm.artschools.data.service.UserApi
+import com.longterm.artschools.data.models.VkAuthRequest
+import com.longterm.artschools.domain.models.User
 
 class UserRepository(
     private val userApi: UserApi,
@@ -13,8 +15,7 @@ class UserRepository(
         password: String,
         repeatPassword: String,
         age: Int? = null,
-        firstName: String? = null,
-        photoUrl: String? = null,
+        firstName: String? = null
     ): Result<Unit> {
         return userApi.register(
             RegisterRequest(
@@ -22,15 +23,28 @@ class UserRepository(
                 password,
                 repeatPassword,
                 age,
-                firstName,
-                photoUrl
+                firstName
             )
         ).onSuccess { authResponse ->
             userStorage.token = authResponse.token
-
-            userApi.me().onSuccess {
-                userStorage.user = it
-            }
         }.map { }
+    }
+
+    suspend fun register(
+        vkAuthToken: String
+    ): Result<Unit> {
+        return userApi.authWithVk(
+            VkAuthRequest(
+                vkAuthToken
+            )
+        ).onSuccess { authResponse ->
+            userStorage.token = authResponse.token
+        }.map { }
+    }
+
+    suspend fun updateUser(): Result<User> {
+        return userApi.me().onSuccess {
+            userStorage.user = it
+        }
     }
 }

@@ -2,10 +2,12 @@ package com.longterm.artschools.di
 
 import android.content.Context
 import com.longterm.artschools.data.UserStorage
+import com.longterm.artschools.data.api.UserApi
+import com.longterm.artschools.data.api.VkApi
 import com.longterm.artschools.data.network.HttpClientFactory
 import com.longterm.artschools.data.repository.UserRepository
-import com.longterm.artschools.data.service.UserApi
 import com.longterm.artschools.domain.usecase.RegisterUseCase
+import com.longterm.artschools.domain.usecase.VkAuthUseCase
 import com.longterm.artschools.ui.components.auth.AuthViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
 import com.longterm.artschools.ui.components.onboarding.OnboardingViewModel
@@ -25,7 +27,7 @@ val presentationModule = module {
     viewModel { OnboardingTargetViewModel() }
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
     viewModel { AuthViewModel() }
-    viewModel { params -> RegisterViewModel(params.get()) }
+    viewModel { params -> RegisterViewModel(params.get(), androidApplication().resources) }
 }
 
 val dataModule = module {
@@ -41,14 +43,17 @@ val dataModule = module {
     factory { UserStorage(get(SharedPreferencesQualifier.UserStorage)) }
 
     factory { UserApi(get()) }
+    factory { VkApi(get()) }
 
     factory { UserRepository(get(), get()) }
 }
 
 val domainModule = module {
     scope<OnboardingScope> {
-        scoped { RegisterUseCase(get()) }
+        scoped { RegisterUseCase(get(), get()) }
     }
+
+    factory { VkAuthUseCase(get(), get()) }
 }
 
 val commonModule = module {

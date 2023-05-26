@@ -12,7 +12,7 @@ data class RegisterRequest(
     val age: Int? = null,
     @SerialName("first_name")
     val firstName: String? = null,
-    val photoUrl: String? = null,
+//    val photoUrl: String? = null, todo унести в другой запрос
 //    val preferences: List<Any>? = null, // todo пока нет в API
 //    val targets: List<Any>? = null, // todo пока нет в API
 )

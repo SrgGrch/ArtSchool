@@ -1,9 +1,11 @@
 package com.longterm.artschools.domain.usecase
 
 import com.longterm.artschools.data.repository.UserRepository
+import com.longterm.artschools.domain.models.User
 
 class RegisterUseCase(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val vkAuthUseCase: VkAuthUseCase
 ) {
     private var name: String? = null
     private var age: Int? = null
@@ -41,8 +43,21 @@ class RegisterUseCase(
             password,
             repeatPassword,
             age,
-            name,
-            photoUrl
-        )
+            name
+        ).onSuccess {
+            userRepository.updateUser()
+        } // todo send other data
+    }
+
+    suspend fun registerViaVk(
+        code: String,
+        clientId: String,
+        clientSecret: String
+    ): Result<User> {
+        return vkAuthUseCase.execute(
+            code,
+            clientId,
+            clientSecret,
+        ) // todo send other data
     }
 }
