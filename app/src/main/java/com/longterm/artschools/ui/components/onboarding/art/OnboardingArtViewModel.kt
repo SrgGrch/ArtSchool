@@ -40,12 +40,15 @@ class OnboardingArtViewModel(
 
     fun nextPage() {
         registerUseCase
-            .supplyPreferences(_state.value.chips.map { it.code })
+            .supplyPreferences(
+                _state.value.chips
+                    .filter { it.isSelected }
+                    .map { it.code }
+            )
 
         _state.update {
             State.NextPage(it.chips)
         }
-
     }
 
     fun skip() {

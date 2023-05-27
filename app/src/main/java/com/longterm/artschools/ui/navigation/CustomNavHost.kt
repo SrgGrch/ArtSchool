@@ -9,8 +9,12 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
+import androidx.navigation.NavOptionsBuilder
+import androidx.navigation.Navigator
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 
 @Composable
 fun CustomNavHost(
@@ -40,6 +44,14 @@ fun CustomNavHost(
     }
 }
 
-fun NavController.navigate(destination: Destination) {
-    navigate(destination.route)
+fun NavController.navigate(destination: Destination, builder: NavOptionsBuilder.() -> Unit) {
+    navigate(destination, navOptions(builder))
+}
+
+fun NavController.navigate(
+    route: Destination,
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null
+) {
+    navigate(route.route, navOptions, navigatorExtras)
 }
