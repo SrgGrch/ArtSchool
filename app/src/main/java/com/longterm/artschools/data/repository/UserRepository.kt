@@ -2,6 +2,7 @@ package com.longterm.artschools.data.repository
 
 import com.longterm.artschools.data.UserStorage
 import com.longterm.artschools.data.api.UserApi
+import com.longterm.artschools.data.models.account.AuthRequest
 import com.longterm.artschools.data.models.account.RegisterRequest
 import com.longterm.artschools.data.models.account.SetPreferencesRequest
 import com.longterm.artschools.data.models.account.SetTargetsRequest
@@ -52,11 +53,20 @@ class UserRepository(
         }.mapToUnit()
     }
 
+    suspend fun authorize(email: String, password: String): Result<Unit> {
+        return userApi.authorize(
+            AuthRequest(
+                email,
+                password
+            )
+        ).onSuccess { authResponse ->
+            userStorage.token = authResponse.token
+        }.mapToUnit()
+    }
+
     suspend fun updateUser(): Result<User> {
         return userApi.me().onSuccess {
             userStorage.user = it
-        }.onFailure {
-            throw it
         }
     }
 

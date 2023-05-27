@@ -20,12 +20,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.longterm.artschools.R
+import com.longterm.artschools.ui.components.vkauth.components.OnVkAuthResult
 import com.longterm.artschools.ui.core.theme.Colors
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun AuthInitialStateView(viewModel: AuthViewModel) {
+fun AuthInitialStateView(viewModel: AuthViewModel, onNavigateToVk: (OnVkAuthResult) -> Unit) {
     Column {
         Text(
             text = stringResource(id = R.string.or),
@@ -37,7 +38,11 @@ fun AuthInitialStateView(viewModel: AuthViewModel) {
         )
         Spacer(modifier = Modifier.size(12.dp))
         Button(
-            onClick = viewModel::onLoginViaVkClicked,
+            onClick = {
+                onNavigateToVk { token, _ ->
+                    viewModel.vkLoginSucceed(token)
+                }
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Colors.VkBlue),
             contentPadding = PaddingValues(vertical = 14.dp),
             modifier = Modifier
@@ -57,6 +62,6 @@ fun AuthInitialStateView(viewModel: AuthViewModel) {
 @Composable
 private fun Preview() {
     PreviewContext {
-        AuthInitialStateView(viewModel = getViewModel())
+        AuthInitialStateView(viewModel = getViewModel()) {}
     }
 }

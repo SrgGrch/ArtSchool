@@ -8,6 +8,7 @@ import com.longterm.artschools.data.api.VkApi
 import com.longterm.artschools.data.network.HttpClientFactory
 import com.longterm.artschools.data.repository.OnboardingRepository
 import com.longterm.artschools.data.repository.UserRepository
+import com.longterm.artschools.domain.usecase.AuthUseCase
 import com.longterm.artschools.domain.usecase.RegisterUseCase
 import com.longterm.artschools.domain.usecase.VkAuthUseCase
 import com.longterm.artschools.ui.components.auth.AuthViewModel
@@ -29,7 +30,7 @@ val presentationModule = module {
     viewModel { params -> OnboardingArtViewModel(params.get(), get()) }
     viewModel { params -> OnboardingTargetViewModel(params.get(), get()) }
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
-    viewModel { AuthViewModel() }
+    viewModel { AuthViewModel(get(), androidApplication().resources) }
     viewModel { params -> RegisterViewModel(params.get(), androidApplication().resources) }
 
     factory { BottomBarCoordinator() }
@@ -61,6 +62,7 @@ val domainModule = module {
     }
 
     factory { VkAuthUseCase(get(), get()) }
+    factory { AuthUseCase(get(), get()) }
 }
 
 val commonModule = module {
