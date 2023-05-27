@@ -2,11 +2,14 @@ package com.longterm.artschools.ui.components.auth
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.longterm.artschools.domain.usecase.AuthUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel() {
     val state: StateFlow<State>
         get() = _state
     private val _state: MutableStateFlow<State> = MutableStateFlow(State.Initial())
@@ -17,12 +20,12 @@ class AuthViewModel : ViewModel() {
                 val errorPrompt = if (!isValidEmail(value)) "Неверный email" else null
                 val errors = it.errors?.copy(email = errorPrompt) ?: State.InternalAuth.Errors(errorPrompt)
 
-                if (isAllFieldBlank(value, it.password, it.repeatPassword)) {
+                if (isAllFieldBlank(value, it.password)) {
                     State.Initial(value, false)
                 } else {
                     it.copy(
                         email = value,
-                        isDoneButtonEnabled = isDoneEnabled(value, it.password, it.repeatPassword),
+                        isDoneButtonEnabled = isDoneEnabled(value, it.password),
                         errors = errors
                     )
                 }
@@ -40,8 +43,7 @@ class AuthViewModel : ViewModel() {
 
             st.copy(
                 password = value,
-                repeatPassword = "",
-                isDoneButtonEnabled = isDoneEnabled(it.email, value, it.repeatPassword),
+                isDoneButtonEnabled = isDoneEnabled(it.email, value),
                 errors = errors
             )
         }
@@ -54,8 +56,19 @@ class AuthViewModel : ViewModel() {
     }
 
     fun onDoneClicked() {
-        _state.update {
-            State.Done(it.email, it.isDoneButtonEnabled)
+        val st = state.value as? State.InternalAuth ?: error("Wrong state")
+        viewModelScope.launch {
+            authUseCase.authorize(st.email, st.password)
+                .onSuccess {
+                    _state.update {
+                        State.Done(it.email, it.isDoneButtonEnabled)
+                    }
+                }
+                .onFailure {
+                    _state.update { state ->
+                        state.copyState(showError = true)
+                    }
+                }.getOrThrow()
         }
     }
 
@@ -67,16 +80,12 @@ class AuthViewModel : ViewModel() {
 
     fun onDontRememberPasswordClicked() {}
 
-    private fun isDoneEnabled(email: String, password: String, repeatPassword: String): Boolean {
-        return isValidEmail(email)
-                && password.isNotBlank()
-                && password == repeatPassword
+    private fun isDoneEnabled(email: String, password: String): Boolean {
+        return isValidEmail(email) && password.isNotBlank()
     }
 
-    private fun isAllFieldBlank(email: String, password: String, repeatPassword: String): Boolean {
-        return email.isBlank()
-                && password.isBlank()
-                && repeatPassword.isBlank()
+    private fun isAllFieldBlank(email: String, password: String): Boolean {
+        return email.isBlank() && password.isBlank()
     }
 
     private fun isValidEmail(email: String): Boolean {
@@ -88,8 +97,27 @@ class AuthViewModel : ViewModel() {
     sealed interface State {
         val email: String
         val isDoneButtonEnabled: Boolean
+        val showError: Boolean
 
-        data class Initial(override val email: String = "", override val isDoneButtonEnabled: Boolean = false) : State
+        fun copyState(
+            email: String = this.email,
+            isDoneButtonEnabled: Boolean = this.isDoneButtonEnabled,
+            showError: Boolean = this.showError,
+        ): State {
+            return when (this) {
+                is Done -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
+                is Initial -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
+                is InternalAuth -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
+                is Vk -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
+                is Close -> Close
+            }
+        }
+
+        data class Initial(
+            override val email: String = "",
+            override val isDoneButtonEnabled: Boolean = false,
+            override val showError: Boolean = false
+        ) : State
 
         data class InternalAuth(
             override val email: String,
@@ -97,6 +125,7 @@ class AuthViewModel : ViewModel() {
             val repeatPassword: String = "",
             val errors: Errors? = null,
             override val isDoneButtonEnabled: Boolean = false,
+            override val showError: Boolean = false
         ) : State {
             data class Errors(
                 val email: String? = null,
@@ -107,17 +136,20 @@ class AuthViewModel : ViewModel() {
 
         data class Vk(
             override val email: String = "",
-            override val isDoneButtonEnabled: Boolean = false
+            override val isDoneButtonEnabled: Boolean = false,
+            override val showError: Boolean = false
         ) : State
 
         data class Done(
             override val email: String = "",
-            override val isDoneButtonEnabled: Boolean = false
+            override val isDoneButtonEnabled: Boolean = false,
+            override val showError: Boolean = false
         ) : State
 
         object Close : State {
             override val email: String = ""
             override val isDoneButtonEnabled: Boolean = false
+            override val showError: Boolean = false
         }
     }
 }

@@ -33,7 +33,7 @@ import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun AuthScreen() {
+fun AuthScreen(navigateToMainScreen: () -> Unit) {
     val viewModel: AuthViewModel = getViewModel()
     val state by viewModel.state.collectAsState()
 
@@ -86,7 +86,7 @@ fun AuthScreen() {
             is AuthViewModel.State.Initial -> AuthInitialStateView(viewModel)
             is AuthViewModel.State.InternalAuth -> AuthInternalStateView(st, viewModel::onPasswordChanged)
             is AuthViewModel.State.Vk -> Unit // todo
-            is AuthViewModel.State.Done -> Unit // todo
+            is AuthViewModel.State.Done -> navigateToMainScreen()
             is AuthViewModel.State.Close -> Unit // todo
         }
 
@@ -125,6 +125,6 @@ private fun ColumnScope.DoNotRememberPasswordButton(onClick: () -> Unit) {
 @Composable
 private fun Preview() {
     PreviewContext {
-        AuthScreen()
+        AuthScreen {}
     }
 }
