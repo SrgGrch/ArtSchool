@@ -1,11 +1,15 @@
 package com.longterm.artschools.ui.components.onboarding.target
 
 import androidx.lifecycle.ViewModel
+import com.longterm.artschools.domain.usecase.RegisterUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class OnboardingTargetViewModel : ViewModel() {
+class OnboardingTargetViewModel(
+    private val registerUseCase: RegisterUseCase,
+    private val onboardingRepository: OnboardingRepository
+) : ViewModel() {
 
     val state: StateFlow<State> get() = _state
     private val _state = MutableStateFlow<State>(State.Data(getChips()))
@@ -24,7 +28,7 @@ class OnboardingTargetViewModel : ViewModel() {
     }
 
     fun nextPage() {
-        //todo send interests
+        registerUseCase.supplyTargets()
         _state.update {
             State.NextPage(it.chips)
         }

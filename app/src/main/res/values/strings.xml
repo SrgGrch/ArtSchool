@@ -36,4 +36,7 @@
     <string name="onboarding_user_info_subtitle">Так мы сможем точнее настроить приложение</string>
     <string name="onboarding_user_info_next_button">Дальше</string>
     <string name="onboarding_user_info_cancel_button">Не сейчас</string>
+
+    <string name="onboarding_register_title">Сохраним ваш профиль?</string>
+    <string name="onboarding_register_subtitle">Введите вашу почту или войдите через VK, чтобы сохранить введённую информацию </string>
 </resources>

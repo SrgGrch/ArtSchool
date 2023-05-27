@@ -43,7 +43,7 @@ fun RegisterScreen(
 
     Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
         Text(
-            text = stringResource(id = R.string.login),
+            text = stringResource(id = R.string.onboarding_register_title),
             color = Color.Black,
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
@@ -51,7 +51,7 @@ fun RegisterScreen(
         )
         Spacer(modifier = Modifier.size(12.dp))
         Text(
-            text = stringResource(id = R.string.enterEmailOrLoginViaVk),
+            text = stringResource(id = R.string.onboarding_register_subtitle),
             color = Color.Black,
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal,

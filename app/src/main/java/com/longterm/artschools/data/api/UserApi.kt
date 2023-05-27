@@ -4,6 +4,8 @@ import com.longterm.artschools.data.api.core.withResultUnwrapped
 import com.longterm.artschools.data.models.AuthRequest
 import com.longterm.artschools.data.models.AuthResponse
 import com.longterm.artschools.data.models.RegisterRequest
+import com.longterm.artschools.data.models.SetPreferencesRequest
+import com.longterm.artschools.data.models.SetTargetsRequest
 import com.longterm.artschools.data.models.VkAuthRequest
 import com.longterm.artschools.domain.models.User
 import io.ktor.client.HttpClient
@@ -37,6 +39,26 @@ class UserApi(
         request: VkAuthRequest
     ): Result<AuthResponse> = httpClient.withResultUnwrapped {
         post("vk_signin/") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.body()
+    }
+
+    suspend fun setPreferences(
+        request: SetPreferencesRequest
+    ): Result<List<String>> = httpClient.withResultUnwrapped {
+        post("set_preferences/") {
+            withAuth()
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.body()
+    }
+
+    suspend fun setTargets(
+        request: SetTargetsRequest
+    ): Result<List<String>> = httpClient.withResultUnwrapped {
+        post("set_targets/") {
+            withAuth()
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()

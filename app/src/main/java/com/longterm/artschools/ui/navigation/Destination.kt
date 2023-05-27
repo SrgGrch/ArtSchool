@@ -28,9 +28,9 @@ sealed interface Destination {
         @Composable
         override fun GetComposable(navController: NavController) {
             return OnboardingRootScreen(
-                { navController.navigate(VkAuth(it)) },
-                {},
-                { navController.navigate(BottomBarDestination.Main) })//todo
+                navigateToVkAuth = { navController.navigate(VkAuth(it)) },
+                navigateToMainScreen = { navController.navigate(BottomBarDestination.Main) },
+                navigateToLogin = { navController.navigate(BottomBarDestination.Main) })//todo
         }
     }
 

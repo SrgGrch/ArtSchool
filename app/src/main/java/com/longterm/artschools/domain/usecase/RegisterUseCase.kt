@@ -2,6 +2,7 @@ package com.longterm.artschools.domain.usecase
 
 import com.longterm.artschools.data.repository.UserRepository
 import com.longterm.artschools.domain.models.User
+import com.longterm.artschools.ui.core.onSuccessMap
 
 class RegisterUseCase(
     private val userRepository: UserRepository,
@@ -10,12 +11,19 @@ class RegisterUseCase(
     private var name: String? = null
     private var age: Int? = null
     private var photoUrl: String? = null
+    private var preferencesCodes: List<String>? = null
+    private var targetsCodes: List<String>? = null
     private lateinit var email: String
     private lateinit var password: String
     private lateinit var repeatPassword: String
 
-    fun supplyPreferences() = Unit // todo
-    fun supplyTargets() = Unit // todo
+    fun supplyPreferences(codes: List<String>) {
+        preferencesCodes = codes
+    }
+
+    fun supplyTargets(codes: List<String>) {
+        targetsCodes = codes
+    }
 
     fun supplyUserInfo(
         name: String,
@@ -43,7 +51,9 @@ class RegisterUseCase(
             password,
             repeatPassword,
             age,
-            name
+            name,
+            preferencesCodes,
+            targetsCodes
         ).onSuccess {
             userRepository.updateUser()
         } // todo send other data
@@ -58,6 +68,8 @@ class RegisterUseCase(
             code,
             clientId,
             clientSecret,
-        ) // todo send other data
+        ).onSuccessMap { user ->
+            userRepository.sendAdditionalData(preferencesCodes, targetsCodes).map { user }
+        }
     }
 }
