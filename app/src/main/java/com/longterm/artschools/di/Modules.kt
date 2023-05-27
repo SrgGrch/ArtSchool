@@ -30,7 +30,7 @@ val presentationModule = module {
     viewModel { params -> OnboardingArtViewModel(params.get(), get()) }
     viewModel { params -> OnboardingTargetViewModel(params.get(), get()) }
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
-    viewModel { AuthViewModel(get()) }
+    viewModel { AuthViewModel(get(), androidApplication().resources) }
     viewModel { params -> RegisterViewModel(params.get(), androidApplication().resources) }
 
     factory { BottomBarCoordinator() }

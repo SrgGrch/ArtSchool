@@ -67,8 +67,6 @@ class UserRepository(
     suspend fun updateUser(): Result<User> {
         return userApi.me().onSuccess {
             userStorage.user = it
-        }.onFailure {
-            throw it
         }
     }
 

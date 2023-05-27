@@ -20,7 +20,10 @@ sealed interface Destination {
     object Auth : Destination {
         @Composable
         override fun GetComposable(navController: NavController) {
-            return AuthScreen { navController.navigate(BottomBarDestination.Main) }
+            return AuthScreen(
+                navigateToVkAuth = { navController.navigate(VkAuth(it)) },
+                navigateToMainScreen = { navController.navigate(BottomBarDestination.Main) }
+            )
         }
     }
 

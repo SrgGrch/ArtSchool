@@ -88,7 +88,7 @@ class RegisterViewModel(
                     _state.update { state ->
                         state.copyState(showError = true)
                     }
-                }.getOrThrow()
+                }
         }
     }
 
