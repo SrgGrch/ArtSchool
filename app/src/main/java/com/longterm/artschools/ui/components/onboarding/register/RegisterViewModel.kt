@@ -88,7 +88,7 @@ class RegisterViewModel(
                     _state.update { state ->
                         state.copyState(showError = true)
                     }
-                }.getOrThrow()
+                }
         }
     }
 
@@ -104,12 +104,11 @@ class RegisterViewModel(
                 code,
                 resources.getInteger(R.integer.com_vk_sdk_AppId).toString(),
                 resources.getString(R.string.com_vk_sdk_Secret)
-            )
-                .onSuccess {
-                    _state.update {
-                        State.Done()
-                    }
-                }.onFailure { throw it }
+            ).onSuccess {
+                _state.update {
+                    State.Done()
+                }
+            }.onFailure { throw it }
         }
     }
 

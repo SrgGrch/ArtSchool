@@ -86,9 +86,9 @@ fun OnboardingArtScreen(
                     },
                     shape = CircleShape,
                     modifier = Modifier.padding(horizontal = 4.dp),
-                    colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Colors.MainGreen),
+                    colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Colors.GreenMain),
                     border = FilterChipDefaults.filterChipBorder(
-                        borderColor = Colors.MainGreen,
+                        borderColor = Colors.GreenMain,
                         borderWidth = 2.dp
                     )
                 )

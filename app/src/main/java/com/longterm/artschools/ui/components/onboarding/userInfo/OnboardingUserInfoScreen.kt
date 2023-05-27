@@ -65,13 +65,13 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}, skip: () -> Unit = {}) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_select_photo),
                 contentDescription = null,
-                tint = Colors.MainGreen
+                tint = Colors.GreenMain
             )
             Spacer(modifier = Modifier.size(12.dp))
             Text(
                 text = stringResource(id = R.string.onboarding_user_info_select_photo),
                 style = ArtTextStyle.Button,
-                color = Colors.MainGreen
+                color = Colors.GreenMain
             )
         }
 
@@ -107,15 +107,15 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}, skip: () -> Unit = {}) {
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color.Black,
                     containerColor = Color.White,
-                    focusedIndicatorColor = Colors.MainGreen,
-                    unfocusedIndicatorColor = Colors.MainGreen,
-                    disabledIndicatorColor = Colors.MainGreen,
-                    unfocusedLabelColor = Colors.LightGrey,
-                    disabledLabelColor = Colors.LightGrey,
-                    focusedLabelColor = Colors.LightGrey
+                    focusedIndicatorColor = Colors.GreenMain,
+                    unfocusedIndicatorColor = Colors.GreenMain,
+                    disabledIndicatorColor = Colors.GreenMain,
+                    unfocusedLabelColor = Colors.GreyLight,
+                    disabledLabelColor = Colors.GreyLight,
+                    focusedLabelColor = Colors.GreyLight
                 ),
                 label = {
-                    Text("Ваше имя", style = ArtTextStyle.Body, color = Colors.LightGrey)
+                    Text("Ваше имя", style = ArtTextStyle.Body, color = Colors.GreyLight)
                 }
             )
             Spacer(modifier = Modifier.size(12.dp))
@@ -124,17 +124,17 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}, skip: () -> Unit = {}) {
                 onValueChange = vm::onAgeChanged,
                 Modifier.fillMaxWidth(),
                 label = {
-                    Text("Сколько вам лет", style = ArtTextStyle.Body, color = Colors.LightGrey)
+                    Text("Сколько вам лет", style = ArtTextStyle.Body, color = Colors.GreyLight)
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color.Black,
                     containerColor = Color.White,
-                    focusedIndicatorColor = Colors.MainGreen,
-                    unfocusedIndicatorColor = Colors.MainGreen,
-                    disabledIndicatorColor = Colors.MainGreen,
-                    unfocusedLabelColor = Colors.LightGrey,
-                    disabledLabelColor = Colors.LightGrey,
-                    focusedLabelColor = Colors.LightGrey
+                    focusedIndicatorColor = Colors.GreenMain,
+                    unfocusedIndicatorColor = Colors.GreenMain,
+                    disabledIndicatorColor = Colors.GreenMain,
+                    unfocusedLabelColor = Colors.GreyLight,
+                    disabledLabelColor = Colors.GreyLight,
+                    focusedLabelColor = Colors.GreyLight
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(

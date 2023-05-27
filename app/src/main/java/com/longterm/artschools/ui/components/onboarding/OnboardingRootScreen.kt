@@ -100,7 +100,7 @@ fun OnboardingRootScreen(
                         Icon(
                             imageVector = Icons.Rounded.ArrowBack,
                             contentDescription = "назад",
-                            tint = Colors.MainGreen
+                            tint = Colors.GreenMain
                         )
                     }
                 else Spacer(modifier = Modifier.size(48.dp))
