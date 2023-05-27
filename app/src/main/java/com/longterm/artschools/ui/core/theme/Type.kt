@@ -40,6 +40,12 @@ object ArtTextStyle {
         lineHeight = 30.sp
     )
 
+    val H3 = TextStyle(
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+        lineHeight = 24.sp
+    )
+
     val Body = TextStyle(
         fontSize = 16.sp,
         lineHeight = 22.sp
@@ -54,5 +60,10 @@ object ArtTextStyle {
     val Chips = TextStyle(
         fontSize = 13.sp,
         lineHeight = 22.sp
+    )
+
+    val tab = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 14.sp
     )
 }

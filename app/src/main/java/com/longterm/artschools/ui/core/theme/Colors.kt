@@ -11,13 +11,18 @@ object Colors {
     val PurpleGrey40 = Color(0xFF625b71)
     val Pink40 = Color(0xFF7D5260)
 
-    val MainGreen = Color(0xFFA8CE57)
+    val GreenMain = Color(0xFFA8CE57)
     val Green = Color(0xFFADCB47)
     val GreenDisabled = Color(0x80ADCB47)
 
     val VioletLite = Color(0xFF8E75A8)
 
-    val LightGrey = Color(0xFFA1A1A1)
+    val Red = Color(0xFFBA768F)
+
+    val GreyLight = Color(0xFFA1A1A1)
+    val GreyLight3 = Color(0xFFEDEDED)
+
+    val Blue = Color(0xFF3B4560)
 
     val VkBlue = Color(0xFF0077FF)
 }

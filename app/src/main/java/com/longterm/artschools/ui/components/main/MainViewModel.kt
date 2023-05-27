@@ -1,23 +1,37 @@
 package com.longterm.artschools.ui.components.main
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
+import com.longterm.artschools.ui.components.main.models.MainListItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 class MainViewModel : ViewModel() {
-    val state: StateFlow<String>
+    val state: StateFlow<State>
         get() = _state
-    private val _state = MutableStateFlow("String")
+    private val _state = MutableStateFlow<State>(State.Loading)
 
-    init {
-        viewModelScope.launch {
-            delay(10.seconds)
+    fun onQuizAnswer(answer: MainListItem.QuizItem.Answer, position: Int) {
 
-            _state.value = "Хун"
-        }
+    }
+
+    fun retry() {
+
+    }
+
+    sealed interface State {
+        val userPic: String?
+            get() = null
+
+        val level: String
+            get() = "·"
+
+        object Loading : State
+        object Error : State
+        data class Data(
+            val items: List<MainListItem>,
+            val isLoading: Boolean = false,
+            override val level: String,
+            override val userPic: String?
+        ) : State
     }
 }

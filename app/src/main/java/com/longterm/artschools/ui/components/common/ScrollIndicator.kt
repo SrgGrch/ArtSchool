@@ -36,7 +36,7 @@ fun ScrollIndicator(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
                         .clip(CircleShape)
-                        .background(Colors.MainGreen)
+                        .background(Colors.GreenMain)
                         .size(42.dp, 4.dp)
                 )
 
@@ -45,7 +45,7 @@ fun ScrollIndicator(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
                         .clip(CircleShape)
-                        .background(Colors.LightGrey)
+                        .background(Colors.GreyLight)
                         .size(4.dp)
 
                 )
