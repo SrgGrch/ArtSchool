@@ -2,10 +2,10 @@ package com.longterm.artschools.data.repository
 
 import com.longterm.artschools.data.UserStorage
 import com.longterm.artschools.data.api.UserApi
-import com.longterm.artschools.data.models.RegisterRequest
-import com.longterm.artschools.data.models.SetPreferencesRequest
-import com.longterm.artschools.data.models.SetTargetsRequest
-import com.longterm.artschools.data.models.VkAuthRequest
+import com.longterm.artschools.data.models.account.RegisterRequest
+import com.longterm.artschools.data.models.account.SetPreferencesRequest
+import com.longterm.artschools.data.models.account.SetTargetsRequest
+import com.longterm.artschools.data.models.account.VkAuthRequest
 import com.longterm.artschools.domain.models.User
 import com.longterm.artschools.ui.core.onSuccessMap
 
@@ -26,12 +26,12 @@ class UserRepository(
             RegisterRequest(
                 email,
                 password,
-                repeatPassword,
-                age,
-                firstName
+                repeatPassword
             )
         ).onSuccess { authResponse ->
             userStorage.token = authResponse.token
+        }.onSuccessMap {
+            userApi.updateMe(age = age, name = firstName)
         }.onSuccessMap {
             sendAdditionalData(preferencesCodes, targetsCodes)
         }

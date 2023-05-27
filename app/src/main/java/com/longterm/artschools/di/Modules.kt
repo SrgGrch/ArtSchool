@@ -2,9 +2,11 @@ package com.longterm.artschools.di
 
 import android.content.Context
 import com.longterm.artschools.data.UserStorage
+import com.longterm.artschools.data.api.OnboardingApi
 import com.longterm.artschools.data.api.UserApi
 import com.longterm.artschools.data.api.VkApi
 import com.longterm.artschools.data.network.HttpClientFactory
+import com.longterm.artschools.data.repository.OnboardingRepository
 import com.longterm.artschools.data.repository.UserRepository
 import com.longterm.artschools.domain.usecase.RegisterUseCase
 import com.longterm.artschools.domain.usecase.VkAuthUseCase
@@ -24,8 +26,8 @@ import org.koin.dsl.module
 val presentationModule = module {
     viewModel { MainViewModel() }
     viewModel { OnboardingViewModel() }
-    viewModel { OnboardingArtViewModel() }
-    viewModel { OnboardingTargetViewModel() }
+    viewModel { params -> OnboardingArtViewModel(params.get(), get()) }
+    viewModel { params -> OnboardingTargetViewModel(params.get(), get()) }
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
     viewModel { AuthViewModel() }
     viewModel { params -> RegisterViewModel(params.get(), androidApplication().resources) }
@@ -47,8 +49,10 @@ val dataModule = module {
 
     factory { UserApi(get()) }
     factory { VkApi(get()) }
+    factory { OnboardingApi(get()) }
 
     factory { UserRepository(get(), get()) }
+    factory { OnboardingRepository(get()) }
 }
 
 val domainModule = module {

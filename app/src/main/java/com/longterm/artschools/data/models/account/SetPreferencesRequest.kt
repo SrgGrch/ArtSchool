@@ -1,4 +1,4 @@
-package com.longterm.artschools.data.models
+package com.longterm.artschools.data.models.account
 
 import kotlinx.serialization.Serializable
 

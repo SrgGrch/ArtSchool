@@ -1,7 +1,7 @@
 package com.longterm.artschools.data.api
 
 import com.longterm.artschools.data.api.core.withResult
-import com.longterm.artschools.data.models.VkAuthResponse
+import com.longterm.artschools.data.models.account.VkAuthResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
