@@ -20,7 +20,7 @@ sealed interface Destination {
     object Auth : Destination {
         @Composable
         override fun GetComposable(navController: NavController) {
-            return AuthScreen()
+            return AuthScreen { navController.navigate(BottomBarDestination.Main) }
         }
     }
 
@@ -34,7 +34,8 @@ sealed interface Destination {
                         popUpTo(BottomBarDestination.Main.route)
                     }
                 },
-                navigateToLogin = { navController.navigate(BottomBarDestination.Main) })//todo
+                navigateToLogin = { navController.navigate(Auth) }
+            )
         }
     }
 
