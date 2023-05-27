@@ -41,7 +41,11 @@ class OnboardingTargetViewModel(
 
     fun nextPage() {
         registerUseCase
-            .supplyTargets(_state.value.chips.map { it.code })
+            .supplyTargets(
+                _state.value.chips
+                    .filter { it.isSelected }
+                    .map { it.code }
+            )
 
         _state.update {
             State.NextPage(it.chips)
