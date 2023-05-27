@@ -15,6 +15,7 @@ import com.longterm.artschools.ui.components.onboarding.art.OnboardingArtViewMod
 import com.longterm.artschools.ui.components.onboarding.register.RegisterViewModel
 import com.longterm.artschools.ui.components.onboarding.target.OnboardingTargetViewModel
 import com.longterm.artschools.ui.components.onboarding.userInfo.OnboardingUserInfoViewModel
+import com.longterm.artschools.ui.navigation.BottomBarCoordinator
 import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -28,6 +29,8 @@ val presentationModule = module {
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
     viewModel { AuthViewModel() }
     viewModel { params -> RegisterViewModel(params.get(), androidApplication().resources) }
+
+    factory { BottomBarCoordinator() }
 }
 
 val dataModule = module {

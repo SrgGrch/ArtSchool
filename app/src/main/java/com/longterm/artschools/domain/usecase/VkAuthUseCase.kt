@@ -20,7 +20,8 @@ class VkAuthUseCase(
         )
 
         return if (getTokenResult.isSuccess) {
-            val result = userRepository.register(getTokenResult.getOrThrow().accessToken)
+            val r = getTokenResult.getOrThrow()
+            val result = userRepository.register(r.accessToken, r.email)
 
             if (result.isSuccess) {
                 userRepository.updateUser()

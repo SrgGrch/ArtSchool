@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class VkAuthRequest(
     @SerialName("vk_access_token")
-    val vkAccessToken: String
+    val vkAccessToken: String,
+    val email: String
 )

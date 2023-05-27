@@ -3,24 +3,19 @@ package com.longterm.artschools.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.longterm.artschools.ui.components.auth.AuthScreen
-import com.longterm.artschools.ui.components.main.MainScreen
 import com.longterm.artschools.ui.components.onboarding.OnboardingRootScreen
 import com.longterm.artschools.ui.components.vkauth.VkAuthScreen
 import com.longterm.artschools.ui.components.vkauth.components.OnVkAuthResult
 
 sealed interface Destination {
-    val name: String
+    val route: String
         get() = this::class.simpleName!!
+
+    val isNavigationVisible: Boolean
+        get() = true
 
     @Composable
     fun GetComposable(navController: NavController)
-
-    object Main : Destination {
-        @Composable
-        override fun GetComposable(navController: NavController) {
-            return MainScreen()
-        }
-    }
 
     object Auth : Destination {
         @Composable
@@ -32,12 +27,15 @@ sealed interface Destination {
     object Onboarding : Destination {
         @Composable
         override fun GetComposable(navController: NavController) {
-            return OnboardingRootScreen()
+            return OnboardingRootScreen(
+                { navController.navigate(VkAuth(it)) },
+                {},
+                { navController.navigate(BottomBarDestination.Main) })//todo
         }
     }
 
     object VkAuth : Destination {
-        override val name: String
+        override val route: String
             get() = "VkAuth"
 
         private lateinit var onResult: OnVkAuthResult

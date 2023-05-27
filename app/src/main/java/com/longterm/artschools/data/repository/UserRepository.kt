@@ -31,11 +31,13 @@ class UserRepository(
     }
 
     suspend fun register(
-        vkAuthToken: String
+        vkAuthToken: String,
+        email: String
     ): Result<Unit> {
         return userApi.authWithVk(
             VkAuthRequest(
-                vkAuthToken
+                vkAuthToken,
+                email
             )
         ).onSuccess { authResponse ->
             userStorage.token = authResponse.token

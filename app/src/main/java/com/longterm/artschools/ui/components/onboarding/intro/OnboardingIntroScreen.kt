@@ -26,7 +26,7 @@ import com.longterm.artschools.ui.core.utils.PreviewContext
 @Composable
 fun OnboardingIntroScreen(
     nextPage: () -> Unit = {},
-    skip: () -> Unit = {}
+    navigateToLogin: () -> Unit
 ) {
     Column(
         Modifier
@@ -61,7 +61,7 @@ fun OnboardingIntroScreen(
             primaryText = stringResource(id = R.string.onboarding_intro_start_button),
             secondaryText = stringResource(id = R.string.onboarding_intro_login),
             primaryButtonClicked = nextPage,
-            secondaryButtonClicked = skip
+            secondaryButtonClicked = navigateToLogin
         )
     }
 }
@@ -72,7 +72,7 @@ private fun Preview() {
     PreviewContext {
         Column {
             Spacer(modifier = Modifier.size(48.dp))
-            OnboardingIntroScreen { }
+            OnboardingIntroScreen({ }, {})
         }
     }
 }

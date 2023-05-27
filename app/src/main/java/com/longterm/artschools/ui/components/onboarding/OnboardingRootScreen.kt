@@ -49,7 +49,8 @@ const val PAGE_COUNT = 5
 @Composable
 fun OnboardingRootScreen(
     navigateToVkAuth: (OnVkAuthResult) -> Unit,
-    navigateToMainScreen: () -> Unit
+    navigateToMainScreen: () -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     KoinScope(scopeDefinition = { createScope<OnboardingScope>() }) {
         val vm: OnboardingViewModel = getViewModel()
@@ -81,7 +82,8 @@ fun OnboardingRootScreen(
                         vm.skip()
                     },
                     navigateToVkAuth = navigateToVkAuth,
-                    navigateToMainScreen = navigateToMainScreen
+                    navigateToMainScreen = navigateToMainScreen,
+                    navigateToLogin = navigateToLogin
                 )
             }
 
@@ -121,7 +123,8 @@ private fun PagerPage(
     nextPage: () -> Unit,
     skip: () -> Unit,
     navigateToVkAuth: (OnVkAuthResult) -> Unit,
-    navigateToMainScreen: () -> Unit
+    navigateToMainScreen: () -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     Column(
         Modifier
@@ -130,7 +133,7 @@ private fun PagerPage(
         Spacer(modifier = Modifier.size(50.dp))
 
         when (page) {
-            0 -> OnboardingIntroScreen(nextPage, skip)
+            0 -> OnboardingIntroScreen(nextPage, navigateToLogin)
             1 -> OnboardingArtScreen(nextPage, skip)
             2 -> OnboardingTargetScreen(nextPage, skip)
             3 -> OnboardingUserInfoScreen(nextPage, skip)
@@ -145,6 +148,6 @@ private fun PagerPage(
 @Composable
 private fun Preview() {
     PreviewContext {
-        OnboardingRootScreen({}, {})
+        OnboardingRootScreen({}, {}, {})
     }
 }
