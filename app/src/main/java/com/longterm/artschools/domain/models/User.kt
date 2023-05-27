@@ -9,7 +9,7 @@ data class User(
     val id: Int,
     @SerialName("vk_id")
     val vkId: Int? = null,
-    val level: UserLevel,
+    val level: UserLevel? = null,
     val email: String,
     val age: Int? = null,
     @SerialName("first_name")

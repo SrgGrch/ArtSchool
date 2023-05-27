@@ -7,6 +7,7 @@ import com.longterm.artschools.data.models.account.SetPreferencesRequest
 import com.longterm.artschools.data.models.account.SetTargetsRequest
 import com.longterm.artschools.data.models.account.VkAuthRequest
 import com.longterm.artschools.domain.models.User
+import com.longterm.artschools.ui.core.mapToUnit
 import com.longterm.artschools.ui.core.onSuccessMap
 
 class UserRepository(
@@ -48,12 +49,14 @@ class UserRepository(
             )
         ).onSuccess { authResponse ->
             userStorage.token = authResponse.token
-        }.map { }
+        }.mapToUnit()
     }
 
     suspend fun updateUser(): Result<User> {
         return userApi.me().onSuccess {
             userStorage.user = it
+        }.onFailure {
+            throw it
         }
     }
 
