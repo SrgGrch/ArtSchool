@@ -1,4 +1,4 @@
-package com.longterm.artschools.data.service
+package com.longterm.artschools.data.api
 
 import io.ktor.client.request.HttpRequestBuilder
 

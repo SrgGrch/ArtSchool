@@ -1,16 +1,20 @@
 package com.longterm.artschools.ui.components.onboarding.register
 
+import android.content.res.Resources
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.longterm.artschools.R
 import com.longterm.artschools.domain.usecase.RegisterUseCase
+import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-    private val registerUseCase: RegisterUseCase
+    private val registerUseCase: RegisterUseCase,
+    private val resources: Resources
 ) : ViewModel() {
     val state: StateFlow<State>
         get() = _state
@@ -67,13 +71,6 @@ class RegisterViewModel(
         }
     }
 
-
-    fun onLoginViaVkClicked() {
-        _state.update {
-            State.Vk(it.email, it.isDoneButtonEnabled)
-        }
-    }
-
     fun onDoneClicked() {
         val st = state.value as? State.InternalRegister ?: error("Wrong state")
         registerUseCase.supplyCredentials(
@@ -100,6 +97,41 @@ class RegisterViewModel(
         _state.update {
             it.copyState(showError = false)
         }
+    }
+
+    //todo remove this !@#$ if new oauth is working
+    fun vkLoginSucceed(token: VKAccessToken) {
+        viewModelScope.launch {
+            registerUseCase.registerViaVk(
+                token.accessToken,
+                resources.getInteger(R.integer.com_vk_sdk_AppId).toString(),
+                resources.getString(R.string.com_vk_sdk_Secret)
+            )
+                .onSuccess {
+                    _state.update {
+                        State.Done()
+                    }
+                }
+        }
+    }
+
+    fun vkLoginSucceed(code: String) {
+        viewModelScope.launch {
+            registerUseCase.registerViaVk(
+                code,
+                resources.getInteger(R.integer.com_vk_sdk_AppId).toString(),
+                resources.getString(R.string.com_vk_sdk_Secret)
+            )
+                .onSuccess {
+                    _state.update {
+                        State.Done()
+                    }
+                }.onFailure { throw it }
+        }
+    }
+
+    fun vkLoginFailed() {
+        // todo
     }
 
     private fun isDoneEnabled(email: String, password: String, repeatPassword: String): Boolean {
@@ -134,7 +166,6 @@ class RegisterViewModel(
                 is Done -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
                 is Initial -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
                 is InternalRegister -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
-                is Vk -> copy(email = email, isDoneButtonEnabled = isDoneButtonEnabled, showError = showError)
             }
         }
 
@@ -158,12 +189,6 @@ class RegisterViewModel(
                 val repeatPassword: String? = null
             )
         }
-
-        data class Vk(
-            override val email: String = "",
-            override val isDoneButtonEnabled: Boolean = false,
-            override val showError: Boolean = false
-        ) : State
 
         data class Done(
             override val email: String = "",

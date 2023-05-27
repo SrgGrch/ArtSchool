@@ -1,14 +1,29 @@
 package com.longterm.artschools.ui.components.onboarding.art
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.longterm.artschools.data.repository.OnboardingRepository
+import com.longterm.artschools.domain.usecase.RegisterUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class OnboardingArtViewModel : ViewModel() {
+class OnboardingArtViewModel(
+    private val registerUseCase: RegisterUseCase,
+    private val onboardingRepository: OnboardingRepository
+) : ViewModel() {
 
     val state: StateFlow<State> get() = _state
-    private val _state = MutableStateFlow<State>(State.Data(getChips()))
+    private val _state = MutableStateFlow<State>(State.Loading())
+
+    init {
+        viewModelScope.launch {
+            _state.update { state ->
+                getChips().getOrNull()?.let { State.Data(it) } ?: State.Error(state.chips)
+            }
+        }
+    }
 
     fun chipClicked(chip: State.Chip) {
         if (_state.value !is State.Data) return
@@ -24,7 +39,9 @@ class OnboardingArtViewModel : ViewModel() {
     }
 
     fun nextPage() {
-        //todo send interests
+        registerUseCase
+            .supplyPreferences(_state.value.chips.map { it.code })
+
         _state.update {
             State.NextPage(it.chips)
         }
@@ -37,14 +54,16 @@ class OnboardingArtViewModel : ViewModel() {
         }
     }
 
-    private fun getChips() = listOf(
-        State.Chip("\uD83C\uDFB6 Музыка"),
-        State.Chip("\uD83E\uDE70 Хореография "),
-        State.Chip("\uD83C\uDFA8 Живопись"),
-        State.Chip("\uD83C\uDFAD Театр"),
-        State.Chip("✍️ Дизайн"),
-        State.Chip("\uD83C\uDFDB️ Архитектура"),
-    )
+    private suspend fun getChips() = onboardingRepository
+        .getPreferences()
+        .map {
+            it.map { target ->
+                State.Chip(
+                    target.code,
+                    target.name
+                )
+            }
+        }
 
     fun onNextPageInvoked() {
         _state.update {
@@ -65,7 +84,11 @@ class OnboardingArtViewModel : ViewModel() {
         data class NextPage(override val chips: List<Chip>) : State()
         data class NotNow(override val chips: List<Chip>) : State()
 
+        data class Error(override val chips: List<Chip>) : State()
+        data class Loading(override val chips: List<Chip> = listOf()) : State()
+
         data class Chip(
+            val code: String,
             val text: String,
             val isSelected: Boolean = false,
         )
