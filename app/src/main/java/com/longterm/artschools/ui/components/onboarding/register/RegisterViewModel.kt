@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.longterm.artschools.R
 import com.longterm.artschools.domain.usecase.RegisterUseCase
-import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -96,22 +95,6 @@ class RegisterViewModel(
     fun onErrorShowed() {
         _state.update {
             it.copyState(showError = false)
-        }
-    }
-
-    //todo remove this !@#$ if new oauth is working
-    fun vkLoginSucceed(token: VKAccessToken) {
-        viewModelScope.launch {
-            registerUseCase.registerViaVk(
-                token.accessToken,
-                resources.getInteger(R.integer.com_vk_sdk_AppId).toString(),
-                resources.getString(R.string.com_vk_sdk_Secret)
-            )
-                .onSuccess {
-                    _state.update {
-                        State.Done()
-                    }
-                }
         }
     }
 

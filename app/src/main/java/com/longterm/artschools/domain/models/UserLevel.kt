@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserLevel(
-    val level: Level?, //O'rly?
-    val total_exp: Int? //O'rly?
+    val level: Level? = null, //O'rly?
+    val total_exp: Double? = null //O'rly?
 ) {
     @Serializable
     data class Level(
