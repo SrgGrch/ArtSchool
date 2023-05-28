@@ -2,15 +2,15 @@ package com.longterm.artschools.di
 
 import android.content.Context
 import com.longterm.artschools.data.UserStorage
-import com.longterm.artschools.data.api.NewsApi
 import com.longterm.artschools.data.api.CoursesApi
+import com.longterm.artschools.data.api.NewsApi
 import com.longterm.artschools.data.api.OnboardingApi
 import com.longterm.artschools.data.api.QuizApi
 import com.longterm.artschools.data.api.UserApi
 import com.longterm.artschools.data.api.VkApi
 import com.longterm.artschools.data.network.HttpClientFactory
-import com.longterm.artschools.data.repository.NewsRepository
 import com.longterm.artschools.data.repository.CoursesRepository
+import com.longterm.artschools.data.repository.NewsRepository
 import com.longterm.artschools.data.repository.OnboardingRepository
 import com.longterm.artschools.data.repository.PlaylistRepository
 import com.longterm.artschools.data.repository.QuizRepository
@@ -45,7 +45,7 @@ val presentationModule = module {
     viewModel { AuthViewModel(get(), androidApplication().resources) }
     viewModel { params -> RegisterViewModel(params.get(), androidApplication().resources) }
     viewModel { CoursesListViewModel(get()) }
-    viewModel { CourseViewModel(get()) }
+    viewModel { params -> CourseViewModel(params.get(), get()) }
     viewModel { params -> ArticleVm(params.get(), get()) }
 
     factory { BottomBarCoordinator() }

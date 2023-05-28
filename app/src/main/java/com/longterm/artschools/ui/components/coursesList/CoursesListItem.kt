@@ -41,22 +41,22 @@ fun CoursesListItem(
 ) {
     Column(
         Modifier
-            .clip(RoundedCornerShape(16.dp))
             .clickable {
                 onItemClicked(data.id)
             }
             .fillMaxWidth()
+            .padding(top = 12.dp)
     ) {
         Image(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current).data(data = data.imageUrl)
                     .apply(block = {
-                        crossfade(true)
                         preview()
                     }).build()
             ),
             contentDescription = "Картина",
             Modifier
+                .clip(RoundedCornerShape(16.dp))
                 .aspectRatio(1.6f)
                 .fillMaxWidth(),
             contentScale = ContentScale.FillBounds

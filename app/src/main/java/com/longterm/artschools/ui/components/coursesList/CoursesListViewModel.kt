@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.longterm.artschools.data.repository.CoursesRepository
 import com.longterm.artschools.ui.components.coursesList.models.CoursePreview
-import com.longterm.artschools.ui.core.theme.Colors
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -42,11 +41,19 @@ class CoursesListViewModel(private val coursesRepository: CoursesRepository) : V
                     imageUrl = "https://img3.akspic.ru/crops/3/0/8/0/5/150803/150803-zhivopis-krasnyjcvet-kraska-art-sovremennoeiskusstvo-3840x2160.jpg",
                     reward = 10,
                     tags = course.tags.map {
-                        CoursePreview.Tag(it, Colors.Pink80.value.toLong())
-                    }
+                        CoursePreview.Tag(it, 0xFFEFB8C8)
+                    } + CoursePreview.Tag(createDifficultyString(course.difficulty), 0xFFD0BCFF)
                 )
             }
         }
+
+    private fun createDifficultyString(difficulty: Int) = buildString {
+        repeat(difficulty) {
+            append("⭐ ")
+        }
+        append("Сложность")
+    }
+
 
     sealed interface State {
         object Loading : State

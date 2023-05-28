@@ -25,7 +25,9 @@ sealed class BottomBarDestination(
     object Courses : BottomBarDestination("Курсы", R.drawable.ic_tab_courses) {
         @Composable
         override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
-            CoursesListScreen()
+            CoursesListScreen {
+                navController.navigate(Destination.Course(it))
+            }
         }
     }
 
