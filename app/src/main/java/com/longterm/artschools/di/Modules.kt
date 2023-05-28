@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import com.longterm.artschools.data.UserStorage
+import com.longterm.artschools.data.api.CoursesApi
 import com.longterm.artschools.data.api.NewsApi
 import com.longterm.artschools.data.api.OnboardingApi
 import com.longterm.artschools.data.api.QuizApi
 import com.longterm.artschools.data.api.UserApi
 import com.longterm.artschools.data.api.VkApi
 import com.longterm.artschools.data.network.HttpClientFactory
+import com.longterm.artschools.data.repository.CoursesRepository
 import com.longterm.artschools.data.repository.NewsRepository
 import com.longterm.artschools.data.repository.OnboardingRepository
 import com.longterm.artschools.data.repository.PlaylistRepository
@@ -21,6 +23,8 @@ import com.longterm.artschools.domain.usecase.GetFeedUseCase
 import com.longterm.artschools.domain.usecase.RegisterUseCase
 import com.longterm.artschools.domain.usecase.VkAuthUseCase
 import com.longterm.artschools.ui.components.auth.AuthViewModel
+import com.longterm.artschools.ui.components.course.CourseViewModel
+import com.longterm.artschools.ui.components.coursesList.CoursesListViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
 import com.longterm.artschools.ui.components.news.ArticleVm
 import com.longterm.artschools.ui.components.onboarding.OnboardingViewModel
@@ -42,6 +46,8 @@ val presentationModule = module {
     viewModel { params -> OnboardingArtViewModel(params.get(), get()) }
     viewModel { params -> OnboardingTargetViewModel(params.get(), get()) }
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
+    viewModel { CoursesListViewModel(get()) }
+    viewModel { params -> CourseViewModel(params.get(), get()) }
     viewModel { AuthViewModel(get(), get()) }
     viewModel { params -> RegisterViewModel(params.get(), get()) }
     viewModel { params -> ArticleVm(params.get(), get()) }
@@ -79,12 +85,14 @@ val dataModule = module {
     factory { OnboardingApi(get()) }
     factory { QuizApi(get()) }
     factory { NewsApi(get()) }
+    factory { CoursesApi(get()) }
 
     factory { UserRepository(get(), get()) }
     factory { OnboardingRepository(get()) }
     factory { QuizRepository(get()) }
     factory { NewsRepository(get()) }
     factory { PlaylistRepository() }
+    factory { CoursesRepository(get()) }
 }
 
 val domainModule = module {

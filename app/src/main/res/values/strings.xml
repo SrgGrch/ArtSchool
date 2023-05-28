@@ -40,4 +40,8 @@
 
     <string name="onboarding_register_title">Сохраним ваш профиль?</string>
     <string name="onboarding_register_subtitle">Введите вашу почту или войдите через VK, чтобы сохранить введённую информацию </string>
+
+    <string name="cousres_title">Курсы</string>
+    <string name="cousres_course_reading">Курс читает</string>
+    <string name="cousres_lessons">Уроки курса</string>
 </resources>
