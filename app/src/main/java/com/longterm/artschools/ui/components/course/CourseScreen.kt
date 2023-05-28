@@ -49,7 +49,7 @@ fun CoursesScreen(goBack: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "Ошибка, попробуйте еще раз")
-            Button(onClick = vm::retry) {
+            Button(onClick = { /* todo */ }) {
                 Text(text = "Обновить")
             }
         }

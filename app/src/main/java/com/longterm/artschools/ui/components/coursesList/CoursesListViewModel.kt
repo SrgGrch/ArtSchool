@@ -1,23 +1,52 @@
 package com.longterm.artschools.ui.components.coursesList
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.longterm.artschools.data.repository.CoursesRepository
 import com.longterm.artschools.ui.components.coursesList.models.CoursePreview
-import com.longterm.artschools.ui.components.main.models.MainListItem
+import com.longterm.artschools.ui.core.theme.Colors
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class CoursesListViewModel : ViewModel() {
+class CoursesListViewModel(private val coursesRepository: CoursesRepository) : ViewModel() {
     val state: StateFlow<State>
         get() = _state
     private val _state = MutableStateFlow<State>(State.Loading)
 
-    fun onQuizAnswer(answer: MainListItem.QuizItem.Answer, position: Int) {
+    init {
+        getAll()
+    }
 
+    private fun getAll() {
+        viewModelScope.launch {
+            _state.update {
+                getAllCourses().getOrNull()
+                    ?.let { State.Data(it) } ?: State.Error
+            }
+        }
     }
 
     fun retry() {
-
+        getAll()
     }
+
+    private suspend fun getAllCourses() = coursesRepository.getAll()
+        .map { courses ->
+            courses.map { course ->
+                CoursePreview(
+                    id = course.id,
+                    title = course.name,
+                    description = "${course.totalLessons} уроков\n${course.freeLessons} пробный урок",
+                    imageUrl = "https://img3.akspic.ru/crops/3/0/8/0/5/150803/150803-zhivopis-krasnyjcvet-kraska-art-sovremennoeiskusstvo-3840x2160.jpg",
+                    reward = 10,
+                    tags = course.tags.map {
+                        CoursePreview.Tag(it, Colors.Pink80.value.toLong())
+                    }
+                )
+            }
+        }
 
     sealed interface State {
         object Loading : State

@@ -32,7 +32,6 @@ import com.longterm.artschools.ui.components.common.preview
 import com.longterm.artschools.ui.components.coursesList.models.CoursePreview
 import com.longterm.artschools.ui.components.main.items.ItemsPaddingValues
 import com.longterm.artschools.ui.core.theme.ArtTextStyle
-import com.longterm.artschools.ui.core.theme.Colors
 import com.longterm.artschools.ui.core.utils.PreviewContext
 
 @Composable
@@ -65,9 +64,9 @@ fun CoursesListItem(
 
         Column(
             Modifier
-                .offset(y = (-16).dp)
+                .offset(y = (-32).dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(Colors.GreyLight3)
+                .background(Color.White)
                 .padding(ItemsPaddingValues)
                 .fillMaxWidth()
         ) {
@@ -92,11 +91,10 @@ fun CoursesListItem(
                 }
             }
             Spacer(Modifier.height(8.dp))
-            Column {
+            Column() {
                 Text(data.title, style = ArtTextStyle.H3)
                 Spacer(Modifier.height(8.dp))
                 Text(data.description, style = ArtTextStyle.Body)
-                Spacer(Modifier.height(20.dp))
             }
         }
     }
