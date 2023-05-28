@@ -5,6 +5,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.longterm.artschools.ui.components.auth.AuthScreen
 import com.longterm.artschools.ui.components.course.CoursesScreen
+import com.longterm.artschools.ui.components.lesson.LessonScreen
 import com.longterm.artschools.ui.components.main.splash.SplashScreen
 import com.longterm.artschools.ui.components.news.ArticleScreen
 import com.longterm.artschools.ui.components.onboarding.OnboardingRootScreen
@@ -94,6 +95,23 @@ sealed interface Destination {
         const val ARGUMENT = "articleId"
     }
 
+    object Lesson : Destination {
+        override val route: String
+            get() = "Lesson/{$ARGUMENT}"
+
+        operator fun invoke(lessonId: Int): String {
+            return "Lesson/$lessonId"
+        }
+
+        @Composable
+        override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
+            val id = navBackStackEntry.arguments?.getString(ARGUMENT)
+            LessonScreen(id?.toIntOrNull() ?: -1, goBack = { navController.popBackStack() })
+        }
+
+        const val ARGUMENT = "lessonId"
+    }
+
     object Course : Destination {
         override val route: String
             get() = "Course/{$ARGUMENT}"
@@ -105,8 +123,8 @@ sealed interface Destination {
         @Composable
         override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
             val id = navBackStackEntry.arguments?.getString(ARGUMENT)
-            CoursesScreen(id?.toIntOrNull() ?: -1) {
-                navController.popBackStack()
+            CoursesScreen(id?.toIntOrNull() ?: -1, goBack = { navController.popBackStack() }) {
+                navController.navigate(Lesson(it))
             }
         }
 
