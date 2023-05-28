@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -39,7 +43,8 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun AuthScreen(
     navigateToVkAuth: (OnVkAuthResult) -> Unit,
-    navigateToMainScreen: () -> Unit
+    navigateToMainScreen: () -> Unit,
+    back: () -> Unit
 ) {
     val viewModel: AuthViewModel = getViewModel()
     val state by viewModel.state.collectAsState()
@@ -49,7 +54,14 @@ fun AuthScreen(
 
     Box {
         Column(modifier = Modifier.padding(horizontal = Dimens.horizontalPadding)) {
-            Spacer(modifier = Modifier.size(48.dp))
+            IconButton(onClick = back) {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = "назад",
+                    tint = Colors.GreenMain
+                )
+            }
+            Spacer(modifier = Modifier.size(16.dp))
             Text(
                 text = if (state is AuthViewModel.State.Initial) stringResource(id = R.string.login)
                 else stringResource(id = R.string.enterPassword),
@@ -134,6 +146,6 @@ private fun ColumnScope.DoNotRememberPasswordButton(onClick: () -> Unit) {
 @Composable
 private fun Preview() {
     PreviewContext {
-        AuthScreen({}, {})
+        AuthScreen({}, {}, {})
     }
 }

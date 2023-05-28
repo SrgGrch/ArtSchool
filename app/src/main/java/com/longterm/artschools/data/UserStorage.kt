@@ -10,7 +10,8 @@ class UserStorage(private val sharedPreferences: SharedPreferences) {
     var user: User?
         get() = sharedPreferences.getString(::user.name, null)?.let { Json.decodeFromString(it) }
         set(value) = sharedPreferences.edit {
-            putString(::user.name, Json.encodeToString(value))
+            if (value == null) remove(::user.name)
+            else putString(::user.name, Json.encodeToString(value))
         }
 
     val requireUser
@@ -22,7 +23,8 @@ class UserStorage(private val sharedPreferences: SharedPreferences) {
     var token: String?
         get() = sharedPreferences.getString(::token.name, null)
         set(value) = sharedPreferences.edit {
-            putString(::token.name, value)
+            if (value == null) remove(::token.name)
+            else putString(::token.name, value)
         }
 
     fun setUser(user: User, token: String) {

@@ -54,33 +54,39 @@ object ArtTextStyle {
     val H1 = TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp,
-        lineHeight = 30.sp
+        lineHeight = 30.sp,
+        fontFamily = ArtFontFamily
     )
 
     val H3 = TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
-        lineHeight = 24.sp
+        lineHeight = 24.sp,
+        fontFamily = ArtFontFamily
     )
 
     val Body = TextStyle(
         fontSize = 16.sp,
-        lineHeight = 22.sp
+        lineHeight = 22.sp,
+        fontFamily = ArtFontFamily
     )
 
     val Button = TextStyle(
         fontSize = 18.sp,
         lineHeight = 22.sp,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        fontFamily = ArtFontFamily
     )
 
     val Chips = TextStyle(
         fontSize = 13.sp,
-        lineHeight = 22.sp
+        lineHeight = 22.sp,
+        fontFamily = ArtFontFamily
     )
 
     val tab = TextStyle(
         fontSize = 12.sp,
-        lineHeight = 14.sp
+        lineHeight = 14.sp,
+        fontFamily = ArtFontFamily
     )
 }

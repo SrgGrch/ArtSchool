@@ -1,7 +1,6 @@
 package com.longterm.artschools.ui.navigation
 
 import androidx.annotation.DrawableRes
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -17,9 +16,14 @@ sealed class BottomBarDestination(
     object Main : BottomBarDestination("Главный", R.drawable.ic_tab_main) {
         @Composable
         override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
-            MainScreen {
-                navController.navigate(Destination.Article(it))
-            }
+            MainScreen(
+                navigateToArticle = {
+                    navController.navigate(Destination.Article(it))
+                },
+                navigateToProfile = {
+                    navController.navigate(Destination.Profile)
+                },
+            )
         }
     }
 

@@ -1,6 +1,7 @@
 package com.longterm.artschools.ui.components.main
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +38,7 @@ import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun MainScreen(navigateToArticle: (id: Int) -> Unit) {
+fun MainScreen(navigateToArticle: (id: Int) -> Unit, navigateToProfile: () -> Unit) {
     val vm: MainViewModel = getViewModel()
     val state by vm.state.collectAsState()
 
@@ -55,6 +56,7 @@ fun MainScreen(navigateToArticle: (id: Int) -> Unit) {
                     .clip(CircleShape)
                     .height(52.dp)
                     .aspectRatio(1f)
+                    .clickable { navigateToProfile() }
             )
 
             IconButton(onClick = { /*TODO*/ }, Modifier.padding(top = 6.dp)) {
@@ -107,6 +109,6 @@ fun MainScreen(navigateToArticle: (id: Int) -> Unit) {
 @Composable
 private fun Preview() {
     PreviewContext {
-        MainScreen(navigateToArticle = {})
+        MainScreen(navigateToArticle = {}, {})
     }
 }
