@@ -6,9 +6,9 @@ Android приложение было написано в рамках хака�
 
 ## Скачать
 
-[Скачать приложение](https://github.com/SrgGrch/ArtSchool/releases/download/v0.1.1-beta/ArtSchools.apk)
+[Скачать приложение](https://github.com/SrgGrch/ArtSchool/releases/download/v0.1.1-beta2/ArtSchools.apk)
 
-[Релиз в рамках хакатона](https://github.com/SrgGrch/ArtSchool/releases/tag/v0.1.1-beta)
+[Релиз в рамках хакатона](https://github.com/SrgGrch/ArtSchool/releases/tag/v0.1.1-beta2)
 
 ## Зависимости
 
