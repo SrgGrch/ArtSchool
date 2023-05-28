@@ -5,7 +5,8 @@ class BottomBarCoordinator {
         return when (route) {
             Destination.VkAuth.route,
             Destination.Onboarding.route,
-            Destination.Auth.route -> false
+            Destination.Auth.route,
+            Destination.Splash.route -> false
 
             null -> false
             else -> true

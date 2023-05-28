@@ -21,11 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.longterm.artschools.data.UserStorage
 import com.longterm.artschools.ui.core.theme.ArtSchoolsTheme
 import com.longterm.artschools.ui.navigation.ArtBottomBar
 import com.longterm.artschools.ui.navigation.BottomBarCoordinator
-import com.longterm.artschools.ui.navigation.BottomBarDestination
 import com.longterm.artschools.ui.navigation.CustomNavHost
 import com.longterm.artschools.ui.navigation.Destination
 import com.vk.api.sdk.auth.VKAuthCallback
@@ -61,10 +59,6 @@ fun Main() {
     val currentRoute = navBackStackEntry?.destination?.route
     bottomBarState = bottomBarCoordinator.needToShowBottomBar(currentRoute)
 
-    val startDestination = if (koinInject<UserStorage>().isLoggedIn) {
-        BottomBarDestination.Main
-    } else Destination.Onboarding
-
     Scaffold(bottomBar = {
         AnimatedVisibility(
             visible = bottomBarState,
@@ -74,7 +68,7 @@ fun Main() {
             ArtBottomBar(navController)
         }
     }) {
-        CustomNavHost(navController, startDestination, it)
+        CustomNavHost(navController, Destination.Splash, it)
     }
 }
 

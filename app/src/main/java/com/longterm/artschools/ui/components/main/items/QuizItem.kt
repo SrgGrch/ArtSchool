@@ -61,7 +61,7 @@ fun QuizItem(
             Modifier
                 .fillMaxWidth()
                 .aspectRatio(1.6f),
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.Crop
         )
 
         Column(
