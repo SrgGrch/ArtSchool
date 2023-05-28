@@ -1,6 +1,7 @@
 package com.longterm.artschools.ui.components.onboarding.register
 
 import android.content.res.Resources
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -85,6 +86,7 @@ class RegisterViewModel(
                     }
                 }
                 .onFailure {
+                    Log.e("RegisterViewModel", it.stackTraceToString())
                     _state.update { state ->
                         state.copyState(showError = true)
                     }

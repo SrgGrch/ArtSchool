@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PostAnswerResponse(
-    val score: Int,
+    val score: Float,
     val answers: List<Answers>,
     val reaction: String
 ) {

@@ -45,6 +45,9 @@ class MainViewModel(
                         } ?: state
                     }
                 }
+                .onFailure {
+                    Log.e("MainViewModel", it.stackTraceToString())
+                }
         }
     }
 
