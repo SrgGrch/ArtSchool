@@ -42,7 +42,7 @@ class AuthWebViewClient(
                     onStatusChange(AuthStatus.CONFIRM)
                 }
                 // Если открыто окно с сообщением об неверно введеном пароле.
-                if (url.contains("email")) {
+                if (url.contains("email=")) {
                     onStatusChange(AuthStatus.ERROR)
                 }
             }

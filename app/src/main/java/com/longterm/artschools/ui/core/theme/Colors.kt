@@ -12,6 +12,7 @@ object Colors {
     val Pink40 = Color(0xFF7D5260)
 
     val GreenMain = Color(0xFFA8CE57)
+    val GreenSecondary = Color(0xB4A8CE57)
     val Green = Color(0xFFADCB47)
     val GreenDisabled = Color(0x80ADCB47)
 

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -71,7 +72,10 @@ fun OnboardingRootScreen(
             vm.prevPage()
         }
 
-        Box {
+        Box(
+            Modifier
+                .fillMaxHeight()
+        ) {
             HorizontalPager(pageCount = PAGE_COUNT, state = pagerState, userScrollEnabled = false) {
                 PagerPage(
                     page = it,

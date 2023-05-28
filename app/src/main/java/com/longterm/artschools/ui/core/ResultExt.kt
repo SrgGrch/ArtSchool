@@ -15,3 +15,11 @@ inline fun <T, R> Result<T>.onSuccessMapResult(block: (T) -> Result<R>): Result<
 fun <T> Result<T>.mapToUnit(): Result<Unit> {
     return map { }
 }
+
+inline fun <T> withResult(block: () -> T): Result<T> {
+    return try {
+        block().let { Result.success(it) }
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+}

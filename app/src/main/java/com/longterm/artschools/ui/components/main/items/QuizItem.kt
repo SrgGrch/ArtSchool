@@ -41,7 +41,7 @@ import com.longterm.artschools.ui.core.utils.PreviewContext
 fun QuizItem(
     position: Int,
     data: MainListItem.QuizItem,
-    onAnswerSelected: (MainListItem.QuizItem.Answer) -> Unit
+    onAnswerSelected: (quizId: Int, answer: MainListItem.QuizItem.Answer) -> Unit
 ) {
     Column(
         Modifier
@@ -53,14 +53,14 @@ fun QuizItem(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current).data(data = data.imageUrl)
                     .apply(block = {
-                        crossfade(true)
+//                        crossfade(true)
                         preview()
                     }).build()
             ),
             contentDescription = "Картина",
             Modifier
-                .aspectRatio(1.6f)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .aspectRatio(1.6f),
             contentScale = ContentScale.FillBounds
         )
 
@@ -104,8 +104,8 @@ fun QuizItem(
                 Spacer(Modifier.height(20.dp))
                 Column {
                     data.answers.forEach { answer ->
-                        Chip(answer.text, answer.selected, answer.correct) {
-                            onAnswerSelected(answer)
+                        Chip(answer.text, answer.selected, data.isCorrectAnswerSelected) {
+                            onAnswerSelected(data.id, answer)
                         }
                     }
                 }
@@ -125,9 +125,11 @@ fun QuizItem(
 private fun Chip(
     text: String,
     selected: Boolean,
-    correct: Boolean,
+    correct: Boolean?,
     onClick: () -> Unit
 ) {
+    val color = if (correct == true) Colors.GreenMain else Colors.Red
+
     FilterChip(
         selected = selected,
         onClick = onClick,
@@ -136,13 +138,16 @@ private fun Chip(
         },
         shape = CircleShape,
         colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = if (correct) Colors.GreenMain else Colors.Red,
-            selectedLabelColor = Color.White
+            selectedContainerColor = color,
+            selectedLabelColor = Color.White,
+            disabledSelectedContainerColor = color,
+            disabledLabelColor = if (selected) Color.White else Color.Black
         ),
         border = FilterChipDefaults.filterChipBorder(
             borderColor = Colors.GreenMain,
             borderWidth = 2.dp
-        )
+        ),
+        enabled = correct == null
     )
 }
 
@@ -159,13 +164,14 @@ private fun Preview() {
                 "В 1880 году в Санкт-Петербурге была впервые выставлена картина «Лунная ночь на Днепре». Удивительным было то, что она была единственной на выставке. Необыкновенная реалистичность лунного света поразила публику",
                 "",
                 listOf(
-                    MainListItem.QuizItem.Answer("\uD83D\uDE31 Эдвард Мунк", false),
-                    MainListItem.QuizItem.Answer("\uD83C\uDF33 Архип Куинджи ", correct = true, selected = true),
-                    MainListItem.QuizItem.Answer("\uD83C\uDF0A Иван Айвазовский", false),
+                    MainListItem.QuizItem.Answer(1, "\uD83D\uDE31 Эдвард Мунк", false),
+                    MainListItem.QuizItem.Answer(1, "\uD83C\uDF33 Архип Куинджи ", selected = true),
+                    MainListItem.QuizItem.Answer(1, "\uD83C\uDF0A Иван Айвазовский", false),
                 ),
+                true,
                 "✅ Правильный ответ, так держать! «Лунная ночь на Днепре» — одна из самых известных картин Архипа Куинджи."
             )
-        ) {
+        ) { _, _ ->
 
         }
     }

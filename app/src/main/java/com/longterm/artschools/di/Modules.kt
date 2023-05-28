@@ -2,17 +2,25 @@ package com.longterm.artschools.di
 
 import android.content.Context
 import com.longterm.artschools.data.UserStorage
+import com.longterm.artschools.data.api.NewsApi
 import com.longterm.artschools.data.api.OnboardingApi
+import com.longterm.artschools.data.api.QuizApi
 import com.longterm.artschools.data.api.UserApi
 import com.longterm.artschools.data.api.VkApi
 import com.longterm.artschools.data.network.HttpClientFactory
+import com.longterm.artschools.data.repository.NewsRepository
 import com.longterm.artschools.data.repository.OnboardingRepository
+import com.longterm.artschools.data.repository.PlaylistRepository
+import com.longterm.artschools.data.repository.QuizRepository
 import com.longterm.artschools.data.repository.UserRepository
+import com.longterm.artschools.domain.usecase.AnswerQuizUseCase
 import com.longterm.artschools.domain.usecase.AuthUseCase
+import com.longterm.artschools.domain.usecase.GetFeedUseCase
 import com.longterm.artschools.domain.usecase.RegisterUseCase
 import com.longterm.artschools.domain.usecase.VkAuthUseCase
 import com.longterm.artschools.ui.components.auth.AuthViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
+import com.longterm.artschools.ui.components.news.ArticleVm
 import com.longterm.artschools.ui.components.onboarding.OnboardingViewModel
 import com.longterm.artschools.ui.components.onboarding.art.OnboardingArtViewModel
 import com.longterm.artschools.ui.components.onboarding.register.RegisterViewModel
@@ -25,13 +33,14 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val presentationModule = module {
-    viewModel { MainViewModel() }
+    viewModel { MainViewModel(get(), get()) }
     viewModel { OnboardingViewModel() }
     viewModel { params -> OnboardingArtViewModel(params.get(), get()) }
     viewModel { params -> OnboardingTargetViewModel(params.get(), get()) }
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
     viewModel { AuthViewModel(get(), androidApplication().resources) }
     viewModel { params -> RegisterViewModel(params.get(), androidApplication().resources) }
+    viewModel { params -> ArticleVm(params.get(), get()) }
 
     factory { BottomBarCoordinator() }
 }
@@ -51,9 +60,14 @@ val dataModule = module {
     factory { UserApi(get()) }
     factory { VkApi(get()) }
     factory { OnboardingApi(get()) }
+    factory { QuizApi(get()) }
+    factory { NewsApi(get()) }
 
     factory { UserRepository(get(), get()) }
     factory { OnboardingRepository(get()) }
+    factory { QuizRepository(get()) }
+    factory { NewsRepository(get()) }
+    factory { PlaylistRepository() }
 }
 
 val domainModule = module {
@@ -62,7 +76,9 @@ val domainModule = module {
     }
 
     factory { VkAuthUseCase(get(), get()) }
+    factory { GetFeedUseCase(get(), get(), get()) }
     factory { AuthUseCase(get(), get()) }
+    factory { AnswerQuizUseCase(get()) }
 }
 
 val commonModule = module {
