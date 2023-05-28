@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.longterm.artschools.R
+import com.longterm.artschools.ui.components.coursesList.CoursesListScreen
 import com.longterm.artschools.ui.components.main.MainScreen
 
 sealed class BottomBarDestination(
@@ -24,7 +25,7 @@ sealed class BottomBarDestination(
     object Courses : BottomBarDestination("Курсы", R.drawable.ic_tab_courses) {
         @Composable
         override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
-            Text(text = "Сourses") //todo
+            CoursesListScreen()
         }
     }
 
