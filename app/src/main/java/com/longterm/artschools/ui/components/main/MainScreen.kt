@@ -31,12 +31,13 @@ import androidx.compose.ui.unit.dp
 import com.longterm.artschools.R
 import com.longterm.artschools.ui.components.main.items.ArticleItem
 import com.longterm.artschools.ui.components.main.items.QuizItem
+import com.longterm.artschools.ui.components.main.items.VkPlaylist
 import com.longterm.artschools.ui.components.main.models.MainListItem
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navigateToArticle: (id: Int) -> Unit) {
     val vm: MainViewModel = getViewModel()
     val state by vm.state.collectAsState()
 
@@ -83,10 +84,16 @@ fun MainScreen() {
                 LazyColumn {
                     itemsIndexed(st.items) { position, item ->
                         when (item) {
-                            is MainListItem.ArticleItem -> ArticleItem(data = item, onItemClicked = {/*todo**/ })
-                            is MainListItem.QuizItem -> QuizItem(position = position, data = item, onAnswerSelected = {
-                                vm.onQuizAnswer(it, position)
-                            })
+                            is MainListItem.ArticleItem -> ArticleItem(data = item, onItemClicked = { navigateToArticle(it) })
+                            is MainListItem.QuizItem -> QuizItem(
+                                position = position,
+                                data = item,
+                                onAnswerSelected = { quizId, answer ->
+                                    vm.onQuizAnswer(answer, quizId, position)
+                                }
+                            )
+
+                            is MainListItem.VkPlaylist -> VkPlaylist(data = item)
                         }
                     }
                 }
@@ -100,6 +107,6 @@ fun MainScreen() {
 @Composable
 private fun Preview() {
     PreviewContext {
-        MainScreen()
+        MainScreen(navigateToArticle = {})
     }
 }

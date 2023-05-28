@@ -81,7 +81,7 @@ fun AuthScreen(
             when (val st = state) {
                 is AuthViewModel.State.Initial -> AuthInitialStateView(viewModel, navigateToVkAuth)
                 is AuthViewModel.State.InternalAuth -> AuthInternalStateView(st, viewModel::onPasswordChanged)
-                is AuthViewModel.State.Done -> navigateToMainScreen()
+                is AuthViewModel.State.Done -> LaunchedEffect(key1 = state, block = { navigateToMainScreen() })
             }
 
             Spacer(modifier = Modifier.weight(1f))

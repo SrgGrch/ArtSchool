@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -29,6 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.longterm.artschools.R
+import com.longterm.artschools.di.OnboardingScope
 import com.longterm.artschools.domain.usecase.RegisterUseCase
 import com.longterm.artschools.ui.components.common.ButtonGroup
 import com.longterm.artschools.ui.core.theme.ArtTextStyle
@@ -36,6 +39,7 @@ import com.longterm.artschools.ui.core.theme.Colors
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 import org.koin.compose.koinInject
+import org.koin.compose.scope.KoinScope
 import org.koin.core.parameter.parametersOf
 
 @Composable
@@ -54,7 +58,11 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}, skip: () -> Unit = {}) {
         vm.onSkip()
     }
 
-    Column {
+    Column(
+        Modifier
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState())
+    ) {
         Row(
             Modifier
                 .fillMaxWidth()
@@ -169,6 +177,8 @@ fun OnboardingUserInfoScreen(nextPage: () -> Unit = {}, skip: () -> Unit = {}) {
 @Composable
 private fun Preview() {
     PreviewContext {
-        OnboardingUserInfoScreen()
+        KoinScope(scopeDefinition = { createScope<OnboardingScope>() }) {
+            OnboardingUserInfoScreen()
+        }
     }
 }

@@ -3,11 +3,15 @@ package com.longterm.artschools.ui.components.onboarding.register
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -18,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.longterm.artschools.R
+import com.longterm.artschools.di.OnboardingScope
 import com.longterm.artschools.domain.usecase.RegisterUseCase
 import com.longterm.artschools.ui.components.onboarding.register.components.RegisterDoneButton
 import com.longterm.artschools.ui.components.onboarding.register.components.RegisterEmailTextField
@@ -28,6 +33,7 @@ import com.longterm.artschools.ui.core.theme.Dimens.horizontalPadding
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 import org.koin.compose.koinInject
+import org.koin.compose.scope.KoinScope
 import org.koin.core.parameter.parametersOf
 
 @Composable
@@ -41,7 +47,12 @@ fun RegisterScreen(
 
     val errors = (state as? RegisterViewModel.State.InternalRegister)?.errors
 
-    Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = horizontalPadding)
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState())
+    ) {
         Text(
             text = stringResource(id = R.string.onboarding_register_title),
             color = Color.Black,
@@ -74,7 +85,7 @@ fun RegisterScreen(
                 vm::onRepeatChanged
             )
 
-            is RegisterViewModel.State.Done -> navigateToMainScreen()
+            is RegisterViewModel.State.Done -> LaunchedEffect(key1 = state, block = { navigateToMainScreen() })
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -93,6 +104,8 @@ fun RegisterScreen(
 @Composable
 private fun Preview() {
     PreviewContext {
-        RegisterScreen({}, {})
+        KoinScope(scopeDefinition = { createScope<OnboardingScope>() }) {
+            RegisterScreen({}, {})
+        }
     }
 }

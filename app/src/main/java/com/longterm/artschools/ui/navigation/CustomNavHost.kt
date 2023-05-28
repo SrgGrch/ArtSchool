@@ -11,9 +11,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.NavOptionsBuilder
+import androidx.navigation.NavType
 import androidx.navigation.Navigator
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 
 @Composable
@@ -26,7 +28,7 @@ fun CustomNavHost(
         destination: Destination,
         arguments: List<NamedNavArgument> = emptyList(),
         deepLinks: List<NavDeepLink> = emptyList()
-    ) = composable(destination.route, arguments, deepLinks) { destination.GetComposable(navController) }
+    ) = composable(destination.route, arguments, deepLinks) { destination.GetComposable(navController, it) }
 
     NavHost(
         navController = navController,
@@ -40,6 +42,10 @@ fun CustomNavHost(
         createDestination(Destination.Onboarding)
         createDestination(Destination.Auth)
         createDestination(Destination.VkAuth)
+        createDestination(
+            Destination.Article,
+            arguments = listOf(navArgument(Destination.Article.ARGUMENT) { type = NavType.StringType })
+        )
 //        createDestination(Destination.Register)
     }
 }

@@ -8,11 +8,12 @@ sealed interface MainListItem {
         val description: String,
         val imageUrl: String,
         val answers: List<Answer>,
+        val isCorrectAnswerSelected: Boolean? = null,
         val answerDescription: String? = null
     ) : MainListItem {
         data class Answer(
+            val id: Int,
             val text: String,
-            val correct: Boolean,
             val selected: Boolean = false
         )
     }
@@ -24,10 +25,18 @@ sealed interface MainListItem {
         val imageUrl: String,
         val reward: Int,
         val tags: List<Tag>
-    ) : MainListItem {
-        data class Tag(
-            val text: String,
-            val color: Long
-        )
-    }
+    ) : MainListItem
+
+    data class VkPlaylist(
+        val linkToVk: String,
+        val imageUrl: String,
+        val title: String,
+        val description: String,
+        val tags: List<Tag>
+    ) : MainListItem
+
+    data class Tag(
+        val text: String,
+        val color: String
+    )
 }

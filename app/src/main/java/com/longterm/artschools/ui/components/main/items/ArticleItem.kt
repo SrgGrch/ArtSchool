@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.longterm.artschools.R
+import com.longterm.artschools.ui.components.common.fromHex
 import com.longterm.artschools.ui.components.common.preview
 import com.longterm.artschools.ui.components.main.models.MainListItem
 import com.longterm.artschools.ui.core.theme.ArtTextStyle
@@ -53,7 +54,7 @@ fun ArticleItem(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current).data(data = data.imageUrl)
                     .apply(block = {
-                        crossfade(true)
+//                        crossfade(true)
                         preview()
                     }).build()
             ),
@@ -61,23 +62,14 @@ fun ArticleItem(
             Modifier
                 .aspectRatio(1.6f)
                 .fillMaxWidth(),
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.Crop
         )
-//        AsyncImage(
-//            model = ImageRequest.Builder(LocalContext.current)
-//                .data(data.imageUrl)
-//                .crossfade(true)
-//                .build(),
-//            contentDescription = "Картинка",
-//            contentScale = ContentScale.FillBounds,
-//            modifier = Modifier.clip(CircleShape)
-//        )
 
         Column(
             Modifier
                 .offset(y = (-16).dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(Colors.GreyLight3)
+                .background(Color.White)
                 .padding(ItemsPaddingValues)
                 .fillMaxWidth()
         ) {
@@ -93,7 +85,7 @@ fun ArticleItem(
                             Modifier
                                 .padding(2.dp)
                                 .clip(CircleShape)
-                                .background(Color(it.color))
+                                .background(Color.fromHex(it.color))
                                 .padding(vertical = 4.dp, horizontal = 8.dp),
                             style = ArtTextStyle.tab,
                             color = Color.White
@@ -133,12 +125,8 @@ private fun Preview() {
                 "https://static.tildacdn.com/tild6338-3363-4137-b534-663038303161/DSCF0696.jpg",
                 3,
                 listOf(
-                    MainListItem.ArticleItem.Tag("Интервью", 0xFF8E75A8),
-                    MainListItem.ArticleItem.Tag("🎶 Музыка", 0xFFDBB0C2),
-                    MainListItem.ArticleItem.Tag("Интервью", 0xFF8E75A8),
-                    MainListItem.ArticleItem.Tag("🎶 Музыка", 0xFFDBB0C2),
-                    MainListItem.ArticleItem.Tag("Интервью", 0xFF8E75A8),
-                    MainListItem.ArticleItem.Tag("🎶 Музыка", 0xFFDBB0C2),
+                    MainListItem.Tag("Интервью", "#FF8E75A8"),
+                    MainListItem.Tag("🎶 Музыка", "#FFDBB0C2"),
                 )
             )
         ) {
