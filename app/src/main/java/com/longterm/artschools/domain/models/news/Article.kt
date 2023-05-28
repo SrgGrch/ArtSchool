@@ -6,5 +6,6 @@ data class Article(
     val id: Int,
     val title: String,
     val text: String,
+    val image: String,
     val tags: List<Tag>
 )

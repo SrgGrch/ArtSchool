@@ -70,6 +70,11 @@ class UserRepository(
         }
     }
 
+    fun signOut() {
+        userStorage.user = null
+        userStorage.token = null
+    }
+
     suspend fun sendAdditionalData(
         preferencesCodes: List<String>? = null,
         targetsCodes: List<String>? = null

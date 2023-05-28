@@ -1,6 +1,7 @@
 package com.longterm.artschools.data.repository
 
 import com.longterm.artschools.data.api.QuizApi
+import com.longterm.artschools.domain.ImagePathResolver
 import com.longterm.artschools.domain.models.quiz.Quiz
 import com.longterm.artschools.domain.models.quiz.QuizAnswer
 import com.longterm.artschools.domain.models.quiz.QuizAnswerResult
@@ -19,6 +20,8 @@ class QuizRepository(
             it.question,
             it.text,
             it.answers.map { ans -> QuizAnswer(ans.id, ans.text) },
+            it.image?.let { image -> ImagePathResolver.resolve(image) }
+                ?: "https://avatars.mds.yandex.net/get-mpic/4262452/img_id5635830207981014623.jpeg/orig",
             it.userAnswers,
         )
     }

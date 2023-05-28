@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.longterm.artschools.R
 import com.longterm.artschools.data.UserStorage
+import com.longterm.artschools.data.repository.UserRepository
 import com.longterm.artschools.ui.core.theme.ArtTextStyle
 import com.longterm.artschools.ui.core.theme.Colors
 import com.longterm.artschools.ui.core.utils.PreviewContext
@@ -38,6 +39,8 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun SplashScreen(close: (Destination) -> Unit) {
     val userStorage: UserStorage = koinInject()
+    val userRepository: UserRepository = koinInject()
+
     Row(
         Modifier
             .background(Colors.GreenMain)
@@ -54,6 +57,7 @@ fun SplashScreen(close: (Destination) -> Unit) {
                 state = true
                 delay(500.milliseconds)
                 val startDestination = if (userStorage.isLoggedIn) {
+                    userRepository.updateUser()
                     BottomBarDestination.Main
                 } else Destination.Onboarding
                 close(startDestination)

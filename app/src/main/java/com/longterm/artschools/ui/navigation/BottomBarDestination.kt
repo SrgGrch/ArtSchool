@@ -7,6 +7,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.longterm.artschools.R
 import com.longterm.artschools.ui.components.main.MainScreen
+import com.longterm.artschools.ui.components.map.MapScreen
 
 sealed class BottomBarDestination(
     val title: String,
@@ -31,7 +32,7 @@ sealed class BottomBarDestination(
     object Map : BottomBarDestination("Карта", R.drawable.ic_tab_map) {
         @Composable
         override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
-            Text(text = "Map") //todo
+            MapScreen()
         }
     }
 }
