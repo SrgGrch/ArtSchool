@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.longterm.artschools.domain.ImagePathResolver
 import com.longterm.artschools.ui.components.common.preview
 import com.longterm.artschools.ui.core.theme.Colors
 import org.koin.androidx.compose.getViewModel
@@ -97,7 +98,7 @@ private fun LessonInfo(st: LessonViewModel.State.Data, goBack: () -> Unit) {
         Spacer(modifier = Modifier.size(12.dp))
         Image(
             painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(LocalContext.current).data(data = st.lesson.image)
+                ImageRequest.Builder(LocalContext.current).data(data = ImagePathResolver.resolve(st.lesson.image))
                     .apply(block = {
                         preview()
                     }).build()
