@@ -25,6 +25,7 @@ import com.longterm.artschools.domain.usecase.VkAuthUseCase
 import com.longterm.artschools.ui.components.auth.AuthViewModel
 import com.longterm.artschools.ui.components.course.CourseViewModel
 import com.longterm.artschools.ui.components.coursesList.CoursesListViewModel
+import com.longterm.artschools.ui.components.lesson.LessonViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
 import com.longterm.artschools.ui.components.news.ArticleVm
 import com.longterm.artschools.ui.components.onboarding.OnboardingViewModel
@@ -48,6 +49,7 @@ val presentationModule = module {
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
     viewModel { CoursesListViewModel(get()) }
     viewModel { params -> CourseViewModel(params.get(), get()) }
+    viewModel { params -> LessonViewModel(params.get(), get()) }
     viewModel { AuthViewModel(get(), get()) }
     viewModel { params -> RegisterViewModel(params.get(), get()) }
     viewModel { params -> ArticleVm(params.get(), get()) }
