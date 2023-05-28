@@ -55,6 +55,7 @@ fun CustomNavHost(
             Destination.Lesson,
             arguments = listOf(navArgument(Destination.Lesson.ARGUMENT) { type = NavType.StringType })
         )
+        createDestination(Destination.Profile)
 //        createDestination(Destination.Register)
     }
 }

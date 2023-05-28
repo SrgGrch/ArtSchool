@@ -9,6 +9,7 @@ import com.longterm.artschools.ui.components.lesson.LessonScreen
 import com.longterm.artschools.ui.components.main.splash.SplashScreen
 import com.longterm.artschools.ui.components.news.ArticleScreen
 import com.longterm.artschools.ui.components.onboarding.OnboardingRootScreen
+import com.longterm.artschools.ui.components.profile.ProfileScreen
 import com.longterm.artschools.ui.components.vkauth.VkAuthScreen
 import com.longterm.artschools.ui.components.vkauth.components.OnVkAuthResult
 
@@ -33,6 +34,9 @@ sealed interface Destination {
                             inclusive = true
                         }
                     }
+                },
+                back = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -137,6 +141,22 @@ sealed interface Destination {
                     }
                 }
             }
+        }
+    }
+
+    object Profile : Destination {
+        @Composable
+        override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
+            ProfileScreen(
+                back = { navController.popBackStack() },
+                routeToOnboarding = {
+                    navController.navigate(Onboarding) {
+                        popUpTo(Onboarding.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
     }
 

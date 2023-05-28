@@ -1,5 +1,6 @@
 package com.longterm.artschools.ui.components.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +47,7 @@ import org.koin.androidx.compose.getViewModel
 fun ProfileScreen(back: () -> Unit, routeToOnboarding: () -> Unit) {
     val vm: ProfileVm = getViewModel()
     val state by vm.state.collectAsState()
+    val context = LocalContext.current
 
     Column(
         Modifier.padding(horizontal = horizontalPadding)
@@ -83,7 +86,10 @@ fun ProfileScreen(back: () -> Unit, routeToOnboarding: () -> Unit) {
                 CircularProgressIndicator()
             }
 
-            ProfileVm.State.SignOut -> LaunchedEffect(key1 = Unit, block = {})
+            ProfileVm.State.SignOut -> LaunchedEffect(key1 = Unit, block = {
+                routeToOnboarding()
+            })
+
             is ProfileVm.State.Data -> {
                 Image(
                     painter = painterResource(id = R.drawable.ic_intro), // todo
@@ -97,25 +103,25 @@ fun ProfileScreen(back: () -> Unit, routeToOnboarding: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = { Toast.makeText(context, "Работа в прогрессе ;)", Toast.LENGTH_SHORT).show() }) {
                     Text(text = "Мои данные", style = ArtTextStyle.Button, color = Color.Black)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = { Toast.makeText(context, "Работа в прогрессе ;)", Toast.LENGTH_SHORT).show() }) {
                     Text(text = "Мои курсы и ответы", style = ArtTextStyle.Button, color = Color.Black)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = { Toast.makeText(context, "Работа в прогрессе ;)", Toast.LENGTH_SHORT).show() }) {
                     Text(text = "Достижения", style = ArtTextStyle.Button, color = Color.Black)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = { vm.signOut() }) {
                     Text(text = "Выход", style = ArtTextStyle.Button, color = Color.Black)
                 }
 

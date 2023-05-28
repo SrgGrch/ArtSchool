@@ -21,6 +21,9 @@ class ProfileVm(
 
     fun signOut() {
         userRepository.signOut()
+        _state.update {
+            State.SignOut
+        }
     }
 
     fun retry() = loadData()
