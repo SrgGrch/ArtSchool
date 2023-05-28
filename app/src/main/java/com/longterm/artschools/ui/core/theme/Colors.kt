@@ -26,4 +26,6 @@ object Colors {
     val Blue = Color(0xFF3B4560)
 
     val VkBlue = Color(0xFF0077FF)
+
+    val Black = Color(0xFF3C3C3B)
 }

@@ -19,6 +19,8 @@ import com.longterm.artschools.domain.usecase.GetFeedUseCase
 import com.longterm.artschools.domain.usecase.RegisterUseCase
 import com.longterm.artschools.domain.usecase.VkAuthUseCase
 import com.longterm.artschools.ui.components.auth.AuthViewModel
+import com.longterm.artschools.ui.components.course.CourseViewModel
+import com.longterm.artschools.ui.components.coursesList.CoursesListViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
 import com.longterm.artschools.ui.components.news.ArticleVm
 import com.longterm.artschools.ui.components.onboarding.OnboardingViewModel
@@ -40,6 +42,8 @@ val presentationModule = module {
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
     viewModel { AuthViewModel(get(), androidApplication().resources) }
     viewModel { params -> RegisterViewModel(params.get(), androidApplication().resources) }
+    viewModel { CoursesListViewModel() }
+    viewModel { CourseViewModel() }
     viewModel { params -> ArticleVm(params.get(), get()) }
 
     factory { BottomBarCoordinator() }
