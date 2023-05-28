@@ -21,10 +21,10 @@ class GetFeedUseCase(
                 .map {
                     MainListItem.QuizItem(
                         it.id,
-                        3,//todo
+                        (1..3).random(),//todo
                         it.question,
                         it.text,
-                        "https://avatars.mds.yandex.net/get-mpic/4262452/img_id5635830207981014623.jpeg/orig",//todo
+                        it.image,//todo
                         it.answers.map { a ->
                             MainListItem.QuizItem.Answer(
                                 a.id,
@@ -52,16 +52,29 @@ class GetFeedUseCase(
                         it.id,
                         it.title,
                         it.text, // todo
-                        "https://static.tildacdn.com/tild6338-3363-4137-b534-663038303161/DSCF0696.jpg", // todo
-                        3, // todo
+                        it.image,
+                        (1..3).random(), // todo
                         it.tags.map { (text, color) -> MainListItem.Tag(text, color) }
                     )
                 }
 
             buildList {
-                addAll(quizzes)
+                val qi = quizzes.iterator()
+                if (qi.hasNext()) {
+                    add(qi.next())
+                }
+
                 addAll(playlists)
-                addAll(news)
+
+                news.forEachIndexed { index, articleItem ->
+                    add(articleItem)
+
+                    if (index % 3 == 0 && index != 0) {
+                        if (qi.hasNext()) {
+                            add(qi.next())
+                        }
+                    }
+                }
             }
         }
     }

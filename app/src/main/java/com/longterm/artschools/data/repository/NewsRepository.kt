@@ -2,6 +2,7 @@ package com.longterm.artschools.data.repository
 
 import com.longterm.artschools.data.api.NewsApi
 import com.longterm.artschools.data.models.news.ArticleResponse
+import com.longterm.artschools.domain.ImagePathResolver
 import com.longterm.artschools.domain.models.Tag
 import com.longterm.artschools.domain.models.news.Article
 
@@ -44,6 +45,8 @@ class NewsRepository(
             id ?: _id!!,
             title,
             text,
+            image?.let { ImagePathResolver.resolve(it) }
+                ?: "https://avatars.mds.yandex.net/get-mpic/4262452/img_id5635830207981014623.jpeg/orig",
             tags.mapNotNull {
                 tagList[it]
             }

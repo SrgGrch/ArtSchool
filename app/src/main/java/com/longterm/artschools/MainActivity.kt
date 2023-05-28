@@ -19,14 +19,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.longterm.artschools.ui.components.profile.ProfileScreen
 import com.longterm.artschools.ui.core.theme.ArtSchoolsTheme
 import com.longterm.artschools.ui.navigation.ArtBottomBar
 import com.longterm.artschools.ui.navigation.BottomBarCoordinator
 import com.longterm.artschools.ui.navigation.CustomNavHost
 import com.longterm.artschools.ui.navigation.Destination
 import com.vk.api.sdk.auth.VKAuthCallback
+import com.yandex.mapkit.MapKitFactory
+import io.mockk.mockk
 import org.koin.compose.koinInject
 
 
@@ -35,6 +39,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mockk<ViewModel>()
         setContent {
             ArtSchoolsTheme {
                 // A surface container using the 'background' color from the theme
@@ -46,6 +51,16 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        MapKitFactory.getInstance().onStop()
+        super.onStop()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        MapKitFactory.getInstance().onStart()
     }
 }
 

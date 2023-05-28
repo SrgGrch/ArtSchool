@@ -1,6 +1,8 @@
 package com.longterm.artschools.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Resources
 import com.longterm.artschools.data.UserStorage
 import com.longterm.artschools.data.api.CoursesApi
 import com.longterm.artschools.data.api.NewsApi
@@ -30,7 +32,9 @@ import com.longterm.artschools.ui.components.onboarding.art.OnboardingArtViewMod
 import com.longterm.artschools.ui.components.onboarding.register.RegisterViewModel
 import com.longterm.artschools.ui.components.onboarding.target.OnboardingTargetViewModel
 import com.longterm.artschools.ui.components.onboarding.userInfo.OnboardingUserInfoViewModel
+import com.longterm.artschools.ui.components.profile.ProfileVm
 import com.longterm.artschools.ui.navigation.BottomBarCoordinator
+import io.mockk.mockk
 import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -42,17 +46,18 @@ val presentationModule = module {
     viewModel { params -> OnboardingArtViewModel(params.get(), get()) }
     viewModel { params -> OnboardingTargetViewModel(params.get(), get()) }
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
-    viewModel { AuthViewModel(get(), androidApplication().resources) }
-    viewModel { params -> RegisterViewModel(params.get(), androidApplication().resources) }
     viewModel { CoursesListViewModel(get()) }
     viewModel { params -> CourseViewModel(params.get(), get()) }
+    viewModel { AuthViewModel(get(), get()) }
+    viewModel { params -> RegisterViewModel(params.get(), get()) }
     viewModel { params -> ArticleVm(params.get(), get()) }
+    viewModel { ProfileVm(get()) }
 
     factory { BottomBarCoordinator() }
 }
 
-val dataModule = module {
-    factory { HttpClientFactory(get(), get()).create("http://dolgostroiki-20.game-kit.ru/api/") }
+val androidModule = module {
+    factory { androidApplication().resources }
 
     factory(qualifier = SharedPreferencesQualifier.UserStorage) {
         androidApplication().getSharedPreferences(
@@ -60,6 +65,18 @@ val dataModule = module {
             Context.MODE_PRIVATE
         )
     }
+}
+
+val mockAndroidModules = module {
+    factory<Resources?> { mockk(relaxed = true) }
+
+    factory<SharedPreferences?>(qualifier = SharedPreferencesQualifier.UserStorage) {
+        mockk(relaxed = true)
+    }
+}
+
+val dataModule = module {
+    factory { HttpClientFactory(get(), get()).create("http://dolgostroiki-20.game-kit.ru/api/") }
 
     factory { UserStorage(get(SharedPreferencesQualifier.UserStorage)) }
 
@@ -103,4 +120,13 @@ val moduleList = listOf(
     domainModule,
     dataModule,
     presentationModule,
+    androidModule
+)
+
+val previewList = listOf(
+    commonModule,
+    domainModule,
+    dataModule,
+    presentationModule,
+    mockAndroidModules
 )

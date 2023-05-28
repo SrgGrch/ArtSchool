@@ -6,5 +6,6 @@ data class Quiz(
     val question: String,
     val text: String,
     val answers: List<QuizAnswer>,
+    val image: String,
     val userAnswers: List<Int>? = null
 )

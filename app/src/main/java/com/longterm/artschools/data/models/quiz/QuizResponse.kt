@@ -9,6 +9,7 @@ data class QuizResponse(
     val question: String,
     @SerialName("text")
     val text: String,
+    val image: String? = null,
     @SerialName("answers")
     val answers: List<Answers>,
     @SerialName("user_answers")

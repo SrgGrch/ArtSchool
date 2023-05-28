@@ -37,8 +37,8 @@ class ArticleVm(
                         article.id,
                         article.title,
                         article.text,
-                        "https://static.tildacdn.com/tild6338-3363-4137-b534-663038303161/DSCF0696.jpg", // todo, // todo
-                        3, // todo
+                        article.image,
+                        (1..3).random(), // todo
                         article.tags
                     )
                 }
