@@ -33,7 +33,7 @@ import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun CoursesListScreen() {
+fun CoursesListScreen(navigateToCourse: (id: Int) -> Unit) {
     val vm: CoursesListViewModel = getViewModel()
     val state by vm.state.collectAsState()
 
@@ -84,7 +84,7 @@ fun CoursesListScreen() {
             is CoursesListViewModel.State.Data -> {
                 LazyColumn {
                     itemsIndexed(st.items) { _, item ->
-                        CoursesListItem(data = item, onItemClicked = { /*todo*/ })
+                        CoursesListItem(data = item, onItemClicked = { navigateToCourse(item.id) })
                     }
                 }
             }
@@ -96,6 +96,6 @@ fun CoursesListScreen() {
 @Composable
 private fun Preview() {
     PreviewContext {
-        CoursesListScreen()
+        CoursesListScreen({})
     }
 }

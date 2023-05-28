@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.longterm.artschools.ui.components.auth.AuthScreen
+import com.longterm.artschools.ui.components.course.CoursesScreen
 import com.longterm.artschools.ui.components.main.splash.SplashScreen
 import com.longterm.artschools.ui.components.news.ArticleScreen
 import com.longterm.artschools.ui.components.onboarding.OnboardingRootScreen
@@ -87,6 +88,25 @@ sealed interface Destination {
         }
 
         const val ARGUMENT = "articleId"
+    }
+
+    object Course : Destination {
+        override val route: String
+            get() = "Course/{$ARGUMENT}"
+
+        operator fun invoke(courseId: Int): String {
+            return "Course/$courseId"
+        }
+
+        @Composable
+        override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
+            val id = navBackStackEntry.arguments?.getString(ARGUMENT)
+            CoursesScreen(id?.toIntOrNull() ?: -1) {
+                navController.popBackStack()
+            }
+        }
+
+        const val ARGUMENT = "courseId"
     }
 
     object Splash : Destination {
