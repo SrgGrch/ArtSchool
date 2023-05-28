@@ -7,6 +7,10 @@ import kotlinx.serialization.Serializable
 data class CourseResponse(
     val id: Int,
     val name: String,
+    @SerialName("author_name")
+    val authorName: String,
+    @SerialName("author_description")
+    val authorDescription: String,
     val difficulty: Int,
     val tags: List<String>,
     @SerialName("total_lessons")

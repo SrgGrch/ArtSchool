@@ -30,12 +30,9 @@ class CourseViewModel(private val id: Int, private val coursesRepository: Course
                         Course(
                             id = it.id,
                             title = it.name,
-                            authorName = "Виктория Игоревна Саранская",
+                            authorName = it.authorName,
                             authorImageUrl = "https://shop-cdn1-2.vigbo.tech/shops/19661/products/21612973/images/3-2e7445062f6dbcbde00cb3deee691548.jpg",
-                            authorDescription = "Заведующая хоровым отделом “Детской музыкальной школы им. Шебалина”\n" +
-                                    "\n" +
-                                    "Окончила МГК им. П.И. Чайковского (2020 г.)\n" +
-                                    "по специальности «Художественное руководство оперно-симфоническим оркестром и академическим хором»",
+                            authorDescription = it.authorDescription,
                             reward = 50,
                             lessons = it.lessons.map { lesson ->
                                 Course.Lesson(lesson.id, lesson.name, "${lesson.cost} баллов", "${lesson.duration} мин")
