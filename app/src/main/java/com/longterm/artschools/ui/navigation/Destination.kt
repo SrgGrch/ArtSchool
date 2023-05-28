@@ -30,7 +30,7 @@ sealed interface Destination {
                 navigateToVkAuth = { navController.navigate(VkAuth(it)) },
                 navigateToMainScreen = {
                     navController.navigate(BottomBarDestination.Main) {
-                        popUpTo(Auth.route) {
+                        popUpTo(0) {
                             inclusive = true
                         }
                     }
@@ -49,7 +49,7 @@ sealed interface Destination {
                 navigateToVkAuth = { navController.navigate(VkAuth(it)) },
                 navigateToMainScreen = {
                     navController.navigate(BottomBarDestination.Main) {
-                        popUpTo(Onboarding.route) {
+                        popUpTo(0) {
                             inclusive = true
                         }
                     }
@@ -151,7 +151,7 @@ sealed interface Destination {
                 back = { navController.popBackStack() },
                 routeToOnboarding = {
                     navController.navigate(Onboarding) {
-                        popUpTo(Onboarding.route) {
+                        popUpTo(navController.graph.id) {
                             inclusive = true
                         }
                     }

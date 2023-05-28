@@ -18,6 +18,8 @@ class GetFeedUseCase(
                 .map {
                     quizRepository.getQuiz(it.id).getOrThrow()
                 }
+                .filter { it.userAnswers == null }
+                .shuffled()
                 .map {
                     MainListItem.QuizItem(
                         it.id,
