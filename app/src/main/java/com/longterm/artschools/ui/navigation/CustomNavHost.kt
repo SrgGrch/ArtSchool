@@ -46,6 +46,7 @@ fun CustomNavHost(
             Destination.Article,
             arguments = listOf(navArgument(Destination.Article.ARGUMENT) { type = NavType.StringType })
         )
+        createDestination(Destination.Splash)
 //        createDestination(Destination.Register)
     }
 }
