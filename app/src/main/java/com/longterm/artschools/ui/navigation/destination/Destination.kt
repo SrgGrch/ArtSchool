@@ -1,4 +1,4 @@
-package com.longterm.artschools.ui.navigation
+package com.longterm.artschools.ui.navigation.destination
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
@@ -12,6 +12,7 @@ import com.longterm.artschools.ui.components.onboarding.OnboardingRootScreen
 import com.longterm.artschools.ui.components.profile.ProfileScreen
 import com.longterm.artschools.ui.components.vkauth.VkAuthScreen
 import com.longterm.artschools.ui.components.vkauth.components.OnVkAuthResult
+import com.longterm.artschools.ui.navigation.navigate
 
 sealed interface Destination {
     val route: String
@@ -21,11 +22,17 @@ sealed interface Destination {
         get() = true
 
     @Composable
-    fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry)
+    fun GetComposable(
+        navController: NavController,
+        navBackStackEntry: NavBackStackEntry
+    )
 
     object Auth : Destination {
         @Composable
-        override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
+        override fun GetComposable(
+            navController: NavController,
+            navBackStackEntry: NavBackStackEntry
+        ) {
             return AuthScreen(
                 navigateToVkAuth = { navController.navigate(VkAuth(it)) },
                 navigateToMainScreen = {
@@ -44,7 +51,10 @@ sealed interface Destination {
 
     object Onboarding : Destination {
         @Composable
-        override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
+        override fun GetComposable(
+            navController: NavController,
+            navBackStackEntry: NavBackStackEntry
+        ) {
             return OnboardingRootScreen(
                 navigateToVkAuth = { navController.navigate(VkAuth(it)) },
                 navigateToMainScreen = {
@@ -65,13 +75,16 @@ sealed interface Destination {
 
         private lateinit var onResult: OnVkAuthResult
         operator fun invoke(callback: OnVkAuthResult): VkAuth {
-            this.onResult = callback
+            onResult = callback
 
             return this
         }
 
         @Composable
-        override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
+        override fun GetComposable(
+            navController: NavController,
+            navBackStackEntry: NavBackStackEntry
+        ) {
             VkAuthScreen(onResult) { navController.popBackStack() }
         }
     }
@@ -85,7 +98,10 @@ sealed interface Destination {
         }
 
         @Composable
-        override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
+        override fun GetComposable(
+            navController: NavController,
+            navBackStackEntry: NavBackStackEntry
+        ) {
             val id = navBackStackEntry.arguments?.getString(ARGUMENT)
             ArticleScreen(id?.toIntOrNull() ?: -1) {
                 navController.popBackStack()
@@ -104,7 +120,10 @@ sealed interface Destination {
         }
 
         @Composable
-        override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
+        override fun GetComposable(
+            navController: NavController,
+            navBackStackEntry: NavBackStackEntry
+        ) {
             val id = navBackStackEntry.arguments?.getString(ARGUMENT)
             LessonScreen(id?.toIntOrNull() ?: -1, goBack = { navController.popBackStack() })
         }
@@ -121,7 +140,10 @@ sealed interface Destination {
         }
 
         @Composable
-        override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
+        override fun GetComposable(
+            navController: NavController,
+            navBackStackEntry: NavBackStackEntry
+        ) {
             val id = navBackStackEntry.arguments?.getString(ARGUMENT)
             CoursesScreen(id?.toIntOrNull() ?: -1, goBack = { navController.popBackStack() }) {
                 navController.navigate(Lesson(it))
@@ -133,7 +155,10 @@ sealed interface Destination {
 
     object Splash : Destination {
         @Composable
-        override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
+        override fun GetComposable(
+            navController: NavController,
+            navBackStackEntry: NavBackStackEntry
+        ) {
             SplashScreen {
                 navController.navigate(it) {
                     popUpTo(Splash.route) {
@@ -146,7 +171,10 @@ sealed interface Destination {
 
     object Profile : Destination {
         @Composable
-        override fun GetComposable(navController: NavController, navBackStackEntry: NavBackStackEntry) {
+        override fun GetComposable(
+            navController: NavController,
+            navBackStackEntry: NavBackStackEntry
+        ) {
             ProfileScreen(
                 back = { navController.popBackStack() },
                 routeToOnboarding = {

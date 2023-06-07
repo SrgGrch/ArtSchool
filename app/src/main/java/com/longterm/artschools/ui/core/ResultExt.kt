@@ -1,5 +1,7 @@
 package com.longterm.artschools.ui.core
 
+import android.util.Log
+
 
 inline fun <T, R> Result<T>.onSuccessMap(block: (T) -> R): Result<R> {
     return if (isSuccess) Result.success(block(getOrThrow()))
@@ -21,5 +23,11 @@ inline fun <T> withResult(block: () -> T): Result<T> {
         block().let { Result.success(it) }
     } catch (e: Exception) {
         Result.failure(e)
+    }
+}
+
+fun <T> Result<T>.onFailureLog(tag: String): Result<T> {
+    return onFailure {
+        Log.e(tag, it.stackTraceToString())
     }
 }

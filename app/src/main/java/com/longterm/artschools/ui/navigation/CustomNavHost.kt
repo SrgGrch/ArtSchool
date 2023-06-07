@@ -17,6 +17,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navOptions
+import com.google.accompanist.navigation.material.bottomSheet
+import com.longterm.artschools.ui.navigation.destination.BottomBarDestination
+import com.longterm.artschools.ui.navigation.destination.BottomSheetDestinations
+import com.longterm.artschools.ui.navigation.destination.Destination
 
 @Composable
 fun CustomNavHost(
@@ -29,6 +33,13 @@ fun CustomNavHost(
         arguments: List<NamedNavArgument> = emptyList(),
         deepLinks: List<NavDeepLink> = emptyList()
     ) = composable(destination.route, arguments, deepLinks) { destination.GetComposable(navController, it) }
+
+    fun NavGraphBuilder.createBottomSheet(
+        destination: Destination,
+        arguments: List<NamedNavArgument> = emptyList(),
+        deepLinks: List<NavDeepLink> = emptyList()
+    ) = bottomSheet(destination.route, arguments, deepLinks) { destination.GetComposable(navController, it) }
+
 
     NavHost(
         navController = navController,
@@ -56,7 +67,7 @@ fun CustomNavHost(
             arguments = listOf(navArgument(Destination.Lesson.ARGUMENT) { type = NavType.StringType })
         )
         createDestination(Destination.Profile)
-//        createDestination(Destination.Register)
+        createBottomSheet(BottomSheetDestinations.MapPointInfo)
     }
 }
 
