@@ -90,4 +90,12 @@ class UserRepository(
             ?: IllegalStateException("Both requests did not succeed, but no errors")
         )
     }
+
+    suspend fun getUser(): User? {
+        val user = userApi.me().getOrNull() ?: return null
+
+        userStorage.user = user
+
+        return user
+    }
 }

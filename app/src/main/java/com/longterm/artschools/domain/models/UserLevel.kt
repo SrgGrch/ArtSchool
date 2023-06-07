@@ -1,11 +1,14 @@
 package com.longterm.artschools.domain.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserLevel(
-    val level: Level? = null, //O'rly?
-    val total_exp: Double? = null //O'rly?
+    @SerialName("current_level")
+    val currentLevel: Level? = null, //O'rly?
+    @SerialName("total_exp")
+    val totalExp: Double? = null //O'rly?
 ) {
     @Serializable
     data class Level(
