@@ -39,7 +39,6 @@ import com.longterm.artschools.ui.components.onboarding.target.OnboardingTargetV
 import com.longterm.artschools.ui.components.onboarding.userInfo.OnboardingUserInfoViewModel
 import com.longterm.artschools.ui.components.profile.ProfileVm
 import com.longterm.artschools.ui.navigation.BottomBarCoordinator
-import io.mockk.mockk
 import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -76,14 +75,6 @@ val androidModule = module {
             "UserStorage",
             Context.MODE_PRIVATE
         )
-    }
-}
-
-val mockAndroidModules = module {
-    factory<Resources?> { mockk(relaxed = true) }
-
-    factory<SharedPreferences?>(qualifier = SharedPreferencesQualifier.UserStorage) {
-        mockk(relaxed = true)
     }
 }
 
@@ -135,12 +126,4 @@ val moduleList = listOf(
     dataModule,
     presentationModule,
     androidModule
-)
-
-val previewList = listOf(
-    commonModule,
-    domainModule,
-    dataModule,
-    presentationModule,
-    mockAndroidModules
 )

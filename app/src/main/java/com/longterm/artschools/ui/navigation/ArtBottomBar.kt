@@ -44,7 +44,7 @@ fun ArtBottomBar(navController: NavController) {
                 onClick = {
                     navController.navigate(item.route) {
                         navController.graph.startDestinationRoute?.let { screenRoute ->
-                            popUpTo(screenRoute) {
+                            popUpTo(0) { // wtf
                                 saveState = true
                             }
                         }

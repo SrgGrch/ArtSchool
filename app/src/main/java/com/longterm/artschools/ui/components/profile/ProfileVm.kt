@@ -1,5 +1,6 @@
 package com.longterm.artschools.ui.components.profile
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.longterm.artschools.data.repository.UserRepository
@@ -36,6 +37,7 @@ class ProfileVm(
                 }
             }
             .onFailure {
+                Log.e("ProfileVm", it.stackTraceToString())
                 _state.update {
                     State.Error
                 }

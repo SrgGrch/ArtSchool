@@ -15,6 +15,6 @@ data class User(
     @SerialName("first_name")
     val firstName: String? = null,
     val avatar: String? = null,
-    val preferences: List<Preference>? = null,
-    val targets: List<Target>? = null
+    val preferences: List<Int>? = null,
+    val targets: List<Int>? = null
 )
