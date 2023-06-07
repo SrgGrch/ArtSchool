@@ -55,7 +55,7 @@ fun SplashScreen(close: (Destination) -> Unit) {
 
         LaunchedEffect(key1 = Unit, block = {
             scope.launch {
-                delay(2.seconds)
+                delay(1.seconds)
                 state = true
                 delay(500.milliseconds)
 //                activity.startActivity(Intent(activity, PlayerActivity3::class.java))

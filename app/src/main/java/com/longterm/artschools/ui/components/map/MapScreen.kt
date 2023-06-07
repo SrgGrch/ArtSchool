@@ -5,20 +5,26 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -26,6 +32,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +54,7 @@ import com.longterm.artschools.domain.models.points.Point
 import com.longterm.artschools.ui.components.map.MapUtils.moveToMyLocation
 import com.longterm.artschools.ui.components.map.MapUtils.zoomIn
 import com.longterm.artschools.ui.components.map.MapUtils.zoomOut
+import com.longterm.artschools.ui.core.theme.ArtTextStyle
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import com.longterm.artschools.ui.navigation.destination.BottomBarDestination
 import com.longterm.artschools.ui.navigation.destination.BottomSheetDestinations
@@ -88,7 +96,7 @@ fun MapScreen(
     var listeners = remember { mutableListOf<MapObjectTapListener>() }
 
     var objects by remember { mutableStateOf<MapObjectCollection?>(null) }
-    var shouldCenter by remember { mutableStateOf(true) }
+    var shouldCenter by rememberSaveable { mutableStateOf(true) }
 
     val showPoint = (state as? MapVm.State.Data)?.showPoint
     if (showPoint != null)
@@ -110,59 +118,101 @@ fun MapScreen(
     }
 
     Box {
-        AndroidView(factory = {
-            MapView(it)
-        }) { mapView ->
-            val lifecycleOwner: LifecycleOwner = (mapView.context as MainActivity)
+        Column {
+            Row(
+                Modifier
+                    .background(Color.White)
+                    .fillMaxWidth()
+                    .padding(start = 16.dp)
+                    .height(40.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "Школы на карте", style = ArtTextStyle.H3)
 
-            val observer = LifecycleEventObserver { _, event -> // todo move outside
-                when (event) {
-                    Lifecycle.Event.ON_START -> {
-                        mapView.onStart()
-                    }
-
-                    Lifecycle.Event.ON_STOP -> {
-                        mapView.onStop()
-                    }
-
-                    else -> {}
+                IconButton(onClick = { Toast.makeText(context, "В разработке :з", Toast.LENGTH_SHORT).show() }) {
+                    Icon(imageVector = Icons.Rounded.Search, contentDescription = "Поиск")
                 }
             }
+            AndroidView(factory = {
+                MapView(it)
+            }) { mapView ->
+                val lifecycleOwner: LifecycleOwner = (mapView.context as MainActivity)
 
-            lifecycleOwner.lifecycle.addObserver(observer)
+                val observer = LifecycleEventObserver { _, event -> // todo move outside
+                    when (event) {
+                        Lifecycle.Event.ON_START -> {
+                            mapView.onStart()
+                        }
 
-            map = mapView.map
+                        Lifecycle.Event.ON_STOP -> {
+                            mapView.onStop()
+                        }
 
-            if (shouldCenter) {
-                userLocationLayer = MapKitFactory.getInstance().createUserLocationLayer(mapView.mapWindow)
-                MapKitFactory.getInstance().resetLocationManagerToDefault()
-                userLocationLayer?.isVisible = true
+                        else -> {}
+                    }
+                }
 
-                map?.moveToMyLocation(context)
+                lifecycleOwner.lifecycle.addObserver(observer)
 
-                shouldCenter = false
-            }
+                map = mapView.map
 
-            val st = state
-            if (objects == null)
-                objects = mapView.map.mapObjects.addCollection()
+                mapView.map.isRotateGesturesEnabled = false
+                mapView.map.isTiltGesturesEnabled = false
 
-            listeners = mutableListOf()
-            objects?.clear()
+                if (shouldCenter && permissionsGranted) {
+                    MapKitFactory.getInstance().resetLocationManagerToDefault()
+                }
 
-            if (st is MapVm.State.Data) {
-                st.points.forEach {
-                    objects?.addPlacemark(
-                        YandexPoint(it.point.latLng.latitude, it.point.latLng.longitude),
-                        ImageProvider.fromResource(
-                            mapView.context,
-                            if (it.selected) R.drawable.ic_map_point_selected else R.drawable.ic_map_point
+                if (shouldCenter) {
+                    map?.moveToMyLocation(context)
+
+                    shouldCenter = false
+                }
+
+                if (permissionsGranted) {
+                    if (userLocationLayer == null) userLocationLayer =
+                        MapKitFactory.getInstance().createUserLocationLayer(mapView.mapWindow)
+                    userLocationLayer?.isVisible = true
+                }
+
+                val st = state
+                if (objects == null)
+                    objects = mapView.map.mapObjects.addCollection()
+
+                listeners = mutableListOf()
+                objects?.clear()
+
+                if (st is MapVm.State.Data) {
+                    st.points.forEach {
+                        val mapObject = objects?.addPlacemark(
+                            YandexPoint(it.point.latLng.latitude, it.point.latLng.longitude),
                         )
-                    )?.addTapListener(MapObjectTapListener { _, _ ->
-                        vm.onPointClicked(it)
 
-                        true
-                    }.also(listeners::add))
+                        mapObject?.addTapListener(MapObjectTapListener { _, _ ->
+                            vm.onPointClicked(it)
+
+                            true
+                        }.also(listeners::add))
+
+                        if (it.selected) {
+
+                            mapObject?.setIcon(
+                                ImageProvider.fromResource(
+                                    mapView.context,
+                                    R.drawable.ic_map_point_selected
+                                ),
+                                MapUtils.ICON_STYLE_POINT_AS_PIN_SELECTED
+                            )
+                        } else {
+                            mapObject?.setIcon(
+                                ImageProvider.fromResource(
+                                    mapView.context,
+                                    R.drawable.ic_map_point,
+                                ),
+                                MapUtils.ICON_STYLE_POINT_AS_PIN
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -240,6 +290,19 @@ private inline fun Context.requestPermissions(
 @Composable
 private fun Preview() {
     PreviewContext {
-        MapScreen({}, BottomBarDestination.Map.route)
+        Row(
+            Modifier
+                .background(Color.White)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .height(40.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = "Школы на карте", style = ArtTextStyle.H3)
+
+            IconButton(onClick = { }) {
+                Icon(imageVector = Icons.Rounded.Search, contentDescription = "Поиск")
+            }
+        }
     }
 }

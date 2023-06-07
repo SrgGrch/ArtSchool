@@ -7,6 +7,9 @@ import com.longterm.artschools.domain.models.points.Point
 class PointsRepository(
     private val pointsApi: PointsApi
 ) {
+    var lastPoint: Point? = null
+        private set
+
     suspend fun getPoints(query: String? = null): Result<List<Point>> = pointsApi.getPoints(query).map { result ->
         result.map {
             with(it) {
@@ -15,10 +18,14 @@ class PointsRepository(
                     name,
                     description,
                     "Академическая (Ленинский просп., 45)",
-                    "+ 74952128506",
+                    "+74952128506",
                     workTime
                 )
             }
         }
+    }
+
+    fun savePoint(point: Point) {
+        lastPoint = point
     }
 }

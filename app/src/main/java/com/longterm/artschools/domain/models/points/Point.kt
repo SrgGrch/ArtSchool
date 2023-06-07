@@ -8,5 +8,5 @@ data class Point(
     val description: String,
     val address: String,
     val phoneNumber: String?,
-    val workTime: String
+    val workTime: String?
 )
