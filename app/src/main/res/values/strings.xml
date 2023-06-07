@@ -44,4 +44,6 @@
     <string name="cousres_title">Курсы</string>
     <string name="cousres_course_reading">Курс читает</string>
     <string name="cousres_lessons">Уроки курса</string>
+
+    <string name="notification_channel_video">Курсы</string>
 </resources>

@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.longterm.artschools.ui.core.utils.PreviewContext
+import com.longterm.artschools.ui.navigation.destination.BottomBarDestination
 
 @Composable
 fun ArtBottomBar(navController: NavController) {

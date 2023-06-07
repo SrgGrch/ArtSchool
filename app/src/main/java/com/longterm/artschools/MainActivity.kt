@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -19,21 +20,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.media3.common.util.UnstableApi
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.longterm.artschools.ui.core.theme.ArtSchoolsTheme
 import com.longterm.artschools.ui.navigation.ArtBottomBar
 import com.longterm.artschools.ui.navigation.BottomBarCoordinator
 import com.longterm.artschools.ui.navigation.CustomNavHost
-import com.longterm.artschools.ui.navigation.Destination
-import com.vk.api.sdk.auth.VKAuthCallback
+import com.longterm.artschools.ui.navigation.destination.Destination
 import com.yandex.mapkit.MapKitFactory
 import org.koin.compose.koinInject
 
 
+@UnstableApi
 class MainActivity : ComponentActivity() {
-    private var vkAuthCallback: VKAuthCallback? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -62,7 +65,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Main() {
-    val navController = rememberNavController()
+    val bottomSheetNavigator = rememberBottomSheetNavigator()
+    val navController = rememberNavController(bottomSheetNavigator)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val bottomBarCoordinator: BottomBarCoordinator = koinInject()
     var bottomBarState by rememberSaveable { (mutableStateOf(true)) }
@@ -70,16 +74,18 @@ fun Main() {
     val currentRoute = navBackStackEntry?.destination?.route
     bottomBarState = bottomBarCoordinator.needToShowBottomBar(currentRoute)
 
-    Scaffold(bottomBar = {
-        AnimatedVisibility(
-            visible = bottomBarState,
-            enter = fadeIn() + expandVertically(),
-            exit = shrinkVertically() + fadeOut(),
-        ) {
-            ArtBottomBar(navController)
+    ModalBottomSheetLayout(bottomSheetNavigator, sheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)) {
+        Scaffold(bottomBar = {
+            AnimatedVisibility(
+                visible = bottomBarState,
+                enter = fadeIn() + expandVertically(),
+                exit = shrinkVertically() + fadeOut(),
+            ) {
+                ArtBottomBar(navController)
+            }
+        }) {
+            CustomNavHost(navController, Destination.Splash, it)
         }
-    }) {
-        CustomNavHost(navController, Destination.Splash, it)
     }
 }
 

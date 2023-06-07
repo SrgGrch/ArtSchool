@@ -20,6 +20,8 @@ object Colors {
 
     val Red = Color(0xFFBA768F)
 
+    val Orange = Color(0xFFFCC400)
+
     val GreyLight = Color(0xFFA1A1A1)
     val GreyLight3 = Color(0xFFEDEDED)
 

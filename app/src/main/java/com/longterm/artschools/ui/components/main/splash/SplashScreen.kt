@@ -19,17 +19,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.longterm.artschools.MainActivity
 import com.longterm.artschools.R
 import com.longterm.artschools.data.UserStorage
 import com.longterm.artschools.data.repository.UserRepository
 import com.longterm.artschools.ui.core.theme.ArtTextStyle
 import com.longterm.artschools.ui.core.theme.Colors
 import com.longterm.artschools.ui.core.utils.PreviewContext
-import com.longterm.artschools.ui.navigation.BottomBarDestination
-import com.longterm.artschools.ui.navigation.Destination
+import com.longterm.artschools.ui.navigation.destination.BottomBarDestination
+import com.longterm.artschools.ui.navigation.destination.Destination
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -40,7 +42,7 @@ import kotlin.time.Duration.Companion.seconds
 fun SplashScreen(close: (Destination) -> Unit) {
     val userStorage: UserStorage = koinInject()
     val userRepository: UserRepository = koinInject()
-
+    val activity = LocalContext.current as MainActivity
     Row(
         Modifier
             .background(Colors.GreenMain)
@@ -56,6 +58,8 @@ fun SplashScreen(close: (Destination) -> Unit) {
                 delay(2.seconds)
                 state = true
                 delay(500.milliseconds)
+//                activity.startActivity(Intent(activity, PlayerActivity3::class.java))
+
                 val startDestination = if (userStorage.isLoggedIn) {
                     userRepository.updateUser()
                     BottomBarDestination.Main

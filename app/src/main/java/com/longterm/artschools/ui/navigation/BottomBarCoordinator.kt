@@ -1,23 +1,15 @@
 package com.longterm.artschools.ui.navigation
 
-class BottomBarCoordinator {
-//    fun needToShowBottomBar(route: String?): Boolean {
-//        return when (route) {
-//            Destination.VkAuth.route,
-//            Destination.Onboarding.route,
-//            Destination.Auth.route,
-//            Destination.Splash.route -> false
-//
-//            null -> false
-//            else -> true
-//        }
-//    }
+import com.longterm.artschools.ui.navigation.destination.BottomBarDestination
+import com.longterm.artschools.ui.navigation.destination.BottomSheetDestinations
 
+class BottomBarCoordinator {
     fun needToShowBottomBar(route: String?): Boolean {
         return when (route) {
             BottomBarDestination.Main.route,
             BottomBarDestination.Courses.route,
-            BottomBarDestination.Map.route -> true
+            BottomBarDestination.Map.route,
+            BottomSheetDestinations.MapPointInfo.route -> true
 
             else -> false
         }

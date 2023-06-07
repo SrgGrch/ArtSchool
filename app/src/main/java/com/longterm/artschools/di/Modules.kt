@@ -1,10 +1,14 @@
 package com.longterm.artschools.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Resources
+import androidx.media3.exoplayer.ExoPlayer
 import com.longterm.artschools.data.UserStorage
 import com.longterm.artschools.data.api.CoursesApi
 import com.longterm.artschools.data.api.NewsApi
 import com.longterm.artschools.data.api.OnboardingApi
+import com.longterm.artschools.data.api.PointsApi
 import com.longterm.artschools.data.api.QuizApi
 import com.longterm.artschools.data.api.UserApi
 import com.longterm.artschools.data.api.VkApi
@@ -13,6 +17,7 @@ import com.longterm.artschools.data.repository.CoursesRepository
 import com.longterm.artschools.data.repository.NewsRepository
 import com.longterm.artschools.data.repository.OnboardingRepository
 import com.longterm.artschools.data.repository.PlaylistRepository
+import com.longterm.artschools.data.repository.PointsRepository
 import com.longterm.artschools.data.repository.QuizRepository
 import com.longterm.artschools.data.repository.UserRepository
 import com.longterm.artschools.domain.usecase.AnswerQuizUseCase
@@ -25,6 +30,7 @@ import com.longterm.artschools.ui.components.course.CourseViewModel
 import com.longterm.artschools.ui.components.coursesList.CoursesListViewModel
 import com.longterm.artschools.ui.components.lesson.LessonViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
+import com.longterm.artschools.ui.components.map.MapVm
 import com.longterm.artschools.ui.components.news.ArticleVm
 import com.longterm.artschools.ui.components.onboarding.OnboardingViewModel
 import com.longterm.artschools.ui.components.onboarding.art.OnboardingArtViewModel
@@ -46,11 +52,17 @@ val presentationModule = module {
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
     viewModel { CoursesListViewModel(get()) }
     viewModel { params -> CourseViewModel(params.get(), get()) }
-    viewModel { params -> LessonViewModel(params.get(), get()) }
+    viewModel { params -> LessonViewModel(params.get(), get(), get()) }
     viewModel { AuthViewModel(get(), get()) }
     viewModel { params -> RegisterViewModel(params.get(), get()) }
     viewModel { params -> ArticleVm(params.get(), get()) }
     viewModel { ProfileVm(get()) }
+    viewModel { MapVm(get()) }
+
+    factory {
+        ExoPlayer.Builder(androidApplication())
+            .build()
+    }
 
     factory { BottomBarCoordinator() }
 }
@@ -77,6 +89,7 @@ val dataModule = module {
     factory { QuizApi(get()) }
     factory { NewsApi(get()) }
     factory { CoursesApi(get()) }
+    factory { PointsApi(get()) }
 
     factory { UserRepository(get(), get()) }
     factory { OnboardingRepository(get()) }
@@ -84,6 +97,7 @@ val dataModule = module {
     factory { NewsRepository(get()) }
     factory { PlaylistRepository() }
     factory { CoursesRepository(get()) }
+    factory { PointsRepository(get()) }
 }
 
 val domainModule = module {
