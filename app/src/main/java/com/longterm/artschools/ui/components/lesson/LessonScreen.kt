@@ -1,9 +1,11 @@
 package com.longterm.artschools.ui.components.lesson
 
 import android.content.pm.ActivityInfo
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,12 +15,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -99,10 +105,7 @@ private fun LessonInfo(st: LessonViewModel.State.Data, goBack: () -> Unit) {
 
     if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && st.player != null) {
         Box(Modifier.fillMaxSize()) {
-            VideoPlayer(exoPlayer = st.player, {
-                orientation = ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
-                orientation = ActivityInfo.SCREEN_ORIENTATION_USER
-            }, Modifier.fillMaxSize())
+            VideoPlayer(exoPlayer = st.player, Modifier.fillMaxSize())
         }
     } else
         Column {
@@ -116,16 +119,30 @@ private fun LessonInfo(st: LessonViewModel.State.Data, goBack: () -> Unit) {
                 }
             }
 
-            Spacer(modifier = Modifier.size(12.dp))
-            Text(
-                text = st.lesson.name,
-                fontSize = 26.sp,
-                fontWeight = FontWeight.W800,
-                color = Colors.Black,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
+            st.player?.let {
+                VideoPlayer(
+                exoPlayer = st.player, {
+                    orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                }, Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1.87f)
+                    .background(Colors.Black)
             )
+            }
             Spacer(modifier = Modifier.size(12.dp))
-            if (st.player == null) {
+            Card(
+                shape = CardDefaults.shape,
+                modifier = Modifier.offset(y = (-24).dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Text(
+                    text = st.lesson.name,
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.W800,
+                    color = Colors.Black,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
+                )
+                Spacer(modifier = Modifier.size(12.dp))
                 Image(
                     painter = rememberAsyncImagePainter(
                         ImageRequest.Builder(LocalContext.current).data(data = ImagePathResolver.resolve(st.lesson.image))
@@ -140,24 +157,15 @@ private fun LessonInfo(st: LessonViewModel.State.Data, goBack: () -> Unit) {
                         .fillMaxWidth(),
                     contentScale = ContentScale.FillBounds
                 )
-            } else {
-                VideoPlayer(
-                    exoPlayer = st.player, {
-                        orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    }, Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1.87f)
-                        .background(Colors.Black)
+                Spacer(modifier = Modifier.size(12.dp))
+                Text(
+                    text = st.lesson.description,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.W400,
+                    color = Colors.Black,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
                 )
+                Spacer(modifier = Modifier.size(16.dp))
             }
-            Spacer(modifier = Modifier.size(12.dp))
-            Text(
-                text = st.lesson.description,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.W400,
-                color = Colors.Black,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
-            )
-            Spacer(modifier = Modifier.size(16.dp))
         }
 }
