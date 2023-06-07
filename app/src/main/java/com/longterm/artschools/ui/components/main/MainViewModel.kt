@@ -3,6 +3,7 @@ package com.longterm.artschools.ui.components.main
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.longterm.artschools.data.repository.UserRepository
 import com.longterm.artschools.domain.usecase.AnswerQuizUseCase
 import com.longterm.artschools.domain.usecase.GetFeedUseCase
 import com.longterm.artschools.ui.components.main.models.MainListItem
@@ -13,7 +14,8 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val getFeedUseCase: GetFeedUseCase,
-    private val answerQuizUseCase: AnswerQuizUseCase
+    private val answerQuizUseCase: AnswerQuizUseCase,
+    private val userRepository: UserRepository
 ) : ViewModel() {
     val state: StateFlow<State>
         get() = _state
@@ -58,8 +60,9 @@ class MainViewModel(
     private fun loadData() = viewModelScope.launch {
         getFeedUseCase.execute()
             .onSuccess { list ->
+                val level = userRepository.getUser()?.level?.currentLevel?.level?.toString()
                 _state.update {
-                    State.Data(list, "3", null)
+                    State.Data(list, level ?: "·", null)
                 }
             }
             .onFailure {

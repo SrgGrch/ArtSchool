@@ -1,7 +1,10 @@
 package com.longterm.artschools.ui.components.lesson
 
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +26,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +42,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.longterm.artschools.domain.ImagePathResolver
 import com.longterm.artschools.ui.components.common.preview
+import com.longterm.artschools.ui.core.SwitchScreenOrientation
 import com.longterm.artschools.ui.core.UnlockScreenOrientation
 import com.longterm.artschools.ui.core.VideoPlayer
 import com.longterm.artschools.ui.core.theme.Colors
@@ -79,9 +86,23 @@ fun LessonScreen(id: Int, goBack: () -> Unit) {
 private fun LessonInfo(st: LessonViewModel.State.Data, goBack: () -> Unit) {
     val configuration = LocalConfiguration.current
 
+    var orientation by rememberSaveable {
+        mutableStateOf(ActivityInfo.SCREEN_ORIENTATION_USER)
+    }
+
+    SwitchScreenOrientation(orientation)
+
+    BackHandler(enabled = orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+        orientation = ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
+        orientation = ActivityInfo.SCREEN_ORIENTATION_USER
+    }
+
     if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && st.player != null) {
         Box(Modifier.fillMaxSize()) {
-            VideoPlayer(exoPlayer = st.player, Modifier.fillMaxSize())
+            VideoPlayer(exoPlayer = st.player, {
+                orientation = ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
+                orientation = ActivityInfo.SCREEN_ORIENTATION_USER
+            }, Modifier.fillMaxSize())
         }
     } else
         Column {
@@ -120,7 +141,14 @@ private fun LessonInfo(st: LessonViewModel.State.Data, goBack: () -> Unit) {
                     contentScale = ContentScale.FillBounds
                 )
             } else {
-                VideoPlayer(exoPlayer = st.player)
+                VideoPlayer(
+                    exoPlayer = st.player, {
+                        orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    }, Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1.87f)
+                        .background(Colors.Black)
+                )
             }
             Spacer(modifier = Modifier.size(12.dp))
             Text(
