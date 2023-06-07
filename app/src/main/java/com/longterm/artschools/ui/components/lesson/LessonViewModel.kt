@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
-import com.longterm.artschools.data.models.lesson.LessonResponse
-import com.longterm.artschools.data.repository.CoursesRepository
+import com.longterm.artschools.domain.models.lesson.Lesson
+import com.longterm.artschools.domain.usecase.LessonUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 class LessonViewModel(
     private val id: Int,
     private val exoPlayer: ExoPlayer,
-    private val coursesRepository: CoursesRepository
+    private val lessonUseCase: LessonUseCase
 ) : ViewModel() {
     val state: StateFlow<State>
         get() = _state
@@ -32,7 +32,7 @@ class LessonViewModel(
     private fun get(id: Int) {
         viewModelScope.launch {
             _state.update {
-                coursesRepository.getLesson(id).getOrNull()?.let {
+                lessonUseCase.execute(id).getOrNull()?.let {
                     State.Data(
                         it,
                         player = exoPlayer.apply {
@@ -58,6 +58,6 @@ class LessonViewModel(
     sealed interface State {
         object Loading : State
         object Error : State
-        data class Data(val lesson: LessonResponse, val player: ExoPlayer? = null) : State
+        data class Data(val lesson: Lesson, val player: ExoPlayer? = null) : State
     }
 }

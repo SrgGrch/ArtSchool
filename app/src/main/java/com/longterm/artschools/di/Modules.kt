@@ -21,6 +21,7 @@ import com.longterm.artschools.data.repository.UserRepository
 import com.longterm.artschools.domain.usecase.AnswerQuizUseCase
 import com.longterm.artschools.domain.usecase.AuthUseCase
 import com.longterm.artschools.domain.usecase.GetFeedUseCase
+import com.longterm.artschools.domain.usecase.LessonUseCase
 import com.longterm.artschools.domain.usecase.RegisterUseCase
 import com.longterm.artschools.domain.usecase.VkAuthUseCase
 import com.longterm.artschools.ui.components.auth.AuthViewModel
@@ -109,6 +110,7 @@ val domainModule = module {
     factory { GetFeedUseCase(get(), get(), get()) }
     factory { AuthUseCase(get(), get()) }
     factory { AnswerQuizUseCase(get()) }
+    factory { LessonUseCase(get(), get()) }
 }
 
 val commonModule = module {
