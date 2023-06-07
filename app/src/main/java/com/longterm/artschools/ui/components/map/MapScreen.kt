@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -216,6 +217,7 @@ fun MapScreen(
     }
 }
 
+@Composable
 private inline fun Context.requestPermissions(
     launcher: ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>,
     block: () -> Unit
@@ -227,8 +229,10 @@ private inline fun Context.requestPermissions(
     ) {
         block()
     } else {
-        // Request a permission
-        launcher.launch(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
+        SideEffect {
+            // Request a permission
+            launcher.launch(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
+        }
     }
 }
 
