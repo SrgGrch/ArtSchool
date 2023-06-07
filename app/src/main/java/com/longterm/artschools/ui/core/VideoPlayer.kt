@@ -1,9 +1,6 @@
 package com.longterm.artschools.ui.core
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberUpdatedState
@@ -15,16 +12,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
-import com.longterm.artschools.ui.core.theme.Colors
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun VideoPlayer(
     exoPlayer: ExoPlayer,
+    onFullScreenClicked: (Boolean) -> Unit,
     modifier: Modifier = Modifier
-        .fillMaxWidth()
-        .aspectRatio(1.87f)
-        .background(Colors.Black)
 ) {
     val context = LocalContext.current
 
@@ -41,6 +35,7 @@ fun VideoPlayer(
             update = {
                 it.setShowNextButton(false)
                 it.setShowPreviousButton(false)
+                it.setFullscreenButtonClickListener(onFullScreenClicked)
             }
         ),
     ) {
@@ -50,7 +45,11 @@ fun VideoPlayer(
                     exoPlayer.pause()
                 }
 
-                Lifecycle.Event.ON_RESUME -> Unit
+                Lifecycle.Event.ON_RESUME -> {
+                    if (exoPlayer.currentPosition != 0L) {
+                        exoPlayer.play()
+                    }
+                }
 
                 else -> Unit
             }

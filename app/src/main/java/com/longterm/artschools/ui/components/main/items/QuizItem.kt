@@ -39,7 +39,6 @@ import com.longterm.artschools.ui.core.utils.PreviewContext
 
 @Composable
 fun QuizItem(
-    position: Int,
     data: MainListItem.QuizItem,
     onAnswerSelected: (quizId: Int, answer: MainListItem.QuizItem.Answer) -> Unit
 ) {
@@ -156,7 +155,6 @@ private fun Chip(
 private fun Preview() {
     PreviewContext {
         QuizItem(
-            1,
             MainListItem.QuizItem(
                 1,
                 3,

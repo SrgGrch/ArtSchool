@@ -88,7 +88,6 @@ fun MainScreen(navigateToArticle: (id: Int) -> Unit, navigateToProfile: () -> Un
                         when (item) {
                             is MainListItem.ArticleItem -> ArticleItem(data = item, onItemClicked = { navigateToArticle(it) })
                             is MainListItem.QuizItem -> QuizItem(
-                                position = position,
                                 data = item,
                                 onAnswerSelected = { quizId, answer ->
                                     vm.onQuizAnswer(answer, quizId, position)
