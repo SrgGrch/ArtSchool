@@ -50,9 +50,7 @@ fun VideoPlayer(
                     exoPlayer.pause()
                 }
 
-                Lifecycle.Event.ON_RESUME -> {
-                    exoPlayer.play()
-                }
+                Lifecycle.Event.ON_RESUME -> Unit
 
                 else -> Unit
             }

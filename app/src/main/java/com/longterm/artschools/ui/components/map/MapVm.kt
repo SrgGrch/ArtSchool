@@ -34,6 +34,7 @@ class MapVm(
     }
 
     fun onPointClicked(point: SchoolPoint) {
+        pointsRepository.savePoint(point.point)
         _state.update {
             if (it is State.Data) {
                 it.copy(points = it.points.map { p ->

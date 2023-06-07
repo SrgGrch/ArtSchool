@@ -1,8 +1,6 @@
 package com.longterm.artschools.di
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.res.Resources
 import androidx.media3.exoplayer.ExoPlayer
 import com.longterm.artschools.data.UserStorage
 import com.longterm.artschools.data.api.CoursesApi
@@ -31,6 +29,7 @@ import com.longterm.artschools.ui.components.coursesList.CoursesListViewModel
 import com.longterm.artschools.ui.components.lesson.LessonViewModel
 import com.longterm.artschools.ui.components.main.MainViewModel
 import com.longterm.artschools.ui.components.map.MapVm
+import com.longterm.artschools.ui.components.map.dialog.MapPointInfoVm
 import com.longterm.artschools.ui.components.news.ArticleVm
 import com.longterm.artschools.ui.components.onboarding.OnboardingViewModel
 import com.longterm.artschools.ui.components.onboarding.art.OnboardingArtViewModel
@@ -58,6 +57,7 @@ val presentationModule = module {
     viewModel { params -> ArticleVm(params.get(), get()) }
     viewModel { ProfileVm(get()) }
     viewModel { MapVm(get()) }
+    viewModel { MapPointInfoVm(get()) }
 
     factory {
         ExoPlayer.Builder(androidApplication())
@@ -97,7 +97,7 @@ val dataModule = module {
     factory { NewsRepository(get()) }
     factory { PlaylistRepository() }
     factory { CoursesRepository(get()) }
-    factory { PointsRepository(get()) }
+    single { PointsRepository(get()) }
 }
 
 val domainModule = module {

@@ -1,12 +1,14 @@
 package com.longterm.artschools.ui.components.map
 
 import android.content.Context
+import android.graphics.PointF
 import android.location.Location
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.LocationServices
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
+import com.yandex.mapkit.map.IconStyle
 import com.yandex.mapkit.user_location.UserLocationLayer
 import com.yandex.mapkit.map.Map as YandexMap
 
@@ -15,6 +17,10 @@ object MapUtils {
     private const val ZOOM_STEP_DEFAULT_MAP = 2
     private val ZOOM_ANIMATION = Animation(Animation.Type.LINEAR, 0.25f)
     private val SMOOTH_MOVE_ANIMATION = Animation(Animation.Type.SMOOTH, 2f)
+
+    val ICON_STYLE_POINT_AS_PIN_SELECTED: IconStyle = IconStyle().setAnchor(PointF(0.5f, 1f))
+    val ICON_STYLE_POINT_AS_PIN: IconStyle = IconStyle().setAnchor(PointF(0.5f, 0.5f))
+
     fun YandexMap.zoomIn() {
         val cp = cameraPosition
         move(CameraPosition(cp.target, cp.zoom + ZOOM_STEP_DEFAULT_MAP, 0f, 0f), ZOOM_ANIMATION, null)

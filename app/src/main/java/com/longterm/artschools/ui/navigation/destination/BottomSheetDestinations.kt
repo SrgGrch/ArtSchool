@@ -3,7 +3,7 @@ package com.longterm.artschools.ui.navigation.destination
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import com.longterm.artschools.ui.components.map.MapPointInfoBottomSheet
+import com.longterm.artschools.ui.components.map.dialog.MapPointInfoBottomSheet
 
 sealed interface BottomSheetDestinations : Destination {
     object MapPointInfo : BottomSheetDestinations {
@@ -12,7 +12,7 @@ sealed interface BottomSheetDestinations : Destination {
             navController: NavController,
             navBackStackEntry: NavBackStackEntry
         ) {
-            MapPointInfoBottomSheet()
+            MapPointInfoBottomSheet(navController::popBackStack)
         }
     }
 }
