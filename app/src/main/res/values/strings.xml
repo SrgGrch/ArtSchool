@@ -46,4 +46,12 @@
     <string name="cousres_lessons">Уроки курса</string>
 
     <string name="notification_channel_video">Курсы</string>
+
+    <plurals name="score">
+        <item quantity="one">До следующего уровня осталось набрать ещё  %1$d балл</item>
+        <item quantity="two">До следующего уровня осталось набрать ещё  %1$d балла</item>
+        <item quantity="few">До следующего уровня осталось набрать ещё  %1$d балла</item>
+        <item quantity="many">До следующего уровня осталось набрать ещё  %1$d баллов</item>
+        <item quantity="other">До следующего уровня осталось набрать ещё  %1$d баллов</item>
+    </plurals>
 </resources>

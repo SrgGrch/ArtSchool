@@ -23,6 +23,7 @@ object Colors {
     val Orange = Color(0xFFFCC400)
 
     val GreyLight = Color(0xFFA1A1A1)
+    val GreyLight2 = Color(0xFFD0D0D0)
     val GreyLight3 = Color(0xFFEDEDED)
 
     val Blue = Color(0xFF3B4560)

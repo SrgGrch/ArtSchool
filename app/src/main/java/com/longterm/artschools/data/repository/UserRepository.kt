@@ -91,11 +91,15 @@ class UserRepository(
         )
     }
 
-    suspend fun getUser(): User? {
-        val user = userApi.me().getOrNull() ?: return null
 
-        userStorage.user = user
+    suspend fun getUser(): Result<User> {
+        return userApi.me()
+            .onSuccess {
+                userStorage.user = it
+            }
+    }
 
-        return user
+    suspend fun getUserNullable(): User? {
+        return getUser().getOrNull() ?: return null
     }
 }

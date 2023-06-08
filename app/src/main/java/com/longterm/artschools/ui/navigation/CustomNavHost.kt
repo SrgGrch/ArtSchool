@@ -67,6 +67,7 @@ fun CustomNavHost(
             arguments = listOf(navArgument(Destination.Lesson.ARGUMENT) { type = NavType.StringType })
         )
         createDestination(Destination.Profile)
+        createDestination(Destination.Achievements)
         createBottomSheet(BottomSheetDestinations.MapPointInfo)
     }
 }

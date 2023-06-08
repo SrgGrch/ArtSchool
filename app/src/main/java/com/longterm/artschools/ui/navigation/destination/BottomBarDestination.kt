@@ -29,6 +29,9 @@ sealed class BottomBarDestination(
                 navigateToProfile = {
                     navController.navigate(Destination.Profile)
                 },
+                navigateToAchievements = {
+                    navController.navigate(Destination.Achievements)
+                }
             )
         }
     }

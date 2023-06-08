@@ -3,6 +3,7 @@ package com.longterm.artschools.ui.navigation.destination
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import com.longterm.artschools.ui.components.achievements.AchievementsScreen
 import com.longterm.artschools.ui.components.auth.AuthScreen
 import com.longterm.artschools.ui.components.course.CoursesScreen
 import com.longterm.artschools.ui.components.lesson.LessonScreen
@@ -184,6 +185,18 @@ sealed interface Destination {
                         }
                     }
                 }
+            )
+        }
+    }
+
+    object Achievements : Destination {
+        @Composable
+        override fun GetComposable(
+            navController: NavController,
+            navBackStackEntry: NavBackStackEntry
+        ) {
+            AchievementsScreen(
+                back = { navController.popBackStack() }
             )
         }
     }

@@ -60,7 +60,7 @@ class MainViewModel(
     private fun loadData() = viewModelScope.launch {
         getFeedUseCase.execute()
             .onSuccess { list ->
-                val level = userRepository.getUser()?.level?.currentLevel?.level?.toString()
+                val level = userRepository.getUserNullable()?.level?.currentLevel?.level?.toString()
                 _state.update {
                     State.Data(list, level ?: "·", null)
                 }
