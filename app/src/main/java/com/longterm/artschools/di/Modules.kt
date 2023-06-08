@@ -23,6 +23,7 @@ import com.longterm.artschools.domain.usecase.AuthUseCase
 import com.longterm.artschools.domain.usecase.GetFeedUseCase
 import com.longterm.artschools.domain.usecase.RegisterUseCase
 import com.longterm.artschools.domain.usecase.VkAuthUseCase
+import com.longterm.artschools.ui.components.achievements.AchievementsVm
 import com.longterm.artschools.ui.components.auth.AuthViewModel
 import com.longterm.artschools.ui.components.course.CourseViewModel
 import com.longterm.artschools.ui.components.coursesList.CoursesListViewModel
@@ -58,6 +59,7 @@ val presentationModule = module {
     viewModel { ProfileVm(get()) }
     viewModel { MapVm(get()) }
     viewModel { MapPointInfoVm(get()) }
+    viewModel { AchievementsVm(get()) }
 
     factory {
         ExoPlayer.Builder(androidApplication())

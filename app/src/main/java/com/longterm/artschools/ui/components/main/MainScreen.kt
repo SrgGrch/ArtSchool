@@ -38,13 +38,13 @@ import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun MainScreen(navigateToArticle: (id: Int) -> Unit, navigateToProfile: () -> Unit) {
+fun MainScreen(navigateToArticle: (id: Int) -> Unit, navigateToProfile: () -> Unit, navigateToAchievements: () -> Unit) {
     val vm: MainViewModel = getViewModel()
     val state by vm.state.collectAsState()
 
     Column(Modifier.fillMaxSize()) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
-            TextButton(onClick = { /*todo*/ }, Modifier.padding(top = 6.dp)) {
+            TextButton(onClick = navigateToAchievements, Modifier.padding(top = 6.dp)) {
                 Icon(painter = painterResource(id = R.drawable.ic_cup), contentDescription = "Уровень")
                 Text(text = state.level)
             }
@@ -108,6 +108,6 @@ fun MainScreen(navigateToArticle: (id: Int) -> Unit, navigateToProfile: () -> Un
 @Composable
 private fun Preview() {
     PreviewContext {
-        MainScreen(navigateToArticle = {}, {})
+        MainScreen(navigateToArticle = {}, {}, {})
     }
 }
