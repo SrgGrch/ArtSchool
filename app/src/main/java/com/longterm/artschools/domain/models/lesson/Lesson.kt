@@ -5,6 +5,7 @@ import com.longterm.artschools.ui.components.main.models.MainListItem
 data class Lesson(
     val id: Int,
     val image: String,
+    val video: String? = null,
     val number: Int,
     val name: String,
     val description: String,

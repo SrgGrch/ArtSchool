@@ -142,7 +142,7 @@ private fun Chip(
         selected = selected,
         onClick = onClick,
         label = {
-            Text(text = text, style = ArtTextStyle.Chips)
+            Text(text = text, Modifier.padding(vertical = 12.dp), style = ArtTextStyle.Chips)
         },
         shape = CircleShape,
         colors = FilterChipDefaults.filterChipColors(
@@ -171,7 +171,11 @@ private fun Preview() {
                 "В 1880 году в Санкт-Петербурге была впервые выставлена картина «Лунная ночь на Днепре». Удивительным было то, что она была единственной на выставке. Необыкновенная реалистичность лунного света поразила публику",
                 "",
                 listOf(
-                    MainListItem.QuizItem.Answer(1, "\uD83D\uDE31 Эдвард Мунк", false),
+                    MainListItem.QuizItem.Answer(
+                        1,
+                        "\uD83D\uDE31 Эдвард Мунк Эдвард Мунк Эдвард Мунк Эдвард Мунк Эдвард Мунк Эдвард Мунк Эдвард Мунк Эдвард Мунк Эдвард Мунк Эдвард Мунк Эдвард Мунк ",
+                        false
+                    ),
                     MainListItem.QuizItem.Answer(1, "\uD83C\uDF33 Архип Куинджи ", selected = true),
                     MainListItem.QuizItem.Answer(1, "\uD83C\uDF0A Иван Айвазовский", false),
                 ),

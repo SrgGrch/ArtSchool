@@ -2,6 +2,7 @@ package com.longterm.artschools.domain.usecase
 
 import com.longterm.artschools.data.repository.CoursesRepository
 import com.longterm.artschools.data.repository.QuizRepository
+import com.longterm.artschools.domain.MediaPathResolver
 import com.longterm.artschools.domain.models.lesson.Lesson
 import com.longterm.artschools.ui.components.main.models.MainListItem
 import com.longterm.artschools.ui.core.withResult
@@ -13,7 +14,7 @@ class LessonUseCase(
     suspend fun execute(id: Int): Result<Lesson> {
         return withResult {
             val lesson = coursesRepository.getLesson(id).getOrThrow()
-            val quizes = lesson.questions.map {
+            val quizzes = lesson.questions.map {
                 quizRepository.getQuiz(it).getOrThrow()
             }.map { quiz ->
                 MainListItem.QuizItem(
@@ -33,14 +34,15 @@ class LessonUseCase(
 
             Lesson(
                 id = lesson.id,
-                image = lesson.image,
+                image = MediaPathResolver.resolve(lesson.image),
+                video = lesson.video?.let(MediaPathResolver::resolve),
                 number = lesson.number,
                 name = lesson.name,
                 description = lesson.description,
                 isFree = lesson.isFree,
                 cost = lesson.cost,
                 duration = lesson.duration,
-                quizes = quizes,
+                quizes = quizzes,
                 viewed = lesson.viewed,
                 passed = lesson.passed
             )

@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class LessonResponse(
     val id: Int,
     val image: String,
+    val video: String? = null,
     val number: Int,
     val name: String,
     val description: String,

@@ -34,6 +34,7 @@ import com.longterm.artschools.di.OnboardingScope
 import com.longterm.artschools.ui.components.common.ScrollIndicator
 import com.longterm.artschools.ui.components.onboarding.art.OnboardingArtScreen
 import com.longterm.artschools.ui.components.onboarding.intro.OnboardingIntroScreen
+import com.longterm.artschools.ui.components.onboarding.quizzes.OnboardingQuizScreen
 import com.longterm.artschools.ui.components.onboarding.register.RegisterScreen
 import com.longterm.artschools.ui.components.onboarding.target.OnboardingTargetScreen
 import com.longterm.artschools.ui.components.onboarding.userInfo.OnboardingUserInfoScreen
@@ -45,7 +46,7 @@ import org.koin.androidx.compose.getViewModel
 import org.koin.compose.scope.KoinScope
 import org.koin.core.annotation.KoinExperimentalAPI
 
-const val PAGE_COUNT = 5
+const val PAGE_COUNT = 6
 
 @Composable
 fun OnboardingRootScreen(
@@ -118,7 +119,7 @@ fun OnboardingRootScreen(
 }
 
 private fun getBackground(currentPage: Int): Color {
-    return if (currentPage == 3) Colors.VioletLite else Color.White
+    return if (currentPage == 4) Colors.VioletLite else Color.White
 }
 
 @Composable
@@ -138,10 +139,11 @@ private fun PagerPage(
 
         when (page) {
             0 -> OnboardingIntroScreen(nextPage, navigateToLogin)
-            1 -> OnboardingArtScreen(nextPage, skip)
-            2 -> OnboardingTargetScreen(nextPage, skip)
-            3 -> OnboardingUserInfoScreen(nextPage, skip)
-            4 -> RegisterScreen(navigateToVkAuth, navigateToMainScreen)
+            1 -> OnboardingQuizScreen(nextPage)
+            2 -> OnboardingArtScreen(nextPage, skip)
+            3 -> OnboardingTargetScreen(nextPage, skip)
+            4 -> OnboardingUserInfoScreen(nextPage, skip)
+            5 -> RegisterScreen(navigateToVkAuth, navigateToMainScreen)
             else -> error("No such page $page")
         }
     }

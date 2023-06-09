@@ -11,6 +11,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 
 @SuppressLint("UnsafeOptInUsageError")
@@ -33,6 +34,7 @@ fun VideoPlayer(
             },
             modifier = modifier,
             update = {
+                it.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM;
                 it.setShowNextButton(false)
                 it.setShowPreviousButton(false)
                 it.setFullscreenButtonClickListener(onFullScreenClicked)

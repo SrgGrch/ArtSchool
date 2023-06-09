@@ -9,10 +9,11 @@ data class CourseResponse(
     val name: String,
     @SerialName("author_name")
     val authorName: String,
+    val image: String?,
     @SerialName("author_description")
     val authorDescription: String,
     val difficulty: Int,
-    val tags: List<String>,
+    val tags: List<Int>,
     @SerialName("total_lessons")
     val totalLessons: Int,
     @SerialName("free_lessons")
@@ -24,7 +25,8 @@ data class CourseResponse(
         val id: Int,
         val number: Int,
         val name: String,
-        val is_free: Boolean,
+        @SerialName("is_free")
+        val isFree: Boolean,
         val cost: Int,
         val duration: Int,
         val viewed: Boolean,

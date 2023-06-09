@@ -13,6 +13,8 @@ data class Course(
         val id: Int,
         val title: String,
         val cost: String,
-        val duration: String
+        val isFree: Boolean,
+        val duration: String,
+        val unlocked: Boolean
     )
 }

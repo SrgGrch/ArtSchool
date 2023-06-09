@@ -63,23 +63,32 @@ class LessonViewModel(
 
     private fun get(id: Int) {
         viewModelScope.launch {
-            _state.update {
-                lessonUseCase.execute(id).getOrNull()?.let {
-                    State.Data(
-                        it,
-                        player = exoPlayer.apply {
-                            val mediaItem = MediaItem.Builder()
-                                .setUri(
-                                    Uri.parse("https://storage.googleapis.com/wvmedia/clear/h264/tears/tears.mpd")
-                                )
-                                .build()
+            lessonUseCase.execute(id)
+                .onSuccess {
+                    _state.update { _ ->
+                        State.Data(
+                            it,
+                            it.video?.let { videoUrl ->
+                                exoPlayer.apply {
+                                    val mediaItem = MediaItem.Builder()
+                                        .setUri(
+                                            Uri.parse(videoUrl)
+                                        )
+                                        .build()
 
-                            setMediaItem(mediaItem)
-                            prepare()
-                        }
-                    )
-                } ?: State.Error
-            }
+                                    setMediaItem(mediaItem)
+                                    prepare()
+                                }
+                            }
+                        )
+                    }
+                }
+                .onFailure {
+                    Log.e("LessonViewModel", it.stackTraceToString())
+                    _state.update {
+                        State.Error
+                    }
+                }
         }
     }
 

@@ -11,6 +11,7 @@ import com.longterm.artschools.data.api.QuizApi
 import com.longterm.artschools.data.api.UserApi
 import com.longterm.artschools.data.api.VkApi
 import com.longterm.artschools.data.network.HttpClientFactory
+import com.longterm.artschools.data.repository.BoughtCoursesRepository
 import com.longterm.artschools.data.repository.CoursesRepository
 import com.longterm.artschools.data.repository.NewsRepository
 import com.longterm.artschools.data.repository.OnboardingRepository
@@ -51,7 +52,7 @@ val presentationModule = module {
     viewModel { params -> OnboardingTargetViewModel(params.get(), get()) }
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
     viewModel { CoursesListViewModel(get()) }
-    viewModel { params -> CourseViewModel(params.get(), get()) }
+    viewModel { params -> CourseViewModel(params.get(), get(), get()) }
     viewModel { params -> LessonViewModel(params.get(), get(), get(), get()) }
     viewModel { AuthViewModel(get(), get()) }
     viewModel { params -> RegisterViewModel(params.get(), get()) }
@@ -77,6 +78,13 @@ val androidModule = module {
             Context.MODE_PRIVATE
         )
     }
+
+    factory(qualifier = SharedPreferencesQualifier.BoughtCourses) {
+        androidApplication().getSharedPreferences(
+            "BoughtCourses",
+            Context.MODE_PRIVATE
+        )
+    }
 }
 
 val dataModule = module {
@@ -99,6 +107,8 @@ val dataModule = module {
     factory { PlaylistRepository() }
     factory { CoursesRepository(get()) }
     single { PointsRepository(get()) }
+
+    factory { BoughtCoursesRepository(get(SharedPreferencesQualifier.BoughtCourses)) }
 }
 
 val domainModule = module {
@@ -118,6 +128,7 @@ val commonModule = module {
         Json {
             prettyPrint = true
             ignoreUnknownKeys = true
+            coerceInputValues = true
         }
     }
 }
