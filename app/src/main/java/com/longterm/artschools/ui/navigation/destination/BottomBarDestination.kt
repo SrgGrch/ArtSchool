@@ -27,10 +27,14 @@ sealed class BottomBarDestination(
                     navController.navigate(Destination.Article(it))
                 },
                 navigateToProfile = {
-                    navController.navigate(Destination.Profile)
+                    navController.navigate(Destination.Profile) {
+                        launchSingleTop = true
+                    }
                 },
                 navigateToAchievements = {
-                    navController.navigate(Destination.Achievements)
+                    navController.navigate(Destination.Achievements) {
+                        launchSingleTop = true
+                    }
                 }
             )
         }
