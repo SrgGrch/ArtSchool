@@ -34,7 +34,7 @@ import com.longterm.artschools.ui.core.utils.PreviewContext
 @Composable
 fun LessonCard(
     data: Course.Lesson,
-    onItemClicked: (id: Int) -> Unit,
+    onItemClicked: (Course.Lesson) -> Unit,
     number: Int
 ) {
     Card(
@@ -45,7 +45,7 @@ fun LessonCard(
             .fillMaxWidth()
             .padding(vertical = 12.dp)
             .shadow(6.dp, shape = RoundedCornerShape(16.dp))
-            .clickable { onItemClicked(data.id) }
+            .clickable { onItemClicked(data) }
     ) {
         Spacer(modifier = Modifier.size(16.dp))
         Row(Modifier.padding(horizontal = 16.dp)) {
@@ -101,7 +101,7 @@ fun LessonCard(
 private fun Preview() {
     PreviewContext {
         LessonCard(
-            data = Course.Lesson(0, "3 основные группы инструментов", "бесплатно", "5 мин"),
+            data = Course.Lesson(0, "3 основные группы инструментов", "бесплатно", true, "5 мин", true),
             onItemClicked = {},
             number = 1
         )

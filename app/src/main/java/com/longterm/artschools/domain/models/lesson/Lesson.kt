@@ -1,21 +1,18 @@
-package com.longterm.artschools.data.models.lesson
+package com.longterm.artschools.domain.models.lesson
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.longterm.artschools.ui.components.main.models.MainListItem
 
-@Serializable
-data class LessonResponse(
+data class Lesson(
     val id: Int,
     val image: String,
     val video: String? = null,
     val number: Int,
     val name: String,
     val description: String,
-    @SerialName("is_free")
     val isFree: Boolean,
     val cost: Int,
     val duration: Int,
-    val questions: List<Int>,
+    val quizes: List<MainListItem.QuizItem>,
     val viewed: Boolean,
     val passed: Boolean
 )

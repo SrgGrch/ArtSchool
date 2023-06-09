@@ -1,12 +1,15 @@
 package com.longterm.artschools.ui.components.lesson
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
-import com.longterm.artschools.data.models.lesson.LessonResponse
-import com.longterm.artschools.data.repository.CoursesRepository
+import com.longterm.artschools.domain.models.lesson.Lesson
+import com.longterm.artschools.domain.usecase.AnswerQuizUseCase
+import com.longterm.artschools.domain.usecase.LessonUseCase
+import com.longterm.artschools.ui.components.main.models.MainListItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -15,7 +18,8 @@ import kotlinx.coroutines.launch
 class LessonViewModel(
     private val id: Int,
     private val exoPlayer: ExoPlayer,
-    private val coursesRepository: CoursesRepository
+    private val lessonUseCase: LessonUseCase,
+    private val answerQuizUseCase: AnswerQuizUseCase,
 ) : ViewModel() {
     val state: StateFlow<State>
         get() = _state
@@ -29,25 +33,62 @@ class LessonViewModel(
         get(id)
     }
 
+    fun onQuizAnswer(answer: MainListItem.QuizItem.Answer, quizId: Int, position: Int) {
+        viewModelScope.launch {
+            answerQuizUseCase.execute(quizId, answer.id)
+                .onSuccess { result ->
+                    _state.update { state ->
+                        (state as? State.Data)?.let {
+                            val items = it.lesson.quizes.toMutableList()
+                            val quiz = items[position]
+                            items[position] = quiz.copy(
+                                isCorrectAnswerSelected = result.correct,
+                                answers = quiz.answers.map { answerItem ->
+                                    if (answerItem.id == answer.id) {
+                                        answerItem.copy(selected = true)
+                                    } else answerItem
+                                },
+                                answerDescription = result.reaction
+                            )
+
+                            it.copy(lesson = it.lesson.copy(quizes = items))
+                        } ?: state
+                    }
+                }
+                .onFailure {
+                    Log.e("LessonViewModel", it.stackTraceToString())
+                }
+        }
+    }
+
     private fun get(id: Int) {
         viewModelScope.launch {
-            _state.update {
-                coursesRepository.getLesson(id).getOrNull()?.let {
-                    State.Data(
-                        it,
-                        player = exoPlayer.apply {
-                            val mediaItem = MediaItem.Builder()
-                                .setUri(
-                                    Uri.parse("https://storage.googleapis.com/wvmedia/clear/h264/tears/tears.mpd")
-                                )
-                                .build()
+            lessonUseCase.execute(id)
+                .onSuccess {
+                    _state.update { _ ->
+                        State.Data(
+                            it,
+                            it.video?.let { videoUrl ->
+                                exoPlayer.apply {
+                                    val mediaItem = MediaItem.Builder()
+                                        .setUri(
+                                            Uri.parse(videoUrl)
+                                        )
+                                        .build()
 
-                            setMediaItem(mediaItem)
-                            prepare()
-                        }
-                    )
-                } ?: State.Error
-            }
+                                    setMediaItem(mediaItem)
+                                    prepare()
+                                }
+                            }
+                        )
+                    }
+                }
+                .onFailure {
+                    Log.e("LessonViewModel", it.stackTraceToString())
+                    _state.update {
+                        State.Error
+                    }
+                }
         }
     }
 
@@ -58,6 +99,6 @@ class LessonViewModel(
     sealed interface State {
         object Loading : State
         object Error : State
-        data class Data(val lesson: LessonResponse, val player: ExoPlayer? = null) : State
+        data class Data(val lesson: Lesson, val player: ExoPlayer? = null) : State
     }
 }

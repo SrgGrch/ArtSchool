@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -23,6 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +46,40 @@ import org.koin.core.parameter.parametersOf
 fun CoursesScreen(id: Int, goBack: () -> Unit, navigateToLesson: (id: Int) -> Unit) {
     val vm: CourseViewModel = getViewModel { parametersOf(id) }
     val state by vm.state.collectAsState()
+
+    var openDialog: Int? by remember { mutableStateOf(null) }
+
+    if (openDialog != null) {
+        AlertDialog(
+            onDismissRequest = {
+                // Dismiss the dialog when the user clicks outside the dialog or on the back
+                // button. If you want to disable that functionality, simply use an empty
+                // onDismissRequest.
+                openDialog = null
+            },
+            confirmButton = {
+                Button(onClick = {
+                    vm.buy()
+                    openDialog = null
+                }) {
+                    Text("Купить")
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    openDialog = null
+                }) {
+                    Text("Отмена")
+                }
+            },
+            title = {
+                Text("Купить курс?")
+            },
+            text = {
+                Text("Что бы продолжить нужно купить курс")
+            }
+        )
+    }
 
     when (val st = state) {
         CourseViewModel.State.Error -> Column(
@@ -69,7 +107,17 @@ fun CoursesScreen(id: Int, goBack: () -> Unit, navigateToLesson: (id: Int) -> Un
                     }
                 }
                 itemsIndexed(st.course.lessons) { index, item ->
-                    LessonCard(data = item, onItemClicked = { navigateToLesson(item.id) }, number = index + 1)
+                    LessonCard(
+                        data = item,
+                        onItemClicked = {
+                            if (item.unlocked) {
+                                navigateToLesson(item.id)
+                            } else {
+                                openDialog = item.id
+                            }
+                        },
+                        number = index + 1
+                    )
                 }
             }
         }

@@ -8,7 +8,8 @@ data class CoursesListResponse(
     val id: Int,
     val name: String,
     val difficulty: Int,
-    val tags: List<String>,
+    val image: String?,
+    val tags: List<Int>,
     @SerialName("total_lessons")
     val totalLessons: Int,
     @SerialName("free_lessons")

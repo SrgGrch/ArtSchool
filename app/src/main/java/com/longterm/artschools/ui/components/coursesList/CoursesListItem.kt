@@ -91,7 +91,7 @@ fun CoursesListItem(
                 }
             }
             Spacer(Modifier.height(8.dp))
-            Column() {
+            Column {
                 Text(data.title, style = ArtTextStyle.H3)
                 Spacer(Modifier.height(8.dp))
                 Text(data.description, style = ArtTextStyle.Body)

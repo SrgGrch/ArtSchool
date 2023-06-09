@@ -11,14 +11,15 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun VideoPlayer(
     exoPlayer: ExoPlayer,
-    onFullScreenClicked: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFullScreenClicked: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -33,13 +34,14 @@ fun VideoPlayer(
             },
             modifier = modifier,
             update = {
+                it.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM;
                 it.setShowNextButton(false)
                 it.setShowPreviousButton(false)
                 it.setFullscreenButtonClickListener(onFullScreenClicked)
             }
         ),
     ) {
-        val observer = LifecycleEventObserver { owner, event ->
+        val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
                     exoPlayer.pause()

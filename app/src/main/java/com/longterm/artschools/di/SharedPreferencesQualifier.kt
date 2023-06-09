@@ -8,4 +8,9 @@ interface SharedPreferencesQualifier : Qualifier {
         override val value: QualifierValue
             get() = this::class.simpleName!!
     }
+
+    object BoughtCourses : SharedPreferencesQualifier {
+        override val value: QualifierValue
+            get() = this::class.simpleName!!
+    }
 }

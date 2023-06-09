@@ -68,7 +68,7 @@ class GetFeedUseCase(
 
                 addAll(playlists)
 
-                news.forEachIndexed { index, articleItem ->
+                (news + news + news).forEachIndexed { index, articleItem ->
                     add(articleItem)
 
                     if (index % 3 == 0 && index != 0) {
