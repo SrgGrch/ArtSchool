@@ -17,8 +17,8 @@ import androidx.media3.ui.PlayerView
 @Composable
 fun VideoPlayer(
     exoPlayer: ExoPlayer,
-    onFullScreenClicked: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFullScreenClicked: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -39,7 +39,7 @@ fun VideoPlayer(
             }
         ),
     ) {
-        val observer = LifecycleEventObserver { owner, event ->
+        val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
                     exoPlayer.pause()

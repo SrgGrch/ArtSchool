@@ -40,7 +40,9 @@ import com.longterm.artschools.ui.core.utils.PreviewContext
 @Composable
 fun QuizItem(
     data: MainListItem.QuizItem,
-    onAnswerSelected: (quizId: Int, answer: MainListItem.QuizItem.Answer) -> Unit
+    isShowImage: Boolean = true,
+    isShowText: Boolean = true,
+    onAnswerSelected: (quizId: Int, answer: MainListItem.QuizItem.Answer) -> Unit,
 ) {
     Column(
         Modifier
@@ -48,11 +50,10 @@ fun QuizItem(
             .fillMaxWidth()
     ) {
 
-        Image(
+        if (isShowImage) Image(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current).data(data = data.imageUrl)
                     .apply(block = {
-//                        crossfade(true)
                         preview()
                     }).build()
             ),
@@ -64,12 +65,20 @@ fun QuizItem(
         )
 
         Column(
-            Modifier
-                .offset(y = (-16).dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(Colors.GreyLight3)
-                .padding(ItemsPaddingValues)
-                .fillMaxWidth()
+            if (!isShowImage) {
+                Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Colors.GreyLight3)
+                    .padding(ItemsPaddingValues)
+                    .fillMaxWidth()
+            } else {
+                Modifier
+                    .offset(y = (-16).dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Colors.GreyLight3)
+                    .padding(ItemsPaddingValues)
+                    .fillMaxWidth()
+            }
         ) {
             Row(
                 Modifier.fillMaxWidth(),
@@ -99,7 +108,7 @@ fun QuizItem(
             Column {
                 Text(data.title, style = ArtTextStyle.H3)
                 Spacer(Modifier.height(8.dp))
-                Text(data.description, style = ArtTextStyle.Body)
+                if (isShowText) Text(data.description, style = ArtTextStyle.Body)
                 Spacer(Modifier.height(20.dp))
                 Column {
                     data.answers.forEach { answer ->

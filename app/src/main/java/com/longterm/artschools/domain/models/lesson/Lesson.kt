@@ -1,6 +1,6 @@
 package com.longterm.artschools.domain.models.lesson
 
-import com.longterm.artschools.domain.models.quiz.Quiz
+import com.longterm.artschools.ui.components.main.models.MainListItem
 
 data class Lesson(
     val id: Int,
@@ -11,7 +11,7 @@ data class Lesson(
     val isFree: Boolean,
     val cost: Int,
     val duration: Int,
-    val questions: List<Quiz>,
+    val quizes: List<MainListItem.QuizItem>,
     val viewed: Boolean,
     val passed: Boolean
 )

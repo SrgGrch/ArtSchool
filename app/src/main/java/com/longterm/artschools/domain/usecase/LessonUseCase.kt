@@ -3,6 +3,7 @@ package com.longterm.artschools.domain.usecase
 import com.longterm.artschools.data.repository.CoursesRepository
 import com.longterm.artschools.data.repository.QuizRepository
 import com.longterm.artschools.domain.models.lesson.Lesson
+import com.longterm.artschools.ui.components.main.models.MainListItem
 import com.longterm.artschools.ui.core.withResult
 
 class LessonUseCase(
@@ -14,6 +15,20 @@ class LessonUseCase(
             val lesson = coursesRepository.getLesson(id).getOrThrow()
             val quizes = lesson.questions.map {
                 quizRepository.getQuiz(it).getOrThrow()
+            }.map { quiz ->
+                MainListItem.QuizItem(
+                    quiz.id,
+                    (1..3).random(),
+                    quiz.question,
+                    quiz.text,
+                    quiz.image,
+                    quiz.answers.map { a ->
+                        MainListItem.QuizItem.Answer(
+                            a.id,
+                            a.text
+                        )
+                    }
+                )
             }
 
             Lesson(
@@ -25,7 +40,7 @@ class LessonUseCase(
                 isFree = lesson.isFree,
                 cost = lesson.cost,
                 duration = lesson.duration,
-                questions = quizes,
+                quizes = quizes,
                 viewed = lesson.viewed,
                 passed = lesson.passed
             )

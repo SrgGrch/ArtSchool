@@ -1,11 +1,9 @@
 package com.longterm.artschools.ui.components.lesson
 
 import android.content.pm.ActivityInfo
-import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,6 +48,8 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.longterm.artschools.domain.ImagePathResolver
 import com.longterm.artschools.ui.components.common.preview
+import com.longterm.artschools.ui.components.main.items.QuizItem
+import com.longterm.artschools.ui.components.main.models.MainListItem
 import com.longterm.artschools.ui.core.SwitchScreenOrientation
 import com.longterm.artschools.ui.core.UnlockScreenOrientation
 import com.longterm.artschools.ui.core.VideoPlayer
@@ -84,14 +84,18 @@ fun LessonScreen(id: Int, goBack: () -> Unit) {
 
         is LessonViewModel.State.Data -> {
             Column {
-                LessonInfo(st = st, goBack)
+                LessonInfo(st = st, onQuizAnswer = vm::onQuizAnswer, goBack)
             }
         }
     }
 }
 
 @Composable
-private fun LessonInfo(st: LessonViewModel.State.Data, goBack: () -> Unit) {
+private fun LessonInfo(
+    st: LessonViewModel.State.Data,
+    onQuizAnswer: (answer: MainListItem.QuizItem.Answer, quizId: Int, position: Int) -> Unit,
+    goBack: () -> Unit
+) {
     val configuration = LocalConfiguration.current
 
     var orientation by rememberSaveable {
@@ -107,7 +111,13 @@ private fun LessonInfo(st: LessonViewModel.State.Data, goBack: () -> Unit) {
 
     if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && st.player != null) {
         Box(Modifier.fillMaxSize()) {
-            VideoPlayer(exoPlayer = st.player, Modifier.fillMaxSize())
+            VideoPlayer(
+                exoPlayer = st.player,
+                Modifier.fillMaxSize()
+            ) {
+                orientation = ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
+                orientation = ActivityInfo.SCREEN_ORIENTATION_USER
+            }
         }
     } else {
         Column(Modifier.verticalScroll(rememberScrollState())) {
@@ -123,13 +133,14 @@ private fun LessonInfo(st: LessonViewModel.State.Data, goBack: () -> Unit) {
 
             st.player?.let {
                 VideoPlayer(
-                exoPlayer = st.player, {
+                    exoPlayer = st.player,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1.87f)
+                        .background(Colors.Black)
+                ) {
                     orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                }, Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1.87f)
-                    .background(Colors.Black)
-            )
+                }
             }
             Spacer(modifier = Modifier.size(12.dp))
             Card(
@@ -168,6 +179,14 @@ private fun LessonInfo(st: LessonViewModel.State.Data, goBack: () -> Unit) {
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
                 )
                 Spacer(modifier = Modifier.size(16.dp))
+            }
+
+            st.lesson.quizes.forEachIndexed { position, it ->
+                QuizItem(data = it, isShowImage = false, isShowText = false) { quizId, answer ->
+                    onQuizAnswer(answer, quizId, position)
+                }
+
+                Spacer(modifier = Modifier.size(6.dp))
             }
         }
     }
