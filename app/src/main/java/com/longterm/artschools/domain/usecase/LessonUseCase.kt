@@ -14,23 +14,24 @@ class LessonUseCase(
     suspend fun execute(id: Int): Result<Lesson> {
         return withResult {
             val lesson = coursesRepository.getLesson(id).getOrThrow()
-            val quizzes = lesson.questions.map {
-                quizRepository.getQuiz(it).getOrThrow()
-            }.map { quiz ->
-                MainListItem.QuizItem(
-                    quiz.id,
-                    (1..3).random(),
-                    quiz.question,
-                    quiz.text,
-                    quiz.image,
-                    quiz.answers.map { a ->
-                        MainListItem.QuizItem.Answer(
-                            a.id,
-                            a.text
-                        )
-                    }
-                )
-            }
+            val quizzes = lesson.questions
+                .map { quizRepository.getQuiz(it).getOrThrow() }
+                .filter { it.userAnswers == null }
+                .map { quiz ->
+                    MainListItem.QuizItem(
+                        quiz.id,
+                        (1..3).random(),
+                        quiz.question,
+                        quiz.text,
+                        quiz.image,
+                        quiz.answers.map { a ->
+                            MainListItem.QuizItem.Answer(
+                                a.id,
+                                a.text
+                            )
+                        }
+                    )
+                }
 
             Lesson(
                 id = lesson.id,
