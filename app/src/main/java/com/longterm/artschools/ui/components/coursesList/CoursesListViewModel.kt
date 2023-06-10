@@ -21,6 +21,8 @@ class CoursesListViewModel(
         get() = _state
     private val _state = MutableStateFlow<State>(State.Loading)
 
+    lateinit var courses: List<CoursePreview>
+
     init {
         getAll()
     }
@@ -29,6 +31,7 @@ class CoursesListViewModel(
         viewModelScope.launch {
             getAllCourses()
                 .onSuccess {
+                    courses = it
                     _state.update { _ ->
                         State.Data(it)
                     }
@@ -44,7 +47,13 @@ class CoursesListViewModel(
 
     fun onSearchValueChanged(query: String) {
         _state.update {
-            (it as? State.Data)?.copy(searchQuery = query) ?: it
+            (it as? State.Data)?.copy(
+                items = if (query.isBlank()) courses else courses.filter { item ->
+                    item.title.contains(query, true) || item.description.contains(query, true)
+                },
+                searchQuery = query
+            ) ?: it
+
         }
     }
 

@@ -25,6 +25,8 @@ class MainViewModel(
         loadData()
     }
 
+    lateinit var feed: List<MainListItem>
+
     fun onQuizAnswer(answer: MainListItem.QuizItem.Answer, quizId: Int, position: Int) {
         viewModelScope.launch {
             answerQuizUseCase.execute(quizId, answer.id)
@@ -55,7 +57,13 @@ class MainViewModel(
 
     fun onSearchValueChanged(query: String) {
         _state.update {
-            (it as? State.Data)?.copy(searchQuery = query) ?: it
+            (it as? State.Data)?.copy(
+                items = if (query.isBlank()) feed else feed.filter { item ->
+                    if (item !is MainListItem.ArticleItem) return@filter false
+                    item.title.contains(query, true) || item.description.contains(query, true)
+                },
+                searchQuery = query
+            ) ?: it
         }
     }
 
@@ -66,6 +74,7 @@ class MainViewModel(
     private fun loadData() = viewModelScope.launch {
         getFeedUseCase.execute()
             .onSuccess { list ->
+                feed = list
                 val level = userRepository.getUserNullable()?.level?.currentLevel?.level?.toString()
                 _state.update {
                     State.Data(list, level ?: "·", null)

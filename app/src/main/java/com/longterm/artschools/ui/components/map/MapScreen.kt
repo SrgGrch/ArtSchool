@@ -135,6 +135,9 @@ fun MapScreen(
                 },
                 searchValue = (state as? MapVm.State.Data)?.searchQuery ?: "",
                 onSearchValueChanged = vm::onSearchValueChanged,
+                onClear = {
+                    vm.onSearchValueChanged("")
+                }
             )
             Box {
                 AndroidView(factory = {

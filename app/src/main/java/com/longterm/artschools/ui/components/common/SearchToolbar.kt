@@ -34,6 +34,7 @@ fun SearchToolbar(
     title: @Composable RowScope.() -> Unit,
     searchValue: String,
     onSearchValueChanged: (String) -> Unit,
+    onClear: () -> Unit,
     leftIcon: @Composable RowScope.() -> Unit = {},
 ) {
     var showSearch by remember {
@@ -60,6 +61,7 @@ fun SearchToolbar(
                 },
                 trailingIcon = {
                     IconButton(onClick = {
+                        onClear()
                         showSearch = false
                     }) {
                         Icon(imageVector = Icons.Rounded.Close, contentDescription = "Закрыть поиск")
@@ -101,6 +103,7 @@ private fun Preview() {
             },
             asd,
             { asd = it },
+            {},
             {
                 TextButton(onClick = {}, Modifier.padding(top = 6.dp)) {
                     Icon(painter = painterResource(id = R.drawable.ic_cup), contentDescription = "Уровень")

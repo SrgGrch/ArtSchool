@@ -55,6 +55,9 @@ fun MainScreen(navigateToArticle: (id: Int) -> Unit, navigateToProfile: () -> Un
             },
             (state as? MainViewModel.State.Data)?.searchQuery ?: "",
             vm::onSearchValueChanged,
+            onClear = {
+                vm.onSearchValueChanged("")
+            },
             leftIcon = {
                 TextButton(onClick = navigateToAchievements, Modifier.padding(top = 6.dp)) {
                     Icon(painter = painterResource(id = R.drawable.ic_cup), contentDescription = "Уровень")

@@ -51,6 +51,9 @@ fun CoursesListScreen(navigateToCourse: (id: Int) -> Unit) {
             },
             searchValue = (state as? CoursesListViewModel.State.Data)?.searchQuery ?: "",
             onSearchValueChanged = vm::onSearchValueChanged,
+            onClear = {
+                vm.onSearchValueChanged("")
+            }
         )
         when (val st = state) {
             CoursesListViewModel.State.Error -> Column(
