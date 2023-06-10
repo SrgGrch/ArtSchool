@@ -29,7 +29,7 @@ class NewsRepository(
         }
     }
 
-    private suspend fun getTagsMap(): Map<Int, Tag> {
+    suspend fun getTagsMap(): Map<Int, Tag> {
         if (tags.isEmpty()) {
             val list = getTags().getOrNull() ?: emptyList()
 
