@@ -62,7 +62,9 @@ class MapVm(
 
     fun onSearchValueChanged(query: String) {
         _state.update {
-            (it as? State.Data)?.copy(searchQuery = query) ?: it
+            (it as? State.Data)?.copy(points = if (query.isBlank()) pointList else pointList.filter { item ->
+                item.point.name.contains(query, true) || item.point.description.contains(query, true)
+            }, searchQuery = query) ?: it
         }
     }
 
