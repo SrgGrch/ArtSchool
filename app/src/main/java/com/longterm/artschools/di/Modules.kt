@@ -58,7 +58,7 @@ val presentationModule = module {
     viewModel { AuthViewModel(get(), get()) }
     viewModel { params -> RegisterViewModel(params.get(), get()) }
     viewModel { params -> ArticleVm(params.get(), get()) }
-    viewModel { ProfileVm(get()) }
+    viewModel { ProfileVm(get(), get()) }
     viewModel { MapVm(get()) }
     viewModel { MapPointInfoVm(get()) }
     viewModel { AchievementsVm(get()) }

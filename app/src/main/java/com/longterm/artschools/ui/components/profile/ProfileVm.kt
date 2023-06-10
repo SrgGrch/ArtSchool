@@ -3,6 +3,7 @@ package com.longterm.artschools.ui.components.profile
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.longterm.artschools.data.repository.BoughtCoursesRepository
 import com.longterm.artschools.data.repository.UserRepository
 import com.longterm.artschools.domain.models.User
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +12,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ProfileVm(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val boughtCoursesRepository: BoughtCoursesRepository
 ) : ViewModel() {
     val state: StateFlow<State> get() = _state
     private val _state = MutableStateFlow<State>(State.Loading)
@@ -22,6 +24,7 @@ class ProfileVm(
 
     fun signOut() {
         userRepository.signOut()
+        boughtCoursesRepository.clear()
         _state.update {
             State.SignOut
         }

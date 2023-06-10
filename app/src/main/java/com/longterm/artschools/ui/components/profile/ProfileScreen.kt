@@ -44,7 +44,7 @@ import com.longterm.artschools.ui.core.utils.PreviewContext
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun ProfileScreen(back: () -> Unit, routeToOnboarding: () -> Unit) {
+fun ProfileScreen(back: () -> Unit, routeToOnboarding: () -> Unit, routeToAchievements: () -> Unit) {
     val vm: ProfileVm = getViewModel()
     val state by vm.state.collectAsState()
     val context = LocalContext.current
@@ -115,7 +115,7 @@ fun ProfileScreen(back: () -> Unit, routeToOnboarding: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                TextButton(onClick = { Toast.makeText(context, "Работа в прогрессе ;)", Toast.LENGTH_SHORT).show() }) {
+                TextButton(onClick = routeToAchievements) {
                     Text(text = "Достижения", style = ArtTextStyle.Button, color = Color.Black)
                 }
 
@@ -144,6 +144,6 @@ fun ProfileScreen(back: () -> Unit, routeToOnboarding: () -> Unit) {
 @Composable
 private fun Preview() {
     PreviewContext {
-        ProfileScreen({}, {})
+        ProfileScreen({}, {}, {})
     }
 }

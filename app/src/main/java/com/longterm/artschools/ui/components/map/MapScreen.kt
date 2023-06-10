@@ -5,11 +5,14 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Paint
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,10 +21,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -55,6 +62,7 @@ import com.longterm.artschools.ui.components.map.MapUtils.moveToMyLocation
 import com.longterm.artschools.ui.components.map.MapUtils.zoomIn
 import com.longterm.artschools.ui.components.map.MapUtils.zoomOut
 import com.longterm.artschools.ui.core.theme.ArtTextStyle
+import com.longterm.artschools.ui.core.theme.Colors
 import com.longterm.artschools.ui.core.utils.PreviewContext
 import com.longterm.artschools.ui.navigation.destination.BottomBarDestination
 import com.longterm.artschools.ui.navigation.destination.BottomSheetDestinations
@@ -66,8 +74,10 @@ import com.yandex.mapkit.user_location.UserLocationLayer
 import com.yandex.runtime.image.ImageProvider
 import org.koin.androidx.compose.getViewModel
 import kotlin.collections.Map
+import kotlin.math.roundToInt
 import com.yandex.mapkit.geometry.Point as YandexPoint
 import com.yandex.mapkit.map.Map as YandexMap
+
 
 @SuppressLint("MissingPermission") // todo
 @Composable
@@ -125,7 +135,8 @@ fun MapScreen(
                     .fillMaxWidth()
                     .padding(start = 16.dp)
                     .height(40.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "Школы на карте", style = ArtTextStyle.H3)
 
@@ -133,84 +144,124 @@ fun MapScreen(
                     Icon(imageVector = Icons.Rounded.Search, contentDescription = "Поиск")
                 }
             }
-            AndroidView(factory = {
-                MapView(it)
-            }) { mapView ->
-                val lifecycleOwner: LifecycleOwner = (mapView.context as MainActivity)
+            Box {
+                AndroidView(factory = {
+                    MapView(it)
+                }) { mapView ->
+                    val lifecycleOwner: LifecycleOwner = (mapView.context as MainActivity)
 
-                val observer = LifecycleEventObserver { _, event -> // todo move outside
-                    when (event) {
-                        Lifecycle.Event.ON_START -> {
-                            mapView.onStart()
+                    val observer = LifecycleEventObserver { _, event -> // todo move outside
+                        when (event) {
+                            Lifecycle.Event.ON_START -> {
+                                mapView.onStart()
+                            }
+
+                            Lifecycle.Event.ON_STOP -> {
+                                mapView.onStop()
+                            }
+
+                            else -> {}
                         }
+                    }
 
-                        Lifecycle.Event.ON_STOP -> {
-                            mapView.onStop()
+                    lifecycleOwner.lifecycle.addObserver(observer)
+
+                    map = mapView.map
+
+                    mapView.map.isRotateGesturesEnabled = false
+                    mapView.map.isTiltGesturesEnabled = false
+
+                    if (shouldCenter && permissionsGranted) {
+                        MapKitFactory.getInstance().resetLocationManagerToDefault()
+                    }
+
+                    if (shouldCenter) {
+                        map?.moveToMyLocation(context)
+
+                        shouldCenter = false
+                    }
+
+                    if (permissionsGranted) {
+                        if (userLocationLayer == null) userLocationLayer =
+                            MapKitFactory.getInstance().createUserLocationLayer(mapView.mapWindow)
+                        userLocationLayer?.isVisible = true
+                    }
+
+                    val st = state
+                    if (objects == null)
+                        objects = mapView.map.mapObjects.addCollection()
+
+                    listeners = mutableListOf()
+                    objects?.clear()
+
+                    if (st is MapVm.State.Data) {
+                        st.points.forEach {
+                            val mapObject = objects?.addPlacemark(
+                                YandexPoint(it.point.latLng.latitude, it.point.latLng.longitude),
+                            )
+
+                            mapObject?.addTapListener(MapObjectTapListener { _, _ ->
+                                vm.onPointClicked(it)
+
+                                true
+                            }.also(listeners::add))
+
+                            if (it.selected) {
+
+                                mapObject?.setIcon(
+                                    ImageProvider.fromResource(
+                                        mapView.context,
+                                        R.drawable.ic_map_point_selected
+                                    ),
+                                    MapUtils.ICON_STYLE_POINT_AS_PIN_SELECTED
+                                )
+                            } else {
+                                mapObject?.setIcon(
+                                    ImageProvider.fromResource(
+                                        mapView.context,
+                                        R.drawable.ic_map_point,
+                                    ),
+//                                    ImageProvider.fromBitmap(
+//                                        createPin(it.point.preferences),
+//                                        true,
+//                                        it.point.latLng.toString()
+//                                    ),
+                                    MapUtils.ICON_STYLE_POINT_AS_PIN
+                                )
+                            }
                         }
-
-                        else -> {}
                     }
                 }
 
-                lifecycleOwner.lifecycle.addObserver(observer)
-
-                map = mapView.map
-
-                mapView.map.isRotateGesturesEnabled = false
-                mapView.map.isTiltGesturesEnabled = false
-
-                if (shouldCenter && permissionsGranted) {
-                    MapKitFactory.getInstance().resetLocationManagerToDefault()
-                }
-
-                if (shouldCenter) {
-                    map?.moveToMyLocation(context)
-
-                    shouldCenter = false
-                }
-
-                if (permissionsGranted) {
-                    if (userLocationLayer == null) userLocationLayer =
-                        MapKitFactory.getInstance().createUserLocationLayer(mapView.mapWindow)
-                    userLocationLayer?.isVisible = true
-                }
-
+                val scrollState = rememberScrollState()
                 val st = state
-                if (objects == null)
-                    objects = mapView.map.mapObjects.addCollection()
-
-                listeners = mutableListOf()
-                objects?.clear()
-
                 if (st is MapVm.State.Data) {
-                    st.points.forEach {
-                        val mapObject = objects?.addPlacemark(
-                            YandexPoint(it.point.latLng.latitude, it.point.latLng.longitude),
-                        )
-
-                        mapObject?.addTapListener(MapObjectTapListener { _, _ ->
-                            vm.onPointClicked(it)
-
-                            true
-                        }.also(listeners::add))
-
-                        if (it.selected) {
-
-                            mapObject?.setIcon(
-                                ImageProvider.fromResource(
-                                    mapView.context,
-                                    R.drawable.ic_map_point_selected
+                    Row(
+                        Modifier
+                            .wrapContentHeight()
+                            .fillMaxWidth()
+                            .padding(top = 6.dp)
+                            .horizontalScroll(scrollState)
+                    ) {
+                        st.filters.forEach { filter ->
+                            FilterChip(
+                                selected = filter.isSelected,
+                                onClick = { vm.onFilterClick(filter.id) },
+                                label = {
+                                    Text(text = filter.text, style = ArtTextStyle.Chips)
+                                },
+                                shape = CircleShape,
+                                modifier = Modifier.padding(horizontal = 4.dp),
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = Colors.GreenMain,
+                                    containerColor = Color.White
                                 ),
-                                MapUtils.ICON_STYLE_POINT_AS_PIN_SELECTED
+                                border = FilterChipDefaults.filterChipBorder(
+                                    borderColor = Colors.GreenMain,
+                                    borderWidth = 2.dp
+                                )
                             )
-                        } else {
-                            mapObject?.setIcon(
-                                ImageProvider.fromResource(
-                                    mapView.context,
-                                    R.drawable.ic_map_point,
-                                ),
-                                MapUtils.ICON_STYLE_POINT_AS_PIN
-                            )
+
                         }
                     }
                 }
@@ -305,4 +356,39 @@ private fun Preview() {
             }
         }
     }
+}
+
+private val pins = mutableMapOf<Int, Bitmap>()
+
+private fun createPin(preferences: List<Int>): Bitmap {
+    val id = preferences.first()
+    return pins[id] ?: run {
+        textAsBitmap(getText(id), 70f).also {
+            pins[id] = it
+        }
+    }
+}
+
+fun getText(id: Int) = when (id) {
+    1 -> "✍️"
+    2 -> "🎭"
+    3 -> "🎨"
+    4 -> "🩰"
+    else -> "🎶"
+}
+
+fun textAsBitmap(text: String, textSize: Float): Bitmap {
+    val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    paint.textSize = textSize
+    paint.textAlign = Paint.Align.LEFT
+    val baseline: Float = -paint.ascent() // ascent() is negative
+    val width = (paint.measureText(text) + 0.5f).roundToInt() // round
+    val height = (baseline + paint.descent() + 0.5f).roundToInt()
+    val image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val canvas = android.graphics.Canvas(image)
+    canvas.drawText(text, 0f, baseline, paint)
+    canvas.drawCircle(0f, baseline, 25f, Paint().apply {
+        color = 0xFFFFFF
+    })
+    return image
 }

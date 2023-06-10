@@ -184,6 +184,9 @@ sealed interface Destination {
                             inclusive = true
                         }
                     }
+                },
+                routeToAchievements = {
+                    navController.navigate(Achievements)
                 }
             )
         }

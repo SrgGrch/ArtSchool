@@ -2,7 +2,8 @@
     <string name="app_name">Школы Искусств</string>
 
 
-    <string name="com_vk_sdk_Secret">bRUQMWv798QurrntWakO</string>
+    <string name="com_vk_sdk_Secret">kfNKuGLCkHmAC4YKDfy5</string>
+    <!--    <string name="com_vk_sdk_Secret">bRUQMWv798QurrntWakO</string>-->
 
 
     <string name="login">Вход</string>

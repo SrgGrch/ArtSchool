@@ -19,7 +19,8 @@ class PointsRepository(
                     description,
                     "Академическая (Ленинский просп., 45)",
                     "+74952128506",
-                    workTime
+                    workTime,
+                    preferences
                 )
             }
         }

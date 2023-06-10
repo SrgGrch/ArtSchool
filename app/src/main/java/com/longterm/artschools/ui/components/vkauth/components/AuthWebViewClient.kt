@@ -20,6 +20,7 @@ class AuthWebViewClient(
     private var _currentUrl = ""
 
     override fun shouldOverrideUrlLoading(wv: WebView, webResourceRequest: WebResourceRequest): Boolean {
+        println("SAS: shouldOverrideUrlLoading, ${webResourceRequest.url}")
         wv.loadUrl(webResourceRequest.url.toString())
         return true
     }
@@ -52,7 +53,7 @@ class AuthWebViewClient(
             }
             // Если открыто окно для считывания токена.
             if (url.contains("https://oauth.vk.com/blank.html")) {
-                wv.visibility = View.INVISIBLE
+//                wv.visibility = View.INVISIBLE
                 onStatusChange(AuthStatus.SUCCESS)
             }
         }

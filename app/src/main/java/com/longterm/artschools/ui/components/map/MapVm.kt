@@ -16,21 +16,58 @@ class MapVm(
     val state: StateFlow<State> get() = _state
     private val _state = MutableStateFlow<State>(State.Loading)
 
+    private lateinit var pointList: List<SchoolPoint>
+
     init {
         viewModelScope.launch {
             pointsRepository.getPoints()
                 .onSuccess { points ->
+                    pointList = points.map {
+                        SchoolPoint(
+                            it,
+                            false
+                        )
+                    }
                     _state.update {
-                        State.Data(points.map {
-                            SchoolPoint(
-                                it,
-                                false
-                            )
-                        })
+                        State.Data(
+                            pointList,
+                            getFilters(),
+                        )
                     }
                 }
                 .onFailureLog(TAG)
         }
+    }
+
+    fun onFilterClick(id: Int) {
+        _state.update {
+            val data = it as? State.Data ?: return@update it
+
+            val filters = data.filters.map { filter ->
+                if (filter.id == id) filter.copy(isSelected = !filter.isSelected)
+                else filter
+            }
+
+            val selectedFilters = filters.filter { it.isSelected }.map { it.id }.toSet()
+
+            data.copy(
+                points = pointList.filter {
+                    if (selectedFilters.isEmpty()) true
+                    else it.point.preferences.intersect(selectedFilters).isNotEmpty()
+                },
+                filters = filters
+            )
+        }
+    }
+
+    private fun getFilters(): List<Filter> {
+        return listOf(
+            Filter(1, "✍️ Дизайн"),
+            Filter(2, "🎭 Театр"),
+            Filter(3, "🎨 Живопись"),
+            Filter(4, "🩰 Хореография"),
+            Filter(5, "🎶 Музыка"),
+        )
     }
 
     fun onPointClicked(point: SchoolPoint) {
@@ -66,8 +103,18 @@ class MapVm(
 
     sealed interface State {
         object Loading : State
-        data class Data(val points: List<SchoolPoint>, val showPoint: Point? = null) : State
+        data class Data(
+            val points: List<SchoolPoint>,
+            val filters: List<Filter>,
+            val showPoint: Point? = null
+        ) : State
     }
+
+    data class Filter(
+        val id: Int,
+        val text: String,
+        val isSelected: Boolean = false
+    )
 
     data class SchoolPoint(
         val point: Point,

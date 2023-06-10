@@ -2,10 +2,12 @@ package com.longterm.artschools.ui.components.vkauth
 
 import android.view.ViewGroup
 import android.webkit.CookieManager
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.integerResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import com.longterm.artschools.R
 import com.longterm.artschools.ui.components.vkauth.components.AuthStatus
@@ -29,7 +31,7 @@ fun VkAuthScreen(
     val authParams = buildString {
         append("https://oauth.vk.com/authorize?")
         append(getUrlArg("client_id", integerResource(id = R.integer.com_vk_sdk_AppId).toString()))
-        append(getUrlArg("client_secret", "bRUQMWv798QurrntWakO"))
+        append(getUrlArg("client_secret", stringResource(id = R.string.com_vk_sdk_Secret)))
         append(getUrlArg("redirect_uri", "https://oauth.vk.com/blank.html"))
         append(getUrlArg("display", "mobile"))
         append(getUrlArg("scope", VkScope.SCOPE))
@@ -39,12 +41,20 @@ fun VkAuthScreen(
         append(getUrlArg("revoke", "1"))
     }
 
+    WebView.setWebContentsDebuggingEnabled(true)
+
+    var webView: WebView? = null
+
     AndroidView(factory = {
         WebView(it).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
+            settings.blockNetworkLoads = false
+            settings.javaScriptEnabled = true;
+            settings.domStorageEnabled = true
+            settings.javaScriptCanOpenWindowsAutomatically = true;
             webViewClient = AuthWebViewClient(it) {
                 when (it) {
                     AuthStatus.ERROR -> {
@@ -75,9 +85,11 @@ fun VkAuthScreen(
                     AuthStatus.CONFIRM -> Unit
                 }
             }
+            webChromeClient = WebChromeClient()
             loadUrl(authParams)
         }
     }, update = {
+        webView = it
         it.loadUrl(authParams)
     })
 }

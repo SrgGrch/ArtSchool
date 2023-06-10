@@ -12,5 +12,6 @@ data class PointsResponse(
     @SerialName("work_time")
     val workTime: String? = null,
     @SerialName("phone_number")
-    val phoneNumber: String? = null
+    val phoneNumber: String? = null,
+    val preferences: List<Int> = emptyList()
 )

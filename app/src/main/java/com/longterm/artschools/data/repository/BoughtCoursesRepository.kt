@@ -13,4 +13,10 @@ class BoughtCoursesRepository(private val sp: SharedPreferences) {
     fun isBought(id: Int): Boolean {
         return sp.getBoolean(id.toString(), false)
     }
+
+    fun clear() {
+        sp.edit {
+            clear()
+        }
+    }
 }
