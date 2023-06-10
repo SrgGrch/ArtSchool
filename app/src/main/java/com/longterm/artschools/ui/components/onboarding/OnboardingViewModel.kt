@@ -22,7 +22,7 @@ class OnboardingViewModel : ViewModel() {
     }
 
     fun skip() = _state.update { state ->
-        state.nextPage().copy(currentPage = 4)
+        state.nextPage().copy(currentPage = 5)
     }
 
     data class State(
