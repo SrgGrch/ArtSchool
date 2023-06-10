@@ -52,7 +52,7 @@ val presentationModule = module {
     viewModel { params -> OnboardingArtViewModel(params.get(), get()) }
     viewModel { params -> OnboardingTargetViewModel(params.get(), get()) }
     viewModel { params -> OnboardingUserInfoViewModel(params.get()) }
-    viewModel { CoursesListViewModel(get()) }
+    viewModel { CoursesListViewModel(get(), get()) }
     viewModel { params -> CourseViewModel(params.get(), get(), get()) }
     viewModel { params -> LessonViewModel(params.get(), get(), get(), get()) }
     viewModel { AuthViewModel(get(), get()) }

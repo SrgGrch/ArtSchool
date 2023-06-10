@@ -28,6 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.longterm.artschools.domain.models.Tag
+import com.longterm.artschools.ui.components.common.fromHex
 import com.longterm.artschools.ui.components.common.preview
 import com.longterm.artschools.ui.components.coursesList.models.CoursePreview
 import com.longterm.artschools.ui.components.main.items.ItemsPaddingValues
@@ -45,7 +47,7 @@ fun CoursesListItem(
                 onItemClicked(data.id)
             }
             .fillMaxWidth()
-            .padding(top = 12.dp)
+            .padding(top = 8.dp)
     ) {
         Image(
             painter = rememberAsyncImagePainter(
@@ -64,7 +66,7 @@ fun CoursesListItem(
 
         Column(
             Modifier
-                .offset(y = (-32).dp)
+                .offset(y = (-16).dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color.White)
                 .padding(ItemsPaddingValues)
@@ -82,7 +84,7 @@ fun CoursesListItem(
                             Modifier
                                 .padding(2.dp)
                                 .clip(CircleShape)
-                                .background(Color(it.color))
+                                .background(Color.fromHex(it.color))
                                 .padding(vertical = 4.dp, horizontal = 8.dp),
                             style = ArtTextStyle.tab,
                             color = Color.White
@@ -112,12 +114,12 @@ private fun Preview() {
                 "https://static.tildacdn.com/tild6338-3363-4137-b534-663038303161/DSCF0696.jpg",
                 3,
                 listOf(
-                    CoursePreview.Tag("Интервью", 0xFF8E75A8),
-                    CoursePreview.Tag("🎶 Музыка", 0xFFDBB0C2),
-                    CoursePreview.Tag("Интервью", 0xFF8E75A8),
-                    CoursePreview.Tag("🎶 Музыка", 0xFFDBB0C2),
-                    CoursePreview.Tag("Интервью", 0xFF8E75A8),
-                    CoursePreview.Tag("🎶 Музыка", 0xFFDBB0C2),
+                    Tag("Интервью", "#FF8E75A8"),
+                    Tag("🎶 Музыка", "#FFDBB0C2"),
+                    Tag("Интервью", "#FF8E75A8"),
+                    Tag("🎶 Музыка", "#FFDBB0C2"),
+                    Tag("Интервью", "#FF8E75A8"),
+                    Tag("🎶 Музыка", "#FFDBB0C2")
                 )
             )
         ) {
