@@ -60,6 +60,12 @@ class MapVm(
         }
     }
 
+    fun onSearchValueChanged(query: String) {
+        _state.update {
+            (it as? State.Data)?.copy(searchQuery = query) ?: it
+        }
+    }
+
     private fun getFilters(): List<Filter> {
         return listOf(
             Filter(1, "✍️ Дизайн"),
@@ -106,7 +112,8 @@ class MapVm(
         data class Data(
             val points: List<SchoolPoint>,
             val filters: List<Filter>,
-            val showPoint: Point? = null
+            val showPoint: Point? = null,
+            val searchQuery: String = ""
         ) : State
     }
 

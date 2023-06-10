@@ -53,6 +53,12 @@ class MainViewModel(
         }
     }
 
+    fun onSearchValueChanged(query: String) {
+        _state.update {
+            (it as? State.Data)?.copy(searchQuery = query) ?: it
+        }
+    }
+
     fun retry() {
         loadData()
     }
@@ -87,6 +93,7 @@ class MainViewModel(
             override val level: String,
             override val userPic: String?,
             val isLoading: Boolean = false,
+            val searchQuery: String = ""
         ) : State
     }
 }

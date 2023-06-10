@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Paint
-import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -58,6 +57,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.longterm.artschools.MainActivity
 import com.longterm.artschools.R
 import com.longterm.artschools.domain.models.points.Point
+import com.longterm.artschools.ui.components.common.SearchToolbar
 import com.longterm.artschools.ui.components.map.MapUtils.moveToMyLocation
 import com.longterm.artschools.ui.components.map.MapUtils.zoomIn
 import com.longterm.artschools.ui.components.map.MapUtils.zoomOut
@@ -129,21 +129,13 @@ fun MapScreen(
 
     Box {
         Column {
-            Row(
-                Modifier
-                    .background(Color.White)
-                    .fillMaxWidth()
-                    .padding(start = 16.dp)
-                    .height(40.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = "Школы на карте", style = ArtTextStyle.H3)
-
-                IconButton(onClick = { Toast.makeText(context, "В разработке :з", Toast.LENGTH_SHORT).show() }) {
-                    Icon(imageVector = Icons.Rounded.Search, contentDescription = "Поиск")
-                }
-            }
+            SearchToolbar(
+                title = {
+                    Text(text = "Школы на карте", Modifier.padding(start = 16.dp), style = ArtTextStyle.H3)
+                },
+                searchValue = (state as? MapVm.State.Data)?.searchQuery ?: "",
+                onSearchValueChanged = vm::onSearchValueChanged,
+            )
             Box {
                 AndroidView(factory = {
                     MapView(it)

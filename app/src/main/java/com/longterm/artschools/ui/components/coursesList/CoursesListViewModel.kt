@@ -27,7 +27,6 @@ class CoursesListViewModel(
 
     private fun getAll() {
         viewModelScope.launch {
-
             getAllCourses()
                 .onSuccess {
                     _state.update { _ ->
@@ -40,6 +39,12 @@ class CoursesListViewModel(
                         State.Error
                     }
                 }
+        }
+    }
+
+    fun onSearchValueChanged(query: String) {
+        _state.update {
+            (it as? State.Data)?.copy(searchQuery = query) ?: it
         }
     }
 
@@ -82,6 +87,7 @@ class CoursesListViewModel(
         data class Data(
             val items: List<CoursePreview>,
             val isLoading: Boolean = false,
+            val searchQuery: String = ""
         ) : State
     }
 }
